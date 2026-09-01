@@ -1,0 +1,55 @@
+# LOL Bench harness config — the whole "institutional" setup is this file.
+# Every result is stamped with (dataset_version, harness_hash). Bump dataset_version when items change.
+
+dataset_version: "0.1.0"
+harness_version: "0.1.0"
+
+# n samples per model-item at v0 (documented deviation; raised to 10 at C5)
+n_samples: 5
+max_output_tokens: 400
+temperature: 0.9          # generation diversity; judge calls use temperature 0
+
+# Candidates: fill in as keys/accounts come online. Judge must be from a
+# DIFFERENT family than every scored candidate (no self-judging).
+candidates:
+  - name: llama-3.3-70b
+    provider: groq          # free tier
+    model: llama-3.3-70b-versatile
+    enabled: false          # enable when GROQ_API_KEY present
+  - name: llama-3.1-8b
+    provider: groq
+    model: llama-3.1-8b-instant
+    enabled: false
+  - name: local-70b
+    provider: local         # Mac Studio 64GB via llama.cpp/Ollama, 4-bit quant
+    model: llama-3.3-70b-instruct-q4_K_M
+    base_url: http://localhost:11434/v1
+    enabled: false
+  - name: gemini-flash
+    provider: gemini        # free tier, CAPPED slot (~250 req/day)
+    model: gemini-2.0-flash
+    enabled: false
+
+# Judge: local Mac Studio preferred (free, unlimited, no self-family conflict
+# as long as llama-3.3-70b candidate is disabled when local-70b judges, or
+# judge uses a different family, e.g. qwen2.5-72b q4).
+judge:
+  provider: local
+  model: qwen2.5-72b-instruct-q4_K_M
+  base_url: http://localhost:11434/v1
+
+# Rate limits (requests per minute) per provider — re-verify against provider
+# docs at C2; these change constantly.
+rate_limits_rpm:
+  groq: 30
+  gemini: 10
+  local: 0                  # 0 = unlimited
+
+paths:
+  items_a: data/lol_a_items.jsonl
+  premises_b: data/lol_b_wave0_premises.jsonl
+  pools_c: data/lol_c_pools.jsonl
+  outputs: outputs/
+  judgments: judgments/
+  results: results/
+  site_results: site/results.json

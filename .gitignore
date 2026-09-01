@@ -1,0 +1,24 @@
+# secrets
+.env
+**/keys*.json
+harness/.env
+
+# private held-out test split (never published)
+data/private/*
+!data/private/.gitkeep
+
+# run artifacts (large; results/ summaries ARE committed)
+outputs/*
+judgments/*
+!outputs/.gitkeep
+!judgments/.gitkeep
+
+# node / python
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# os
+.DS_Store
+Thumbs.db
