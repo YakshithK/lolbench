@@ -1,10 +1,15 @@
 import hashlib
 import json
 import random
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
+
+
+def strip_think(text):
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip()
 
 ROOT = Path(__file__).resolve().parents[1]
 CFG = yaml.safe_load((ROOT / "harness" / "config.yaml").read_text(encoding="utf-8"))
@@ -90,7 +95,7 @@ def build_matchups():
             if line.strip():
                 o = json.loads(line)
                 if o.get("sample") == 0:
-                    by_model.setdefault(m, {})[o["item_id"]] = o["output"]
+                    by_model.setdefault(m, {})[o["item_id"]] = strip_think(o["output"])
     premises = sorted(set().union(*[set(v.keys()) for v in by_model.values()]))
     matchups = []
     for prem in premises:

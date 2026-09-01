@@ -2,48 +2,54 @@
 # Every result is stamped with (dataset_version, harness_hash). Bump dataset_version when items change.
 
 dataset_version: "0.1.0"
-harness_version: "0.1.0"
+harness_version: "0.1.1"
 
-# n samples per model-item at v0 (documented deviation; raised to 10 at C5)
-n_samples: 5
-max_output_tokens: 400
+# n samples per model-item (documented deviation: v0 runs 3; raised to 10 at C5)
+n_samples: 3
+lol_b_samples: 1          # voting uses sample 0; extra samples added at C5
+max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning tokens
+judge_max_tokens: 1500
 temperature: 0.9          # generation diversity; judge calls use temperature 0
 
-# Candidates: fill in as keys/accounts come online. Judge must be from a
-# DIFFERENT family than every scored candidate (no self-judging).
 candidates:
-  - name: llama-3.3-70b
-    provider: groq          # free tier
-    model: llama-3.3-70b-versatile
-    enabled: false          # enable when GROQ_API_KEY present
-  - name: llama-3.1-8b
-    provider: groq
-    model: llama-3.1-8b-instant
-    enabled: false
+  - name: glm-5.3-flash
+    provider: bai
+    model: glm-5.3-flash
+    enabled: true
+  - name: deepseek-v4-flash
+    provider: bai
+    model: deepseek-v4-flash
+    enabled: true
   - name: local-70b
-    provider: local         # Mac Studio 64GB via llama.cpp/Ollama, 4-bit quant
+    provider: local
     model: llama-3.3-70b-instruct-q4_K_M
     base_url: http://localhost:11434/v1
     enabled: false
   - name: gemini-flash
-    provider: gemini        # free tier, CAPPED slot (~250 req/day)
+    provider: gemini
     model: gemini-2.0-flash
     enabled: false
+  - name: groq-llama-3.3-70b
+    provider: groq
+    model: llama-3.3-70b-versatile
+    enabled: false
 
-# Judge: local Mac Studio preferred (free, unlimited, no self-family conflict
-# as long as llama-3.3-70b candidate is disabled when local-70b judges, or
-# judge uses a different family, e.g. qwen2.5-72b q4).
+# Judge is DeepSeek (free on b.ai). Per governance, a judge never scores its
+# own family: exclude_models makes DeepSeek rows skip judging (GLM rows are
+# graded by DeepSeek; DeepSeek rows await a third free family or credits).
 judge:
-  provider: local
-  model: qwen2.5-72b-instruct-q4_K_M
-  base_url: http://localhost:11434/v1
+  provider: bai
+  model: deepseek-v4-flash
+  exclude_models:
+    - deepseek-v4-flash
 
-# Rate limits (requests per minute) per provider — re-verify against provider
-# docs at C2; these change constantly.
+# Free-tier style rate limits (requests per minute); 0 = unlimited.
+# b.ai aggregator limits unknown — backoff in run.py handles 429s.
 rate_limits_rpm:
+  bai: 0
   groq: 30
   gemini: 10
-  local: 0                  # 0 = unlimited
+  local: 0
 
 paths:
   items_a: data/lol_a_items.jsonl

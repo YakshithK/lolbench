@@ -34,6 +34,7 @@ def main():
     items = parse_items()
     j = CFG["judge"]
     provider, model, base_url = j["provider"], j["model"], j.get("base_url")
+    excluded = set(j.get("exclude_models", []))
     out = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     done = done_keys(out)
     n = CFG["n_samples"]
@@ -42,9 +43,13 @@ def main():
 
     todo = 0
     work = []
+    skipped = 0
     for name, ofile in cands.items():
         path = ROOT / CFG["paths"]["outputs"] / name / "lol_a.jsonl"
         if not path.exists():
+            continue
+        if name in excluded:
+            skipped += len(load_jsonl(path))
             continue
         for row in load_jsonl(path):
             key = f'{row["item_id"]}|{row["sample"]}'
@@ -52,7 +57,7 @@ def main():
                 continue
             work.append((name, row, items.get(row["item_id"])))
             todo += 1
-    print(f"[judge] {todo} judgments to make", flush=True)
+    print(f"[judge] {todo} judgments to make ({skipped} excluded-model rows skipped)", flush=True)
 
     for name, row, item in work:
         if item is None:
@@ -72,7 +77,7 @@ def main():
         got = None
         for attempt in range(3):
             try:
-                raw = chat(provider, model, base_url, messages, 0.0, 200)
+                raw = chat(provider, model, base_url, messages, 0.0, CFG.get("judge_max_tokens", 1500))
                 got = extract_json(raw)
                 if got:
                     break

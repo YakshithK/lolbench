@@ -13,9 +13,16 @@ CFG = yaml.safe_load((ROOT / "harness" / "config.yaml").read_text(encoding="utf-
 PROVIDER_URLS = {
     "groq": "https://api.groq.com/openai/v1/chat/completions",
     "gemini": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+    "bai": "https://api.b.ai/v1/chat/completions",
+    "tokenrouter": "https://api.tokenrouter.com/v1/chat/completions",
 }
 
-ENV_KEYS = {"groq": "GROQ_API_KEY", "gemini": "GEMINI_API_KEY"}
+ENV_KEYS = {
+    "groq": "GROQ_API_KEY",
+    "gemini": "GEMINI_API_KEY",
+    "bai": "BAI_API_KEY",
+    "tokenrouter": "TOKENROUTER_API_KEY",
+}
 
 WINDOWS = {}
 
@@ -23,7 +30,7 @@ WINDOWS = {}
 def load_env():
     env_file = ROOT / "harness" / ".env"
     if env_file.exists():
-        for line in env_file.read_text(encoding="utf-8").splitlines():
+        for line in env_file.read_text(encoding="utf-8-sig").splitlines():
             line = line.strip()
             if line and not line.startswith("#") and "=" in line:
                 k, _, v = line.partition("=")
@@ -105,6 +112,7 @@ def run_candidate(cand, items, premises):
     provider = cand["provider"]
     model = cand["model"]
     n = CFG["n_samples"]
+    nb = CFG.get("lol_b_samples", CFG["n_samples"])
     temp = CFG["temperature"]
     mt = CFG["max_output_tokens"]
 
