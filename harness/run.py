@@ -125,7 +125,7 @@ def run_candidate(cand, items, premises):
     base_url = cand.get("base_url")
     provider = cand["provider"]
     model = cand["model"]
-    n = CFG["n_samples"]
+    n = CFG["anchor_samples"] if cand.get("anchor") else CFG["n_samples"]
     nb = CFG.get("lol_b_samples", CFG["n_samples"])
     temp = CFG["temperature"]
     mt = CFG["max_output_tokens"]

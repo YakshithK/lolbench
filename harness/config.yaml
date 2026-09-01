@@ -6,6 +6,7 @@ harness_version: "0.1.2"
 
 # n samples per model-item (documented deviation: v0 runs 3; raised to 10 at C5)
 n_samples: 3
+anchor_samples: 1          # frontier anchors run once per item (wider CIs, flagged in UI)
 lol_b_samples: 1          # voting uses sample 0; extra samples added at C5
 max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning tokens
 judge_max_tokens: 1500
@@ -34,26 +35,53 @@ candidates:
     provider: bai
     model: qwen3.8-flash
     enabled: true
-  # ---- paid (OpenRouter) + xAI credits: final proprietary wave ----
-  - name: gpt-5.6-luna
+  # ---- Tier 2: OSS flagship (OpenRouter, full run) ----
+  - name: glm-5.3
     provider: openrouter
-    model: openai/gpt-5.6-luna
-    enabled: false          # enable when OPENROUTER_API_KEY lands
-  - name: gemini-3.7-flash
-    provider: openrouter
-    model: google/gemini-3.7-flash
+    model: z-ai/glm-5.3
     enabled: false
-  - name: claude-sonnet-5
+  - name: deepseek-v4-pro
     provider: openrouter
-    model: anthropic/claude-sonnet-5
+    model: deepseek/deepseek-v4-pro
     enabled: false
-  - name: muse-spark-1.2
+  - name: qwen3.8-max
     provider: openrouter
-    model: meta/muse-spark-1.2
+    model: qwen/qwen3.8-max
+    enabled: false
+  - name: mimo-v2.5-pro
+    provider: openrouter
+    model: xiaomi/mimo-v2.5-pro
+    enabled: false
+  - name: hy4-preview
+    provider: openrouter
+    model: tencent/hy4-preview
+    enabled: false
+
+  # ---- Tier 4: frontier anchors (OpenRouter/xAI, n=1) ----
+  - name: gpt-5.6-terra-pro
+    provider: openrouter
+    model: openai/gpt-5.6-terra-pro
+    anchor: true
+    enabled: false
+  - name: gemini-3.1-pro
+    provider: openrouter
+    model: google/gemini-3.1-pro-preview
+    anchor: true
+    enabled: false
+  - name: claude-opus-5
+    provider: openrouter
+    model: anthropic/claude-opus-5
+    anchor: true
+    enabled: false
+  - name: muse-spark-1.2-contributor
+    provider: openrouter
+    model: meta/muse-spark-1.2-contributor
+    anchor: true
     enabled: false
   - name: grok-4.6
     provider: xai
     model: grok-4.6
+    anchor: true
     enabled: false          # enable when XAI_API_KEY lands (owner has credits)
 
 # Dual-judge protocol: every model is graded ONLY by judges from a different
