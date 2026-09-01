@@ -76,6 +76,43 @@ def lol_c_placeholder():
     }
 
 
+def build_matchups():
+    """Pair each model's wave-0 joke against every other model's joke, per premise.
+    Deterministic sample index (0) for fairness; one matchup per pair per premise
+    with sides shuffled so A/B position is random."""
+    out_dir = ROOT / CFG["paths"]["outputs"]
+    models = sorted(p.name for p in out_dir.glob("*/lol_b.jsonl"))
+    if len(models) < 2:
+        return []
+    by_model = {}
+    for m in models:
+        for line in (out_dir / m / "lol_b.jsonl").read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                o = json.loads(line)
+                if o.get("sample") == 0:
+                    by_model.setdefault(m, {})[o["item_id"]] = o["output"]
+    premises = sorted(set().union(*[set(v.keys()) for v in by_model.values()]))
+    matchups = []
+    for prem in premises:
+        present = [m for m in models if prem in by_model.get(m, {})]
+        for i in range(len(present)):
+            for k in range(i + 1, len(present)):
+                a, b = present[i], present[k]
+                if random.Random(f"{prem}|{a}|{b}").random() < 0.5:
+                    a, b = b, a
+                matchups.append({
+                    "matchup_id": f"{prem}:{min(a,b)}-vs-{max(a,b)}",
+                    "premise_id": prem,
+                    "model_a": a,
+                    "model_b": b,
+                    "a": by_model[a][prem],
+                    "b": by_model[b][prem],
+                })
+    rng = random.Random(7)
+    rng.shuffle(matchups)
+    return matchups
+
+
 def main():
     results = {
         "dataset_version": CFG["dataset_version"],
@@ -84,9 +121,12 @@ def main():
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
         "lol_a": lol_a_scores(),
-        "lol_b": lol_b_placeholder(),
+        "lol_b": {**lol_b_placeholder(), "n_matchups": 0},
         "lol_c": lol_c_placeholder(),
     }
+    matchups = build_matchups()
+    results["lol_b"]["n_matchups"] = len(matchups)
+    (ROOT / "site" / "matchups.json").write_text(json.dumps(matchups, indent=2), encoding="utf-8")
     out = ROOT / CFG["paths"]["site_results"]
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(results, indent=2), encoding="utf-8")

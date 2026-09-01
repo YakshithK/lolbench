@@ -1,0 +1,15 @@
+{
+  "dataset_version": "0.1.0",
+  "harness_version": "0.1.0",
+  "harness_hash": "8bc1f0093c9735ae",
+  "generated_at": "2026-09-01T04:11:02.871818+00:00",
+  "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
+  "lol_a": {},
+  "lol_b": {
+    "status": "voting open at lolbench.lol - per-matchup win rates with Wilson CIs appear as votes accumulate. No Elo until vote volume justifies Bradley-Terry fitting (C5).",
+    "n_matchups": 0
+  },
+  "lol_c": {
+    "status": "pending data import: graded joke pools (rJokesData/HAHA subsets) with owner curation."
+  }
+}
