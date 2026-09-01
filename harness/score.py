@@ -49,22 +49,40 @@ def lol_a_scores():
     jpath = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     if not jpath.exists():
         return {}
+    items = {}
+    ipath = ROOT / CFG["paths"]["items_a"]
+    if ipath.exists():
+        for line in ipath.read_text(encoding="utf-8-sig").splitlines():
+            if line.strip():
+                o = json.loads(line)
+                items[o["id"]] = o["family"]
     per_model = {}
+    fam = {}
     for line in jpath.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
         o = json.loads(line)
         if o.get("score") is None:
             continue
-        per_model.setdefault(o["model"], []).append(float(o["score"]))
+        if o.get("model") == o.get("judge_model"):
+            continue
+        s = float(o["score"])
+        per_model.setdefault(o["model"], []).append(s)
+        f = items.get(o["item_id"], "unknown")
+        fam.setdefault(o["model"], {}).setdefault(f, []).append(s)
     out = {}
     for model, scores in per_model.items():
+        families = {
+            f: {"mean": round(mean(xs), 3), "n": len(xs)}
+            for f, xs in sorted(fam.get(model, {}).items())
+        }
         out[model] = {
             "mean": round(mean(scores), 4),
             "ci95": bootstrap_ci(scores),
             "n_scored": len(scores),
             "items": 150,
             "samples_per_item": CFG["n_samples"],
+            "families": families,
         }
     return out
 

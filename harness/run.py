@@ -1,8 +1,11 @@
+import argparse
 import json
 import os
+import threading
 import time
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import yaml
@@ -15,6 +18,8 @@ PROVIDER_URLS = {
     "gemini": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
     "bai": "https://api.b.ai/v1/chat/completions",
     "tokenrouter": "https://api.tokenrouter.com/v1/chat/completions",
+    "openrouter": "https://openrouter.ai/api/v1/chat/completions",
+    "xai": "https://api.x.ai/v1/chat/completions",
 }
 
 ENV_KEYS = {
@@ -22,9 +27,12 @@ ENV_KEYS = {
     "gemini": "GEMINI_API_KEY",
     "bai": "BAI_API_KEY",
     "tokenrouter": "TOKENROUTER_API_KEY",
+    "openrouter": "OPENROUTER_API_KEY",
+    "xai": "XAI_API_KEY",
 }
 
 WINDOWS = {}
+PRINT_LOCK = threading.Lock()
 
 
 def load_env():
@@ -65,7 +73,7 @@ def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6
         throttle(provider)
         req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
         try:
-            with urllib.request.urlopen(req, timeout=180) as r:
+            with urllib.request.urlopen(req, timeout=240) as r:
                 data = json.loads(r.read().decode("utf-8"))
                 return data["choices"][0]["message"]["content"]
         except urllib.error.HTTPError as e:
@@ -86,7 +94,7 @@ def render(template_path, mapping):
 def done_keys(path):
     keys = set()
     if path.exists():
-        for line in path.read_text(encoding="utf-8").splitlines():
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
             if line.strip():
                 try:
                     o = json.loads(line)
@@ -96,14 +104,20 @@ def done_keys(path):
     return keys
 
 
-def append_result(path, obj):
+def append_result(path, obj, lock=None):
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(obj, ensure_ascii=False) + "\n")
+    line = json.dumps(obj, ensure_ascii=False) + "\n"
+    if lock:
+        with lock:
+            with path.open("a", encoding="utf-8") as f:
+                f.write(line)
+    else:
+        with path.open("a", encoding="utf-8") as f:
+            f.write(line)
 
 
 def load_jsonl(path):
-    return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    return [json.loads(l) for l in path.read_text(encoding="utf-8-sig").splitlines() if l.strip()]
 
 
 def run_candidate(cand, items, premises):
@@ -115,35 +129,43 @@ def run_candidate(cand, items, premises):
     nb = CFG.get("lol_b_samples", CFG["n_samples"])
     temp = CFG["temperature"]
     mt = CFG["max_output_tokens"]
+    workers = max(1, int(CFG.get("parallel_workers", 1)))
+    lock = threading.Lock()
 
     out_a = ROOT / CFG["paths"]["outputs"] / name / "lol_a.jsonl"
     done = done_keys(out_a)
-    todo = sum(1 for item in items for s in range(n) if f'{item["id"]}|{s}' not in done)
-    print(f"[a] {name}: {todo} calls to make", flush=True)
-    for item in items:
-        prompt = render(
+    tasks = [(item, s) for item in items for s in range(n) if f'{item["id"]}|{s}' not in done]
+    print(f"[a] {name}: {len(tasks)} calls to make", flush=True)
+    prompt_cache = {
+        item["id"]: render(
             ROOT / "harness" / "prompts" / "explain.md",
             {"text": item["text"], "question": item["question"]},
         )
-        for s in range(n):
-            key = f'{item["id"]}|{s}'
-            if key in done:
-                continue
-            try:
-                content = chat(provider, model, base_url, [{"role": "user", "content": prompt}], temp, mt)
-            except Exception as e:
+        for item in items
+    }
+
+    def a_worker(task):
+        item, s = task
+        key = f'{item["id"]}|{s}'
+        try:
+            content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache[item["id"]]}], temp, mt)
+        except Exception as e:
+            with PRINT_LOCK:
                 print(f"[warn] {name} {key}: {e}", flush=True)
-                continue
-            append_result(out_a, {"item_id": item["id"], "sample": s, "output": content, "model": name, "ts": time.time()})
-            done.add(key)
+            return
+        append_result(out_a, {"item_id": item["id"], "sample": s, "output": content, "model": name, "ts": time.time()}, lock)
+        with PRINT_LOCK:
             print(f"[a] {name} {key} ok", flush=True)
+
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        list(ex.map(a_worker, tasks))
 
     out_b = ROOT / CFG["paths"]["outputs"] / name / "lol_b.jsonl"
     done = done_keys(out_b)
-    todo = sum(1 for prem in premises for s in range(n) if f'{prem["id"]}|{s}' not in done)
-    print(f"[b] {name}: {todo} calls to make", flush=True)
-    for prem in premises:
-        prompt = render(
+    tasks = [(prem, s) for prem in premises for s in range(nb) if f'{prem["id"]}|{s}' not in done]
+    print(f"[b] {name}: {len(tasks)} calls to make", flush=True)
+    prompt_cache_b = {
+        prem["id"]: render(
             ROOT / "harness" / "prompts" / "generate.md",
             {
                 "format": prem["format"],
@@ -152,27 +174,42 @@ def run_candidate(cand, items, premises):
                 "edginess_budget": prem["edginess_budget"],
             },
         )
-        for s in range(n):
-            key = f'{prem["id"]}|{s}'
-            if key in done:
-                continue
-            try:
-                content = chat(provider, model, base_url, [{"role": "user", "content": prompt}], temp, mt)
-            except Exception as e:
+        for prem in premises
+    }
+
+    def b_worker(task):
+        prem, s = task
+        key = f'{prem["id"]}|{s}'
+        try:
+            content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache_b[prem["id"]]}], temp, mt)
+        except Exception as e:
+            with PRINT_LOCK:
                 print(f"[warn] {name} {key}: {e}", flush=True)
-                continue
-            append_result(out_b, {"item_id": prem["id"], "sample": s, "output": content, "model": name, "ts": time.time()})
-            done.add(key)
+            return
+        append_result(out_b, {"item_id": prem["id"], "sample": s, "output": content, "model": name, "ts": time.time()}, lock)
+        with PRINT_LOCK:
             print(f"[b] {name} {key} ok", flush=True)
+
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        list(ex.map(b_worker, tasks))
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("only", nargs="?", default=None, help="run a single candidate by name")
+    args = parser.parse_args()
+
     load_env()
     items = load_jsonl(ROOT / CFG["paths"]["items_a"])
     premises = load_jsonl(ROOT / CFG["paths"]["premises_b"])
     cands = [c for c in CFG["candidates"] if c.get("enabled")]
+    if args.only:
+        cands = [c for c in cands if c["name"] == args.only]
+        if not cands:
+            print(f"candidate '{args.only}' not found or not enabled")
+            return
     if not cands:
-        print("No enabled candidates in harness/config.yaml. Set enabled: true for models you have keys for.")
+        print("No enabled candidates in harness/config.yaml.")
         return
     for cand in cands:
         print(f"=== {cand['name']} ===", flush=True)

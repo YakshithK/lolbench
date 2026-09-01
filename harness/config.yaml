@@ -2,15 +2,17 @@
 # Every result is stamped with (dataset_version, harness_hash). Bump dataset_version when items change.
 
 dataset_version: "0.1.0"
-harness_version: "0.1.1"
+harness_version: "0.1.2"
 
 # n samples per model-item (documented deviation: v0 runs 3; raised to 10 at C5)
 n_samples: 3
 lol_b_samples: 1          # voting uses sample 0; extra samples added at C5
 max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning tokens
 judge_max_tokens: 1500
-temperature: 0.9          # generation diversity; judge calls use temperature 0
+parallel_workers: 3         # per-candidate concurrent calls
 
+# Candidates: five free B.AI models for v0. Paid entries (OpenRouter/xAI)
+# stay disabled until keys land.
 candidates:
   - name: glm-5.3-flash
     provider: bai
@@ -20,33 +22,56 @@ candidates:
     provider: bai
     model: deepseek-v4-flash
     enabled: true
+  - name: hy3
+    provider: bai
+    model: hy3
+    enabled: true
+  - name: mimo-v2.5
+    provider: bai
+    model: mimo-v2.5
+    enabled: true
+  - name: qwen3.8-flash
+    provider: bai
+    model: qwen3.8-flash
+    enabled: true
+  # ---- paid, enable when keys exist ----
+  - name: gpt-5-nano
+    provider: openrouter
+    model: openai/gpt-5-nano
+    enabled: false
+  - name: gemini-3.1-flash-lite
+    provider: openrouter
+    model: google/gemini-3.1-flash-lite
+    enabled: false
+  - name: grok-4.6
+    provider: xai
+    model: grok-4.6
+    enabled: false
   - name: local-70b
     provider: local
     model: llama-3.3-70b-instruct-q4_K_M
     base_url: http://localhost:11434/v1
     enabled: false
-  - name: gemini-flash
-    provider: gemini
-    model: gemini-2.0-flash
-    enabled: false
-  - name: groq-llama-3.3-70b
-    provider: groq
-    model: llama-3.3-70b-versatile
-    enabled: false
 
-# Judge is DeepSeek (free on b.ai). Per governance, a judge never scores its
-# own family: exclude_models makes DeepSeek rows skip judging (GLM rows are
-# graded by DeepSeek; DeepSeek rows await a third free family or credits).
-judge:
-  provider: bai
-  model: deepseek-v4-flash
-  exclude_models:
-    - deepseek-v4-flash
+# Dual-judge protocol: every model is graded ONLY by judges from a different
+# family. DeepSeek grades the non-DeepSeek rows; Qwen grades the DeepSeek rows
+# (and everything else, giving most models two independent judge scores).
+# Inter-judge agreement on shared rows = free judge-validity signal.
+judges:
+  - name: deepseek-judge
+    provider: bai
+    model: deepseek-v4-flash
+    exclude_models: [deepseek-v4-flash]
+  - name: qwen-judge
+    provider: bai
+    model: qwen3.8-flash
+    exclude_models: [qwen3.8-flash]
 
 # Free-tier style rate limits (requests per minute); 0 = unlimited.
-# b.ai aggregator limits unknown — backoff in run.py handles 429s.
 rate_limits_rpm:
   bai: 0
+  openrouter: 0
+  xai: 0
   groq: 30
   gemini: 10
   local: 0
