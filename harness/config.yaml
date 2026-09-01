@@ -12,6 +12,7 @@ max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning
 judge_max_tokens: 1500
 parallel_workers: 8         # per-candidate concurrent calls
 temperature: 0.9            # generation diversity; judge calls use temperature 0
+max_spend_usd: 0.85         # hard stop for THIS process's paid calls (matches remaining OR credits; raise after top-up)
 
 # Candidates: five free B.AI models for v0. Paid entries (OpenRouter/xAI)
 # stay disabled until keys land.

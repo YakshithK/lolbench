@@ -35,6 +35,10 @@ WINDOWS = {}
 PRINT_LOCK = threading.Lock()
 
 
+SPEND = {"usd": 0.0}
+SPEND_LOCK = threading.Lock()
+
+
 def load_env():
     env_file = ROOT / "harness" / ".env"
     if env_file.exists():
@@ -43,6 +47,38 @@ def load_env():
             if line and not line.startswith("#") and "=" in line:
                 k, _, v = line.partition("=")
                 os.environ.setdefault(k.strip(), v.strip())
+
+
+# Rough per-model USD pricing (per 1M tokens) for spend guarding.
+# Reasoning models burn extra hidden output tokens; these are CEILING prices.
+MODEL_PRICES = {
+    "glm-5.3-flash": (0, 0), "deepseek-v4-flash": (0, 0), "hy3": (0, 0),
+    "mimo-v2.5": (0, 0), "qwen3.8-flash": (0, 0),
+    "glm-5.3": (1.4, 4.4), "deepseek-v4-pro": (1.6, 3.2),
+    "qwen3.8-max": (2, 6), "mimo-v2.5-pro": (0.44, 0.87), "hy4-preview": (0.83, 2.5),
+    "gpt-5.6-sol-pro": (2, 10), "gemini-3.1-pro": (2, 12),
+    "claude-opus-5": (5, 25), "muse-spark-1.2-contributor": (0.10, 0.20),
+    "grok-4.6": (2, 6),
+}
+COST_LOG = ROOT / "outputs" / "cost_log.jsonl"
+
+
+def record_cost(model, usage):
+    pin, pout = MODEL_PRICES.get(model, (5, 25))  # unknown models priced pessimistically
+    tin = (usage or {}).get("prompt_tokens", 0)
+    tout = (usage or {}).get("completion_tokens", 0)
+    usd = tin / 1e6 * pin + tout / 1e6 * pout
+    with SPEND_LOCK:
+        SPEND["usd"] += usd
+        COST_LOG.parent.mkdir(parents=True, exist_ok=True)
+        with COST_LOG.open("a", encoding="utf-8") as f:
+            f.write(json.dumps({"model": model, "in": tin, "out": tout, "usd": round(usd, 6), "total": round(SPEND["usd"], 4), "ts": time.time()}) + "\n")
+    return usd
+
+
+def spend_exceeded():
+    cap = float(CFG.get("max_spend_usd", 0) or 0)
+    return cap and SPEND["usd"] >= cap
 
 
 def throttle(provider):
@@ -59,7 +95,7 @@ def throttle(provider):
     w["n"] += 1
 
 
-def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6):
+def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6, cost_key=None):
     url = base_url or PROVIDER_URLS[provider]
     key = os.environ.get(ENV_KEYS.get(provider, ""), "")
     headers = {"Content-Type": "application/json"}
@@ -75,6 +111,7 @@ def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6
         try:
             with urllib.request.urlopen(req, timeout=240) as r:
                 data = json.loads(r.read().decode("utf-8"))
+                record_cost(cost_key or model, data.get("usage"))
                 return data["choices"][0]["message"]["content"]
         except urllib.error.HTTPError as e:
             if e.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
@@ -147,11 +184,15 @@ def run_candidate(cand, items, premises):
     def a_worker(task):
         item, s = task
         key = f'{item["id"]}|{s}'
+        if spend_exceeded():
+            with PRINT_LOCK:
+                print(f"[spend-guard] skipping {name} {key}: max_spend_usd reached", flush=True)
+            return
         content = None
         budget = mt
         for try_i in range(2):
             try:
-                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache[item["id"]]}], temp, budget)
+                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache[item["id"]]}], temp, budget, cost_key=name)
             except Exception as e:
                 with PRINT_LOCK:
                     print(f"[warn] {name} {key}: {e}", flush=True)
@@ -190,11 +231,15 @@ def run_candidate(cand, items, premises):
     def b_worker(task):
         prem, s = task
         key = f'{prem["id"]}|{s}'
+        if spend_exceeded():
+            with PRINT_LOCK:
+                print(f"[spend-guard] skipping {name} {key}: max_spend_usd reached", flush=True)
+            return
         content = None
         budget = mt
         for try_i in range(2):
             try:
-                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache_b[prem["id"]]}], temp, budget)
+                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache_b[prem["id"]]}], temp, budget, cost_key=name)
             except Exception as e:
                 with PRINT_LOCK:
                     print(f"[warn] {name} {key}: {e}", flush=True)
