@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOL Bench - AI humor, measured honestly</title>
+<meta name="description" content="LOL Bench measures whether LLMs can appreciate, produce, and discriminate humor. Credibility-first: every number ships with its error bars.">
+<style>
+  :root { --bg:#0d0f14; --card:#161a22; --ink:#e8eaf0; --muted:#9aa3b2; --accent:#ffd166; --good:#7ad97a; --line:#242a35; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,sans-serif; line-height:1.55; }
+  .wrap { max-width:880px; margin:0 auto; padding:24px 20px 64px; }
+  header h1 { font-size:2.2rem; letter-spacing:-0.02em; }
+  header h1 span { color:var(--accent); }
+  .tagline { color:var(--muted); margin-top:6px; }
+  .banner { margin:20px 0; padding:12px 16px; border:1px dashed var(--accent); border-radius:10px; background:rgba(255,209,102,.07); font-weight:600; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; margin:16px 0; }
+  .card h2 { font-size:1.15rem; margin-bottom:8px; }
+  .card p { color:var(--muted); }
+  .origin { border-left:3px solid var(--accent); }
+  .origin blockquote { margin:10px 0 0; padding-left:14px; border-left:2px solid var(--line); color:var(--ink); font-style:italic; }
+  table { width:100%; border-collapse:collapse; margin-top:12px; font-size:.95rem; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; }
+  .num { font-variant-numeric:tabular-nums; }
+  .muted { color:var(--muted); font-size:.9rem; }
+  .pill { display:inline-block; padding:2px 10px; border-radius:99px; border:1px solid var(--line); font-size:.78rem; color:var(--muted); margin-right:6px; }
+  .big { font-size:1.6rem; font-weight:700; }
+  footer { margin-top:36px; color:var(--muted); font-size:.85rem; }
+  a { color:var(--accent); text-decoration:none; }
+  code { background:var(--line); padding:1px 6px; border-radius:6px; font-size:.85em; }
+  .empty { color:var(--muted); font-style:italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>LOL <span>Bench</span></h1>
+    <div class="tagline">Can AI make you laugh? Measured in three faculties: appreciation, production, taste. Credibility-first.</div>
+  </header>
+
+  <div class="banner">PRELIMINARY - auto-judged, no human calibration yet. Every score below ships with n and a 95% CI. Judge model family is disjoint from scored candidates.</div>
+
+  <section class="card origin">
+    <h2>Origin</h2>
+    <p>Someone posted they were looking to fund someone making LLMs funny. Then:</p>
+    <blockquote>
+      <p>"Who's building LOL bench?"</p>
+      <p>"Give me a few hours."</p>
+      <p>"Get this guy a job stat."</p>
+    </blockquote>
+    <p class="muted" style="margin-top:8px">This site is the answer. The name is the callback.</p>
+  </section>
+
+  <section class="card">
+    <h2>LOL-A - Appreciation <span class="pill">auto-judged</span></h2>
+    <p>150 items across six families: mechanism explanation, pun disambiguation, benign-violation reasoning, subtle inference, cultural reference, and failed-humor diagnosis ("why is this NOT funny"). Models must explain the joke; a disjoint-family judge grades explanations against expert gold elements.</p>
+    <div id="lol-a"><p class="empty">Scores populate after the first overnight run.</p></div>
+  </section>
+
+  <section class="card">
+    <h2>LOL-B - Production <span class="pill">humans vote</span></h2>
+    <p>Every model writes under the same constrained premises. You vote on anonymous pairs. Win rates with Wilson confidence intervals appear as votes accumulate. No Elo until the vote volume justifies it - that is the honesty policy.</p>
+    <div id="matchup"></div>
+    <div id="lol-b"><p class="empty">Voting opens when wave-0 outputs are published.</p></div>
+    <div id="lol-b-stats" style="margin-top:12px"></div>
+  </section>
+
+  <section class="card">
+    <h2>LOL-C - Taste <span class="pill">automatic</span></h2>
+    <p>Does a model's internal sense of humor match ours? Rank-correlation against human-rated joke pools, plus the self-awareness probe: does a model's taste track its own output quality?</p>
+    <div id="lol-c"><p class="empty">Pending data import (graded joke pools).</p></div>
+  </section>
+
+  <section class="card">
+    <h2>Why the banner matters</h2>
+    <p>Every prior attempt at humor evaluation died of judge mistrust, not topic disinterest. Research finding: human inter-annotator agreement on funniness caps around alpha ~0.45 - humans barely agree with each other. So LOL Bench publishes its own error bars first: judge-validity scores, human agreement, confidence intervals, on the leaderboard itself, not in an appendix. Claims ship when earned. Visibility ships now.</p>
+  </section>
+
+  <footer>
+    <div>Open code, split data. Test items are private; canary strings embedded.</div>
+    <div style="margin-top:6px"><span id="stamp"></span> &middot; <a href="https://github.com/YakshithK/lolbench">github.com/YakshithK/lolbench</a></div>
+  </footer>
+</div>
+
+<script>
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+async function boot(){
+  try{
+    const r=await fetch('./results.json');const j=await r.json();
+    document.getElementById('stamp').textContent='dataset v'+j.dataset_version+' / harness '+j.harness_hash+' / generated '+new Date(j.generated_at).toLocaleString();
+    const A=document.getElementById('lol-a');
+    const models=Object.keys(j.lol_a||{});
+    if(models.length){
+      const rows=models.sort((a,b)=>(j.lol_a[b].mean||0)-(j.lol_a[a].mean||0)).map(m=>{
+        const s=j.lol_a[m];
+        return '<tr><td>'+esc(m)+'</td><td class="num big">'+(s.mean*100).toFixed(1)+'</td><td class="num">'+(s.ci95[0]*100).toFixed(1)+' - '+(s.ci95[1]*100).toFixed(1)+'</td><td class="num">'+s.n_scored+'</td></tr>';
+      }).join('');
+      A.innerHTML='<table><tr><th>model</th><th>comprehension %</th><th>95% CI</th><th>n</th></tr>'+rows+'</table><p class="muted" style="margin-top:8px">Mean rubric score across explanations, element-hit graded (0 / 0.5 / 1). Higher is better. CIs are bootstrap.</p>';
+    }
+    if(j.lol_b && j.lol_b.matchups && j.lol_b.matchups.length){ renderMatchup(j.lol_b.matchups); }
+    else{
+      try{ const m=await fetch('./matchups.json'); if(m.ok){ renderMatchup(await m.json()); } }catch(e){}
+    }
+    try{
+      const lb=await fetch('/api/leaderboard'); if(lb.ok){ const stats=await lb.json();
+        const el=document.getElementById('lol-b-stats');
+        if(Array.isArray(stats)&&stats.length){
+          el.innerHTML='<table><tr><th>matchup</th><th>A wins</th><th>B wins</th><th>ties</th><th>n</th></tr>'+stats.map(s=>'<tr><td>'+esc(s.model_a)+' vs '+esc(s.model_b)+'</td><td class="num">'+s.wins_a+'</td><td class="num">'+s.wins_b+'</td><td class="num">'+s.ties+'</td><td class="num">'+s.total+'</td></tr>').join('')+'</table>';
+        }
+      }
+    }catch(e){}
+  }catch(e){ console.log(e); }
+}
+let currentPair=null;
+async function renderMatchup(matchups){
+  const box=document.getElementById('lol-b');
+  function show(){
+    currentPair=matchups[Math.floor(Math.random()*matchups.length)];
+    box.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
+      '<div class="card" style="margin:0"><h2>Joke A</h2><p style="color:var(--ink)">'+esc(currentPair.a)+'</p></div>'+
+      '<div class="card" style="margin:0"><h2>Joke B</h2><p style="color:var(--ink)">'+esc(currentPair.b)+'</p></div></div>'+
+      '<p class="muted" style="margin-top:10px">Premise: '+esc(currentPair.premise)+'</p>'+
+      '<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">'+
+      '<button onclick="vote(\'A\')">A is funnier</button><button onclick="vote(\'B\')">B is funnier</button><button onclick="vote(\'tie\')">Both flat</button></div>';
+  }
+  window.vote=async function(w){
+    if(!currentPair)return;
+    try{
+      await fetch('/api/vote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        matchup_id:currentPair.matchup_id,premise_id:currentPair.premise_id,
+        model_a:currentPair.model_a,model_b:currentPair.model_b,winner:w})});
+      show();
+    }catch(e){alert('vote failed, try again');}
+  };
+  show();
+}
+boot();
+</script>
+</body>
+</html>
