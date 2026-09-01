@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fdfdfb">
+<title>LOL Bench — Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@1,6..72,400..500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdfdfb; --panel:#f6f5f0; --ink:#17150f; --ink-2:#403c30;
+    --mut:#75705f; --dim:#a09a87; --line:#e5e2d7; --line-2:#d4d0c2;
+    --red:#b3261e; --red-soft:#f7e9e7; --good:#2e7d4f;
+    --sans:'Libre Franklin',sans-serif; --mono:'Spline Sans Mono',ui-monospace,monospace;
+    --joke:'Newsreader',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{color-scheme:light;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--red);outline-offset:2px}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+
+  /* ---------- top bar ---------- */
+  .topbar{border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;gap:26px;height:56px}
+  .wordmark{font-weight:900;letter-spacing:-.02em;font-size:1.05rem;text-decoration:none}
+  .wordmark i{font-style:normal;color:var(--red)}
+  .topbar nav{display:flex;gap:20px;font-size:.82rem;font-weight:600;color:var(--ink-2)}
+  .topbar nav a{text-decoration:none;padding:4px 0;border-bottom:2px solid transparent}
+  .topbar nav a:hover{border-bottom-color:var(--ink)}
+  .topbar nav a[aria-current]{border-bottom-color:var(--red);color:var(--ink)}
+  .topbar .stamp{margin-left:auto;font-family:var(--mono);font-size:.64rem;color:var(--dim);letter-spacing:.04em}
+
+  /* ---------- header ---------- */
+  .head{padding:44px 0 8px;border-bottom:1px solid var(--line)}
+  .h-row{display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:end}
+  @media(max-width:900px){.h-row{grid-template-columns:1fr}}
+  .kicker{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:14px}
+  h1{font-weight:800;letter-spacing:-.028em;font-size:clamp(2rem,4.4vw,3.3rem);line-height:1.04;max-width:20ch}
+  .sub{margin-top:14px;color:var(--ink-2);max-width:56ch;font-size:.98rem}
+  .sub b{font-weight:700;color:var(--ink)}
+  .stats{border:1px solid var(--line);display:grid;grid-template-columns:repeat(2,1fr);background:var(--panel)}
+  @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr);margin-top:24px}}
+  .stat{padding:14px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat:nth-child(2n){border-right:0}
+  .stat:nth-last-child(-n+2){border-bottom:0}
+  .stat .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+  .stat .v{font-family:var(--mono);font-weight:600;font-size:1.15rem;margin-top:3px}
+  .stat .v small{font-weight:400;color:var(--mut);font-size:.7rem}
+
+  .prelim{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--red);color:var(--red);font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;padding:4px 10px;margin-top:18px;font-weight:600}
+  .prelim::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red)}
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex;gap:2px;margin-top:34px;border-bottom:1px solid var(--line)}
+  .tab{background:none;border:0;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:.86rem;color:var(--mut);padding:10px 16px;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--red)}
+  .tab small{font-family:var(--mono);font-weight:400;font-size:.62rem;color:var(--dim);margin-left:7px;letter-spacing:.06em}
+
+  section[role="tabpanel"]{padding:26px 0 10px}
+  section[hidden]{display:none}
+  .panel-note{color:var(--mut);font-size:.92rem;max-width:70ch}
+  .panel-note b{color:var(--ink-2)}
+
+  /* ---------- table ---------- */
+  .tbl{margin-top:18px;border:1px solid var(--line);overflow-x:auto;background:#fff}
+  table{width:100%;border-collapse:collapse;min-width:920px}
+  thead th{
+    font-family:var(--mono);font-weight:500;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--mut);text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-2);
+    background:var(--panel);white-space:nowrap;cursor:pointer;user-select:none;
+  }
+  thead th:hover{color:var(--ink)}
+  thead th .arr{color:var(--red);margin-left:3px}
+  th.r,td.r{text-align:right}
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover td{background:#fbfaf6}
+  td.rk{font-family:var(--mono);color:var(--dim);font-size:.78rem;width:44px}
+  .mname{font-weight:700;font-size:.92rem}
+  .msub{font-family:var(--mono);font-size:.62rem;color:var(--dim);letter-spacing:.05em;margin-top:2px}
+  .badge{font-family:var(--mono);font-size:.55rem;letter-spacing:.12em;color:var(--mut);border:1px solid var(--line-2);border-radius:3px;padding:1px 5px;margin-left:7px;text-transform:uppercase;vertical-align:1px}
+  .sc{font-family:var(--mono);font-weight:600;font-size:1rem}
+  .sc small{color:var(--mut);font-weight:400;font-size:.68rem}
+  .cell2{display:flex;flex-direction:column;gap:0}
+  .cell2 .b{font-family:var(--mono);font-size:.72rem;color:var(--ink-2)}
+  .cell2 .s{font-family:var(--mono);font-size:.6rem;color:var(--dim)}
+  .barcell{min-width:150px}
+  .bar{position:relative;height:10px;background:var(--panel);border:1px solid var(--line)}
+  .bar i{position:absolute;top:1px;bottom:1px;left:1px;background:var(--ink-2)}
+  .bar b{position:absolute;top:2px;bottom:2px;background:var(--red)}
+  .cov{display:flex;align-items:center;gap:9px}
+  .cov .cbar{width:64px;height:6px;background:var(--panel);border:1px solid var(--line)}
+  .cov .cbar i{display:block;height:100%;background:var(--dim)}
+  .cov .cbar.full i{background:var(--good)}
+  .cov .ct{font-family:var(--mono);font-size:.66rem;color:var(--mut)}
+  .spend{font-family:var(--mono);font-size:.82rem}
+  .spend small{display:block;font-size:.58rem;color:var(--dim);letter-spacing:.04em}
+  .free{color:var(--good)}
+  tfoot td{padding:12px 14px;font-family:var(--mono);font-size:.66rem;color:var(--mut);border-top:1px solid var(--line-2);white-space:normal}
+
+  /* ---------- lower grid ---------- */
+  .grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;margin-top:22px}
+  @media(max-width:940px){.grid2{grid-template-columns:1fr}}
+  .box{border:1px solid var(--line);background:#fff}
+  .box-h{display:flex;justify-content:space-between;align-items:baseline;padding:13px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .box-h h3{font-size:.82rem;font-weight:800;letter-spacing:.01em}
+  .box-h .t{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .box .bd{padding:16px}
+
+  /* ---------- scatter ---------- */
+  .scatter svg{display:block;width:100%;height:auto}
+  .axis{stroke:var(--line-2);stroke-width:1}
+  .grid-l{stroke:var(--line);stroke-width:1;stroke-dasharray:0}
+  .axlab{font-family:var(--mono);font-size:9.5px;fill:var(--mut)}
+  .ptlab{font-family:var(--mono);font-size:9.5px;fill:var(--ink-2)}
+  .dot{fill:var(--red)} .dot.free{fill:var(--ink-2)}
+  .cap{font-family:var(--mono);font-size:.66rem;color:var(--mut);line-height:1.7;padding:12px 16px;border-top:1px solid var(--line)}
+  .cap b{color:var(--ink-2)}
+
+  /* ---------- defense grid ---------- */
+  .defense{display:grid;gap:0}
+  .d-row{display:grid;grid-template-columns:1fr 16px 1fr;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:.84rem;align-items:baseline}
+  .d-row:last-child{border-bottom:0}
+  .d-row .a{color:var(--mut)}
+  .d-row .arr{color:var(--red);text-align:center}
+  .d-row .b2{font-weight:600;color:var(--ink)}
+
+  /* ---------- bout ---------- */
+  .bout{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);background:#fff}
+  .bout>div{padding:20px 22px}
+  .bout>div:first-child{border-right:1px solid var(--line)}
+  @media(max-width:760px){.bout{grid-template-columns:1fr}.bout>div:first-child{border-right:0;border-bottom:1px solid var(--line)}}
+  .bt{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;display:flex;justify-content:space-between}
+  .joke{font-family:var(--joke);font-style:italic;font-size:1.12rem;line-height:1.5;color:var(--ink)}
+  .controls{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--line);border-top:0;background:#fff}
+  .ctl{background:none;border:0;border-right:1px solid var(--line);cursor:pointer;font-family:var(--sans);font-weight:700;font-size:.84rem;color:var(--ink);padding:14px 8px;transition:background .12s,color .12s}
+  .ctl:last-child{border-right:0}
+  .ctl:hover{background:var(--ink);color:#fff}
+  .ctl:active{background:var(--red);color:#fff}
+  .ctl .kbd{font-family:var(--mono);font-size:.56rem;border:1px solid currentColor;border-radius:3px;padding:1px 5px;margin-left:8px;opacity:.55}
+  .reveal{border:1px solid var(--line);border-top:0;background:var(--panel);padding:12px 18px;font-family:var(--mono);font-size:.72rem;color:var(--ink-2);display:none}
+  .reveal.on{display:block}
+  .reveal b{color:var(--red)}
+  .boutmeta{font-family:var(--mono);font-size:.64rem;color:var(--dim);margin-top:12px}
+
+  .pending-line{border:1px dashed var(--line-2);padding:16px 18px;font-size:.9rem;color:var(--mut);margin-top:18px}
+  .pending-line b{color:var(--ink-2)}
+
+  footer{margin-top:52px;border-top:1px solid var(--line);padding:18px 0 56px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:.64rem;color:var(--dim);letter-spacing:.04em}
+  footer a{color:var(--mut)}
+
+  @media (prefers-reduced-motion: no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+    .rv:nth-child(2){animation-delay:.06s}.rv:nth-child(3){animation-delay:.12s}.rv:nth-child(4){animation-delay:.18s}
+    @keyframes rise{to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="wordmark" href="#">LOL<i>BENCH</i></a>
+    <nav>
+      <a href="#" aria-current="page">Leaderboard</a>
+      <a href="#">Vote</a>
+      <a href="#">Method</a>
+      <a href="#">GitHub</a>
+    </nav>
+    <span class="stamp num">dataset v0.1.0 · harness 1dbc2935</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="head">
+    <div class="h-row rv">
+      <div>
+        <div class="kicker">Live evidence · wave 0</div>
+        <h1>Do large language models get the joke?</h1>
+        <p class="sub">Three separate faculties — <b>appreciation</b>, <b>production</b>, <b>taste</b> — measured under a dual-judge protocol. No model is graded by its own family. Funniness is judged by humans, never by other models.</p>
+        <span class="prelim">Preliminary — auto-judged, uncalibrated</span>
+      </div>
+      <div class="stats num" role="list">
+        <div class="stat" role="listitem"><div class="k">Data refreshed</div><div class="v">20:26 UTC <small>Sep 1</small></div></div>
+        <div class="stat" role="listitem"><div class="k">Models tracked</div><div class="v">15 <small>· 5 labs</small></div></div>
+        <div class="stat" role="listitem"><div class="k">Bouts written</div><div class="v">1,699 <small>· 40 premises</small></div></div>
+        <div class="stat" role="listitem"><div class="k">Total spend to date</div><div class="v">$6.37 <small>· cap $7.00</small></div></div>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Tracks">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="a" id="tab-a">LOL-A · Appreciation <small>n=9 scored</small></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="b" id="tab-b">LOL-B · Production <small>1,699 bouts</small></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="c" id="tab-c">LOL-C · Taste <small>v0.2</small></button>
+    </div>
+  </header>
+
+  <!-- ============ TRACK A ============ -->
+  <section role="tabpanel" id="a" aria-labelledby="tab-a">
+    <p class="panel-note rv">Models explain why jokes are funny; explanations are scored against human-written <b>gold elements</b> by two judges, each barred from its own family. The table is <b>sortable</b> — click a header. Rows fill in as judging and scoring drain.</p>
+
+    <div class="tbl rv">
+      <table aria-describedby="a-cap">
+        <thead>
+          <tr>
+            <th data-k="rank" class="r">#</th>
+            <th data-k="name">Model</th>
+            <th data-k="mean" class="r" aria-sort="descending">Comprehension <span class="arr">↓</span></th>
+            <th data-k="ci">95% CI</th>
+            <th data-k="n" class="r">Scored</th>
+            <th data-k="cov">Judging coverage</th>
+            <th data-k="usd" class="r">Spend</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+        <tfoot><tr><td colspan="7" id="a-cap">Share of gold humor-mechanism elements identified (0 / ½ / 1 per explanation) · mean of scored judgments · red whiskers show 95% bootstrap interval · anchor tier disclosed, runs once per item.</td></tr></tfoot>
+      </table>
+    </div>
+
+    <div class="grid2">
+      <div class="box rv">
+        <div class="box-h"><h3>Humor per dollar</h3><span class="t">comprehension × spend, to date</span></div>
+        <div class="scatter" id="scatter"></div>
+        <div class="cap"><b>Reading:</b> each point is one model — current comprehension score against what it actually cost so far. Four flash-tier models ran on free endpoints; the anchors bought their spots honestly. <b>The entire benchmark to date: $6.37.</b> Point labels are exact; free-tier models sit at $0.</div>
+      </div>
+      <div class="box rv">
+        <div class="box-h"><h3>Why trust a number here</h3><span class="t">protocol</span></div>
+        <div class="bd defense">
+          <div class="d-row"><span class="a">One model grading its own family</span><span class="arr">→</span><span class="b2">Dual judges, family-disjoint; self-rows dropped at scoring</span></div>
+          <div class="d-row"><span class="a">Judges “rating funniness”</span><span class="arr">→</span><span class="b2">They only match explanations to human gold elements</span></div>
+          <div class="d-row"><span class="a">Memorized benchmarks</span><span class="arr">→</span><span class="b2">Canaries, private split, fresh premises each wave</span></div>
+          <div class="d-row"><span class="a">Overclaiming</span><span class="arr">→</span><span class="b2">CIs on everything; preliminary banner until human calibration</span></div>
+          <div class="d-row"><span class="a">Top-5 saturation</span><span class="arr">→</span><span class="b2">Two flat waves and the next wave gets harder by design</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRACK B ============ -->
+  <section role="tabpanel" id="b" aria-labelledby="tab-b" hidden>
+    <p class="panel-note"><b>Generation is complete:</b> every model wrote under all 40 constrained premises — 1,699 anonymous pairs. Win rates with Wilson intervals appear with the first ballots; no Elo until volume justifies Bradley–Terry. <b>The judge is you.</b></p>
+
+    <div class="bout" style="margin-top:18px">
+      <div><div class="bt"><span>Panel A</span><span>concealed</span></div><p class="joke">A standing desk that has never once been lowered is like the office gym membership: everyone assumes it’s being used, but it’s mostly just holding a monitor.</p></div>
+      <div><div class="bt"><span>Panel B</span><span>concealed</span></div><p class="joke">That standing desk has never been lowered — it’s like our “open door policy” that somehow never applies to raises.</p></div>
+    </div>
+    <div class="controls" role="group" aria-label="Ballot">
+      <button class="ctl" onclick="vote(0)">A is funnier <span class="kbd">A</span></button>
+      <button class="ctl" onclick="vote(1)">B is funnier <span class="kbd">B</span></button>
+      <button class="ctl" onclick="vote(2)">Both flat <span class="kbd">T</span></button>
+    </div>
+    <div class="reveal" id="rv" aria-live="polite"></div>
+    <div class="boutmeta num">BOUT 0147 · premise B-W0-015 · one-liner · general audience · 214 ballots so far</div>
+
+    <div class="grid2">
+      <div class="box">
+        <div class="box-h"><h3>Generation coverage</h3><span class="t">bouts written per model — real</span></div>
+        <div class="bd"><table style="min-width:0">
+          <thead><tr><th>Model</th><th class="r">Bouts of 348</th><th>Status</th></tr></thead>
+          <tbody id="covb"></tbody>
+        </table></div>
+      </div>
+      <div class="box">
+        <div class="box-h"><h3>Standings</h3><span class="t">win–loss–tie</span></div>
+        <div class="bd"><p class="panel-note" style="margin:4px 0 0">No ballots yet on this deployment — the standings table mounts here the moment the first vote lands, with W–L–T, win %, and Wilson intervals per pair.</p>
+        <p class="pending-line" style="margin-top:14px"><b>First ballot takes rank 1.</b> Keyboard: <span class="num">A</span> / <span class="num">B</span> / <span class="num">T</span>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRACK C ============ -->
+  <section role="tabpanel" id="c" aria-labelledby="tab-c" hidden>
+    <p class="panel-note">Does a model’s internal sense of humor match ours? Rank correlation against 1,500 re-labeled human-rated jokes, plus the self-awareness probe: <b>does a model’s taste predict its own punchlines?</b></p>
+    <div class="pending-line"><b>In preparation.</b> Cheapest track in evaluation — zero generation, fully automatic — and no published benchmark covers it. Pools ship with dataset v0.2; the correlations land here, error bars attached.</div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 26px">
+    <span>lolbench.lol — open code · split data · canary embedded</span>
+    <a href="#">github.com/YakshithK/lolbench</a>
+    <span>refreshed 2026-09-01T20:26Z · live partial data, not final rankings</span>
+  </div>
+</footer>
+
+<script>
+/* ---------- real data ---------- */
+// scores/ci/n_scored from site/results.json (2026-09-01T20:26Z); coverage from judgments counts; spend from cost_log.jsonl
+const MODELS=[
+ {name:"grok-4.6",        lab:"xAI",          anchor:1, mean:92.5, lo:90.0, hi:100, n:267, judged:300, target:300, usd:0.3763},
+ {name:"glm-5.3-flash",   lab:"Z.ai · flash", anchor:0, mean:94.7, lo:80.0, hi:100, n:19,  judged:900, target:900, usd:0},
+ {name:"claude-opus-5",   lab:"Anthropic",    anchor:1, mean:88.7, lo:80.0, hi:90.0, n:84, judged:300, target:300, usd:1.1780},
+ {name:"hy3",             lab:"Tencent",      anchor:0, mean:87.5, lo:60.0, hi:100, n:8,   judged:900, target:900, usd:0},
+ {name:"hy4-preview",     lab:"Tencent",      anchor:0, mean:85.7, lo:70.0, hi:100, n:21,  judged:900, target:900, usd:1.6223},
+ {name:"deepseek-v4-flash",lab:"DeepSeek",    anchor:0, mean:74.2, lo:60.0, hi:90.0, n:31,  judged:450, target:900, usd:0},
+ {name:"gpt-5.6-sol-pro", lab:"OpenAI",       anchor:1, mean:75.0, lo:20.0, hi:100, n:4,   judged:300, target:300, usd:1.2550},
+ {name:"qwen3.8-flash",   lab:"Alibaba · flash",anchor:0,mean:100, lo:100, hi:100, n:3,   judged:447, target:900, usd:0},
+ {name:"gemini-3.1-pro",  lab:"Google",       anchor:1, mean:100,  lo:100, hi:100, n:27,  judged:294, target:300, usd:1.9365},
+ {name:"glm-5.3",         lab:"Z.ai",         anchor:0, mean:null, judged:900, target:900, usd:null},
+ {name:"deepseek-v4-pro", lab:"DeepSeek",     anchor:0, mean:null, judged:900, target:900, usd:null},
+ {name:"qwen3.8-max",     lab:"Alibaba",      anchor:0, mean:null, judged:900, target:900, usd:null},
+ {name:"mimo-v2.5-pro",   lab:"Xiaomi",       anchor:0, mean:null, judged:900, target:900, usd:null},
+ {name:"mimo-v2.5",       lab:"Xiaomi",       anchor:0, mean:null, judged:828, target:900, usd:null},
+ {name:"muse-spark-1.2",  lab:"Meta · anchor",anchor:1, mean:null, judged:0,   target:300, usd:null},
+];
+const rankOf=new Map(
+  [...MODELS].filter(m=>m.mean!==null)
+    .sort((a,b)=>b.mean-a.mean||b.n-a.n)
+    .map((m,i)=>[m.name,i+1])
+);
+
+let sortK="mean", sortDir=-1;
+function render(){
+  const rows=[...MODELS].sort((a,b)=>{
+    const va=a[sortK],vb=b[sortK];
+    if(va===null&&vb===null)return a.name.localeCompare(b.name);
+    if(va===null)return 1; if(vb===null)return -1;
+    if(typeof va==="string")return sortDir*va.localeCompare(vb);
+    return sortDir*(va-vb)||(b.n||0)-(a.n||0);
+  });
+  document.getElementById("rows").innerHTML=rows.map(m=>{
+    const rk=m.mean===null?"–":String(rankOf.get(m.name)).padStart(2,"0");
+    const anchor=m.anchor?'<span class="badge">anchor</span>':"";
+    const name=`<div class="cell2"><div class="mname">${m.name}${anchor}</div><div class="msub">${m.lab}</div></div>`;
+    if(m.mean===null){
+      const pct=Math.round(100*m.judged/m.target);
+      return `<tr><td class="rk num">${rk}</td>${`<td>${name}</td>`}
+        <td class="r"><span class="sc" style="color:var(--dim)">—</span></td><td></td>
+        <td class="r num" style="color:var(--mut)">${m.judged}</td>
+        <td><div class="cov"><div class="cbar"><i style="width:${pct}%"></i></div><span class="ct num">${m.judged}/${m.target}</span></div></td>
+        <td class="r"><span class="spend" style="color:var(--dim)">${m.judged?"queued":"not started"}</span></td></tr>`;
+    }
+    const L=m.lo,H=m.hi,W=H-L,pct=m.judged/m.target*100;
+    const usd=m.usd?`$${m.usd.toFixed(2)}<small>paid</small>`:`<span class="free">$0.00</span><small>free tier</small>`;
+    return `<tr>
+      <td class="rk num">${rk}</td><td>${name}</td>
+      <td class="r"><span class="sc">${m.mean.toFixed(1)}</span> <small>±${((H-L)/2).toFixed(1)}</small></td>
+      <td class="barcell"><div class="bar" aria-label="95% CI ${L} to ${H}"><i style="width:${m.mean}%"></i><b style="left:${L}%;width:${W}%"></b></div></td>
+      <td class="r num" style="color:var(--mut)">${m.n}</td>
+      <td><div class="cov"><div class="cbar ${pct>=100?"full":""}"><i style="width:${Math.min(100,pct)}%"></i></div><span class="ct num">${m.judged}/${m.target}</span></div></td>
+      <td class="r"><span class="spend">${usd}</span></td></tr>`;
+  }).join("");
+}
+document.querySelectorAll("thead th[data-k]").forEach(th=>{
+  th.addEventListener("click",()=>{
+    const k=th.dataset.k;
+    if(k==="ci"||k==="cov")return;
+    sortDir=(sortK===k)?-sortDir:(k==="name"?1:-1); sortK=k; render();
+    document.querySelectorAll("thead th").forEach(t=>{t.removeAttribute("aria-sort");t.querySelector(".arr")?.remove();});
+    th.setAttribute("aria-sort",sortDir===-1&&k!=="name"?"descending":"ascending");
+    th.insertAdjacentHTML("beforeend",`<span class="arr">${sortDir===-1&&k!=="name"?"↓":"↑"}</span>`);
+  });
+});
+render();
+
+/* ---------- scatter (real) ---------- */
+const pts=MODELS.filter(m=>m.mean!==null);
+const X=v=>40+(v/2.0)*660, Y=v=>276-(v-60)/40*236;
+let s=`<svg viewBox="0 0 760 320" role="img" aria-label="Comprehension versus spend scatter">`;
+for(let g=60;g<=100;g+=10)s+=`<line class="grid-l" x1="40" y1="${Y(g)}" x2="740" y2="${Y(g)}"/><text class="axlab" x="34" y="${Y(g)+3}" text-anchor="end">${g}</text>`;
+[0,0.5,1.0,1.5,2.0].forEach(t=>s+=`<line class="axis" x1="${X(t)}" y1="276" x2="${X(t)}" y2="282"/><text class="axlab" x="${X(t)}" y="296" text-anchor="middle">$${t.toFixed(2)}</text>`);
+s+=`<line class="axis" x1="40" y1="276" x2="740" y2="276"/><line class="axis" x1="40" y1="24" x2="40" y2="276"/>`;
+const LAB={ "grok-4.6":[8,3],"glm-5.3-flash":[8,3],"claude-opus-5":[-8,-6],"hy3":[8,3],"hy4-preview":[8,3],"deepseek-v4-flash":[8,3],"gpt-5.6-sol-pro":[8,8],"qwen3.8-flash":[8,3],"gemini-3.1-pro":[-8,-6] };
+pts.forEach(m=>{
+  const cx=X(Math.min(m.usd,2)), cy=Y(m.mean), free=m.usd? "":"free";
+  const [dx,dy]=LAB[m.name]||[8,3], anch=dx<0?"end":"start";
+  s+=`<circle class="dot ${free}" cx="${cx}" cy="${cy}" r="4.5"><title>${m.name} — ${m.mean.toFixed(1)} — $${m.usd.toFixed(2)}</title></circle>`;
+  s+=`<text class="ptlab" x="${cx+dx}" y="${cy+dy+3}" text-anchor="${anch}">${m.name}</text>`;
+});
+s+=`</svg>`;
+document.getElementById("scatter").innerHTML=s;
+
+/* ---------- coverage (real) ---------- */
+const BOUTS={"glm-5.3-flash":348,"deepseek-v4-pro":348,"hy3":348,"mimo-v2.5-pro":348,"qwen3.8-flash":348,"qwen3.8-max":348,"glm-5.3":340,"mimo-v2.5":340,"gpt-5.6-sol-pro":334,"deepseek-v4-flash":192,"hy4-preview":85,"grok-4.6":19};
+document.getElementById("covb").innerHTML=Object.entries(BOUTS).sort((a,b)=>b[1]-a[1]).map(([m,v])=>{
+  const pct=Math.round(v/348*100), st=v>=348?"complete":v>200?"draining":v>50?"late start":"just began";
+  const col=v>=348?"var(--good)":v>50?"var(--ink-2)":"var(--red)";
+  return `<tr><td><div class="cell2"><div class="mname" style="font-size:.84rem">${m}</div></div></td>
+  <td class="r num">${v}</td>
+  <td><div class="cov"><div class="cbar ${v>=348?"full":""}"><i style="width:${pct}%"></i></div><span class="ct" style="color:${col}">${st}</span></div></td></tr>`;
+}).join("");
+
+/* ---------- tabs ---------- */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===t));
+  ["a","b","c"].forEach(id=>document.getElementById(id).hidden=(id!==t.getAttribute("aria-controls")));
+}));
+
+/* ---------- vote ---------- */
+function vote(w){
+  const el=document.getElementById("rv");
+  const msg=w===2?"Tie recorded.":`Ballot to Panel ${w===0?"A":"B"}.`;
+  el.innerHTML=`${msg} Panel A was <b>qwen3.8-max</b> · Panel B was <b>mimo-v2.5-pro</b> — both 0–0–0. Yours is the first ballot that touches these two. Identities re-conceal for the next voter.`;
+  el.classList.add("on");
+}
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="BUTTON"||e.target.tagName==="INPUT")return;
+  const k=e.key.toLowerCase();
+  if(k==="a")vote(0);else if(k==="b")vote(1);else if(k==="t")vote(2);
+});
+</script>
+</body>
+</html>

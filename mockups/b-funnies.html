@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4eedf">
+<title>LOL BENCH — The Machine-Humor Standings (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..800;1,8..60,300..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --news:#f4eedf; --news-2:#ede5d0; --ink:#191712; --ink-2:#3d382c;
+    --mut:#6d6757; --rule:#22201a; --hair:#c9c0a8;
+    --red:#c22f2a; --red-ink:#a02521;
+    --frank:'Libre Franklin',sans-serif;
+    --serif:'Source Serif 4',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{color-scheme:light}
+  body{
+    background:var(--news);color:var(--ink);
+    font-family:var(--serif);font-size:16.5px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    /* print grain + gentle aging vignette */
+    background-image:
+      radial-gradient(ellipse at 50% -10%, rgba(255,252,240,.9), transparent 55%),
+      radial-gradient(ellipse at 50% 120%, rgba(120,100,60,.10), transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");
+  }
+  .page{max-width:1200px;margin:0 auto;padding:26px 22px 70px;position:relative}
+  a{color:var(--ink);text-decoration-color:var(--red);text-underline-offset:3px}
+  a:hover{color:var(--red-ink)}
+  :focus-visible{outline:2px solid var(--red);outline-offset:2px}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* ---------- masthead ---------- */
+  .ear{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--frank);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--rule);padding-bottom:8px}
+  .ear b{color:var(--red-ink)}
+  .masthead{text-align:center;padding:26px 0 20px;border-bottom:4px double var(--rule)}
+  .masthead h1{
+    font-family:var(--frank);font-weight:900;text-transform:uppercase;
+    font-size:clamp(3rem,9vw,6.8rem);line-height:.92;letter-spacing:-.015em;
+    position:relative;display:inline-block;
+  }
+  /* print misregistration */
+  .masthead h1::before{
+    content:attr(data-t);position:absolute;left:0;top:0;color:var(--red);
+    transform:translate(3px,2px);opacity:.5;z-index:-1;
+  }
+  .masthead .slogan{font-family:var(--frank);font-weight:500;font-style:italic;font-size:.95rem;color:var(--ink-2);margin-top:10px}
+  .dateline{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--frank);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--rule);padding:9px 2px;color:var(--ink-2)}
+  .dateline .live{color:var(--red-ink);font-weight:700}
+  .dateline .live i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+  /* ---------- front page grid ---------- */
+  .front{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:0;margin-top:0}
+  .front>*{padding:24px 20px}
+  .front>*+*{border-left:1px solid var(--rule)}
+  @media(max-width:940px){.front{grid-template-columns:1fr}.front>*+*{border-left:0;border-top:1px solid var(--rule)}}
+  .colhead{font-family:var(--frank);font-weight:800;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;border-bottom:2px solid var(--rule);padding-bottom:7px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:baseline}
+  .colhead span{font-weight:500;color:var(--mut);letter-spacing:.06em;font-size:.66rem}
+
+  /* letters to the editor */
+  .letter{margin-bottom:20px}
+  .letter p{font-size:.95rem}
+  .letter .drop::first-letter{
+    float:left;font-family:var(--frank);font-weight:900;font-size:3.4em;line-height:.82;
+    padding:4px 8px 0 0;color:var(--red-ink);
+  }
+  .letter .sig{font-family:var(--frank);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-top:6px}
+
+  /* standings box score */
+  .standings table{width:100%;border-collapse:collapse;font-family:var(--frank)}
+  .standings th{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:700;text-align:right;padding:0 6px 6px;border-bottom:2px solid var(--rule)}
+  .standings th:first-child{text-align:left}
+  .standings td{font-size:.85rem;padding:7px 6px;border-bottom:1px solid var(--hair);text-align:right;font-variant-numeric:tabular-nums}
+  .standings tr:last-child td{border-bottom:2px solid var(--rule)}
+  .standings td.tm{font-weight:700;text-align:left;font-size:.82rem}
+  .standings td.tm small{display:block;font-weight:500;color:var(--mut);font-size:.62rem;letter-spacing:.04em}
+  .standings .pct{font-weight:800}
+  .standings .up{color:var(--red-ink);font-size:.66rem;font-weight:800}
+  .standnote{font-family:var(--frank);font-size:.7rem;color:var(--mut);margin-top:12px;line-height:1.5}
+
+  /* the funnies */
+  .panel{border:2px solid var(--rule);background:
+    radial-gradient(circle, rgba(25,23,18,.13) 1px, transparent 1.4px) 0 0/7px 7px,
+    var(--news-2);
+    padding:18px 16px 14px;margin-bottom:16px;position:relative}
+  .panel .no{position:absolute;top:-11px;left:12px;background:var(--news);padding:0 8px;font-family:var(--frank);font-weight:800;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red-ink)}
+  .panel p{font-size:1.02rem;line-height:1.5}
+  .panel .by{font-family:var(--frank);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-top:10px;border-top:1px solid var(--hair);padding-top:7px}
+  .morning{font-family:var(--frank);font-size:.8rem;font-weight:600;text-align:center;margin-top:4px}
+  .morning a{color:var(--red-ink)}
+
+  /* ---------- tonight's card ---------- */
+  .card-sec{margin-top:8px;border-top:4px double var(--rule);padding-top:24px}
+  .card-sec .colhead{max-width:1200px}
+  .card{display:grid;grid-template-columns:1fr 64px 1fr;gap:0;border:2px solid var(--rule)}
+  @media(max-width:860px){.card{grid-template-columns:1fr}.ref{border-left:0!important;border-top:2px solid var(--rule);flex-direction:row!important}}
+  .bout{padding:30px 26px 24px;display:flex;flex-direction:column;gap:14px;min-height:190px}
+  .bout:first-child{border-right:2px solid var(--rule)}
+  .bout .corner{font-family:var(--frank);font-weight:800;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+  .bout .joke{font-size:1.22rem;line-height:1.45;flex:1}
+  .bout .joke::before{content:"“"}
+  .bout .joke::after{content:"”"}
+  .ref{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-right:2px solid var(--rule);background:var(--news-2);padding:14px 6px}
+  .ref .vs{font-family:var(--frank);font-weight:900;font-size:1.5rem;color:var(--red-ink)}
+  .ref .boutno{font-family:var(--frank);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);writing-mode:vertical-rl}
+  .ballot{display:flex;border:2px solid var(--rule);border-top:0}
+  .ballot button{
+    flex:1;background:transparent;border:0;border-right:2px solid var(--rule);cursor:pointer;
+    font-family:var(--frank);font-weight:800;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;
+    padding:15px 8px;color:var(--ink);transition:background .12s,color .12s;
+  }
+  .ballot button:last-child{border-right:0}
+  .ballot button:hover{background:var(--ink);color:var(--news)}
+  .ballot button:active{background:var(--red);color:var(--news)}
+  .ballot button small{display:block;font-weight:500;font-size:.6rem;letter-spacing:.14em;color:inherit;opacity:.6;margin-top:3px}
+  .cardreveal{border:2px solid var(--rule);border-top:0;background:var(--ink);color:var(--news);font-family:var(--frank);font-size:.8rem;letter-spacing:.04em;padding:13px 20px;display:none}
+  .cardreveal.on{display:block}
+  .cardreveal b{color:#ffb8b5;font-weight:800}
+  .premline{font-family:var(--frank);font-size:.72rem;color:var(--mut);margin-top:12px}
+
+  /* ---------- judge's report ---------- */
+  .reports{margin-top:34px;border-top:4px double var(--rule);padding-top:22px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px}
+  @media(max-width:940px){.reports{grid-template-columns:1fr}}
+  .report h3{font-family:var(--frank);font-weight:800;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid var(--rule);padding-bottom:6px;margin-bottom:10px}
+  .report p{font-size:.92rem;color:var(--ink-2)}
+  .report p+p{margin-top:8px}
+  .report .more{font-family:var(--frank);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
+  footer{margin-top:44px;border-top:2px solid var(--rule);padding-top:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--frank);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+  footer b{color:var(--ink-2)}
+
+  @media (prefers-reduced-motion: no-preference){
+    .rv{opacity:0;transform:translateY(10px);animation:rise .65s cubic-bezier(.2,.7,.2,1) forwards}
+    .rv:nth-child(2){animation-delay:.07s}.rv:nth-child(3){animation-delay:.14s}.rv:nth-child(4){animation-delay:.21s}
+    @keyframes rise{to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="ear rv">
+    <span>Vol. 0 · No. 1 — wave 0</span>
+    <span><b>special standing issue</b> — ballots still open</span>
+    <span>price: your vote</span>
+  </div>
+
+  <header class="masthead rv">
+    <h1 data-t="LOL BENCH">LOL BENCH</h1>
+    <p class="slogan">The machine-humor standings, est. 2026 · all the jokes unfit to train on</p>
+  </header>
+  <div class="dateline rv num">
+    <span>Monday, September 1, 2026</span>
+    <span class="live"><i></i>live — wave 0 voting</span>
+    <span>1,699 bouts written · 214 ballots cast · dataset v0.1.0</span>
+  </div>
+
+  <div class="front rv">
+    <div>
+      <div class="colhead">Letters to the Editor <span>origin</span></div>
+      <div class="letter">
+        <p class="drop">To the Editor: Someone posted they were “looking to fund someone making LLMs funny.” The internet asked the only reasonable follow-up:</p>
+        <p style="font-weight:600;margin-top:8px">“Who’s building LOL bench?”</p>
+        <p style="margin-top:8px">“Give me a few hours.”</p>
+        <p class="sig">— the reply, verbatim</p>
+      </div>
+      <div class="letter">
+        <p>“Get this guy a job stat.”</p>
+        <p style="margin-top:8px">This newspaper is the answer. It measures whether machines can explain a joke, write one, and tell a good one from a dud — and it publishes its own error bars on the front page, because a standing without a margin is just a rumor.</p>
+        <p class="sig">— the editor, lolbench.lol</p>
+      </div>
+    </div>
+
+    <div class="standings">
+      <div class="colhead">The Standings <span>track b · win–loss–tie</span></div>
+      <table>
+        <thead><tr><th>club</th><th>W</th><th>L</th><th>T</th><th>Win%</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="tm">glm-5.3-flash<small>Z.ai · flash tier</small></td><td>61</td><td>31</td><td>18</td><td class="pct">.636</td><td class="up">▲1</td></tr>
+          <tr><td class="tm">qwen3.8-max<small>Alibaba · flagship</small></td><td>58</td><td>34</td><td>17</td><td class="pct">.620</td><td></td></tr>
+          <tr><td class="tm">glm-5.3<small>Z.ai · flagship</small></td><td>55</td><td>37</td><td>19</td><td class="pct">.591</td><td></td></tr>
+          <tr><td class="tm">claude-opus-5<small>anchor tier †</small></td><td>52</td><td>39</td><td>16</td><td class="pct">.566</td><td class="up">▲2</td></tr>
+          <tr><td class="tm">deepseek-v4-pro<small>DeepSeek</small></td><td>50</td><td>41</td><td>18</td><td class="pct">.545</td><td></td></tr>
+          <tr><td class="tm">mimo-v2.5-pro<small>Xiaomi</small></td><td>47</td><td>44</td><td>16</td><td class="pct">.511</td><td></td></tr>
+          <tr><td class="tm">gpt-5.6-sol-pro<small>anchor tier †</small></td><td>45</td><td>46</td><td>15</td><td class="pct">.491</td><td></td></tr>
+          <tr><td class="tm">qwen3.8-flash<small>Alibaba · flash tier</small></td><td>41</td><td>50</td><td>15</td><td class="pct">.451</td><td>▼1</td></tr>
+          <tr><td class="tm">hy4-preview<small>Tencent</small></td><td>36</td><td>54</td><td>13</td><td class="pct">.399</td><td></td></tr>
+          <tr><td class="tm">grok-4.6<small>anchor tier †</small></td><td>9</td><td>7</td><td>2</td><td class="pct">.556</td><td class="up">▲1</td></tr>
+          <tr><td class="tm">hy3<small>Tencent</small></td><td>29</td><td>61</td><td>12</td><td class="pct">.325</td><td></td></tr>
+        </tbody>
+      </table>
+      <p class="standnote">† Anchor tier — frontier models disclosed as such; records shown partial while ballots land. Wilson intervals ship on the site proper; no Elo until volume justifies Bradley–Terry. <b>212 of 1,699 bouts voted.</b> Your ballot moves these numbers — see tonight’s card below.</p>
+    </div>
+
+    <div>
+      <div class="colhead">The Funnies <span>from the corpus</span></div>
+      <div class="panel">
+        <span class="no">Panel № 7</span>
+        <p>I finally understand inflation: it costs me thirty dollars to fill a goodie bag that my parents filled with a stick of gum and a pat on the back.</p>
+        <div class="by">Premise B-W0-038 · staff comicist withheld</div>
+      </div>
+      <div class="panel">
+        <span class="no">Panel № 12</span>
+        <p>The guilt of owning a visibly dying houseplant is crushing, but my fern keeps dropping leaves like it’s trying to lighten the load.</p>
+        <div class="by">Premise B-W0-031 · staff comicist withheld</div>
+      </div>
+      <p class="morning">Read every entrant in the open dataset → <a href="#">github.com/YakshithK/lolbench</a></p>
+    </div>
+  </div>
+
+  <section class="card-sec rv">
+    <div class="colhead">Tonight’s Card <span>track b · anonymous pairwise vote</span></div>
+    <div class="card">
+      <div class="bout">
+        <span class="corner">In the left corner</span>
+        <p class="joke" id="ja">A standing desk that has never once been lowered is like the office gym membership: everyone assumes it’s being used, but it’s mostly just holding a monitor.</p>
+      </div>
+      <div class="ref"><span class="boutno">bout 0147 · premise B-W0-015</span><span class="vs">VS</span></div>
+      <div class="bout">
+        <span class="corner">In the right corner</span>
+        <p class="joke" id="jb">That standing desk has never been lowered — it’s like our “open door policy” that somehow never applies to raises.</p>
+      </div>
+    </div>
+    <div class="ballot" role="group" aria-label="Ballot">
+      <button onclick="vote(0)">Left takes it <small>key A</small></button>
+      <button onclick="vote(1)">Right takes it <small>key B</small></button>
+      <button onclick="vote(2)">A draw <small>key T</small></button>
+    </div>
+    <div class="cardreveal" id="cr" aria-live="polite"></div>
+    <p class="premline">PRELIMINARY — auto-judged tracks, no human calibration yet. Corner identities re-conceal for the next reader. One click, no account, no cookies.</p>
+  </section>
+
+  <section class="reports rv">
+    <div class="report">
+      <h3>Judge’s Report: A — Appreciation</h3>
+      <p>Explanations graded against human-written gold elements by two judges, each barred from its own family. Worst family, league-wide: <b>F6, failed humor</b> — most models cannot explain why a joke is <i>not</i> funny.</p>
+      <p class="more">Full table on the site →</p>
+    </div>
+    <div class="report">
+      <h3>Judge’s Report: B — Production</h3>
+      <p>Forty constrained premises, one-liners only this wave. Judges are humans: you. Elo is withheld until the vote volume earns it — an arena promise, kept in public.</p>
+      <p class="more">Cast a ballot above →</p>
+    </div>
+    <div class="report">
+      <h3>Judge’s Report: C — Taste (PENDING)</h3>
+      <p>1,500 human-rated jokes re-labeled; rank correlation incoming. The cheapest track in evaluation and the only one of its kind: does a model’s taste predict its own punchlines?</p>
+      <p class="more">Next dataset release →</p>
+    </div>
+  </section>
+
+  <footer>
+    <span><b>lolbench.lol</b> — open code · split data · canary embedded</span>
+    <span>github.com/YakshithK/lolbench</span>
+    <span class="num">harness 1dbc2935 · mockup, records illustrative</span>
+  </footer>
+</div>
+
+<script>
+function vote(w){
+  const el=document.getElementById("cr");
+  const msg = w===2
+    ? "Scored a <b>draw</b>."
+    : `The <b>${w===0?"left":"right"} corner</b> takes it.`;
+  el.innerHTML=`FINAL — ${msg} Left was <b>qwen3.8-max</b> (58–34–17 overall) · Right was <b>mimo-v2.5-pro</b> (47–44–16). Standings update live; identities re-conceal for the next reader.`;
+  el.classList.add("on");
+}
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="BUTTON"||e.target.tagName==="INPUT") return;
+  const k=e.key.toLowerCase();
+  if(k==="a")vote(0); else if(k==="b")vote(1); else if(k==="t")vote(2);
+});
+</script>
+</body>
+</html>

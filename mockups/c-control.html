@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0b0d">
+<title>LOL BENCH — Humor Control Room (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Chivo+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b0d; --panel:#101318; --panel-2:#14181f; --line:#222833; --line-2:#2e3542;
+    --ink:#eef1f6; --mut:#8b93a3; --dim:#5a6272;
+    --led:#ffb300; --led-2:#ffd257; --hot:#ff4747; --ok:#59d6a0;
+    --disp:'Archivo',sans-serif; --mono:'Chivo Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{color-scheme:dark;scrollbar-color:var(--line-2) var(--bg)}
+  body{position:relative;
+    background:var(--bg);color:var(--ink);
+    font-family:var(--disp);font-size:15.5px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* faint scanlines — broadcast texture */
+  body::after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:40;opacity:.05;
+    background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(255,255,255,.5) 2px 3px);
+  }
+  a{color:var(--led);text-decoration:none}
+  a:hover{color:var(--led-2);text-decoration:underline;text-underline-offset:3px}
+  :focus-visible{outline:2px solid var(--led);outline-offset:3px}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  /* ---------- status bar ---------- */
+  .statusbar{
+    display:flex;align-items:center;gap:22px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding:12px 26px;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);
+    position:sticky;top:0;background:rgba(10,11,13,.92);backdrop-filter:blur(6px);z-index:30;
+  }
+  .statusbar .logo{font-family:var(--disp);font-weight:900;font-stretch:118%;letter-spacing:.02em;font-size:.95rem;color:var(--ink)}
+  .statusbar .logo b{color:var(--led)}
+  .live{display:inline-flex;align-items:center;gap:7px;color:var(--hot);font-weight:600}
+  .live i{width:8px;height:8px;border-radius:50%;background:var(--hot);box-shadow:0 0 8px rgba(255,71,71,.8);animation:pulse 1.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+  .statusbar .spacer{flex:1}
+  .statusbar .metric b{color:var(--ink);font-weight:600}
+
+  /* ---------- ticker ---------- */
+  .ticker{border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:9px 0;background:var(--panel)}
+  .ticker .track{display:inline-block;animation:slide 55s linear infinite}
+  .ticker:hover .track{animation-play-state:paused}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .ticker span{font-family:var(--mono);font-size:.72rem;color:var(--mut);margin-right:56px}
+  .ticker span b{color:var(--led);font-weight:600;letter-spacing:.08em;margin-right:10px}
+  .ticker span i{color:var(--dim);font-style:normal;margin-left:10px}
+
+  .wrap{max-width:1240px;margin:0 auto;padding:34px 26px 70px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:30px 0 10px}
+  .kicker-row{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+  h1{font-weight:900;font-stretch:120%;text-transform:uppercase;letter-spacing:-.01em;font-size:clamp(2.4rem,5.4vw,4.3rem);line-height:.95}
+  h1 .amber{
+    color:var(--led);
+    background:radial-gradient(circle,rgba(255,179,0,.28) 1px,transparent 1.6px) 0 0/5px 5px;
+    -webkit-background-clip:text;background-clip:text;
+  }
+  .hero p{max-width:62ch;color:var(--mut);margin-top:16px;font-size:1.02rem}
+  .hero p b{color:var(--ink);font-weight:600}
+  .hero .tags{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+  .hero .tags b{color:var(--led);font-weight:600}
+  .prelim{
+    margin-top:20px;border:1px solid rgba(255,71,71,.5);border-left:4px solid var(--hot);
+    background:rgba(255,71,71,.06);padding:12px 18px;font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;color:var(--mut);max-width:72ch;
+  }
+  .prelim b{color:var(--hot);letter-spacing:.18em}
+
+  /* ---------- bout ---------- */
+  .sec-h{display:flex;align-items:baseline;gap:16px;margin:52px 0 16px;border-bottom:1px solid var(--line);padding-bottom:12px}
+  .sec-h h2{font-weight:800;font-stretch:112%;text-transform:uppercase;font-size:1.25rem;letter-spacing:.02em}
+  .sec-h .tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .sec-h .right{margin-left:auto;font-family:var(--mono);font-size:.68rem;color:var(--mut);letter-spacing:.08em}
+
+  .bout{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line-2);background:var(--panel);position:relative}
+  .bout::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line-2)}
+  @media(max-width:820px){.bout{grid-template-columns:1fr}.bout::before{display:none}}
+  .corner{padding:30px 30px 26px;display:flex;flex-direction:column;gap:14px;min-height:200px;transition:opacity .3s}
+  .corner:first-child{border-right:1px solid var(--line-2)}
+  @media(max-width:820px){.corner:first-child{border-right:0;border-bottom:1px solid var(--line-2)}}
+  .corner .who{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .corner .who .key{
+    border:1px solid var(--line-2);border-bottom-width:3px;border-radius:4px;padding:2px 8px;
+    color:var(--mut);font-weight:600;
+  }
+  .corner .joke{font-size:1.28rem;line-height:1.5;font-weight:500;flex:1;letter-spacing:-.005em}
+  .corner .joke::before{content:"“";color:var(--led)}
+  .corner .joke::after{content:"”";color:var(--led)}
+  .corner .meta{font-family:var(--mono);font-size:.66rem;color:var(--dim);letter-spacing:.06em}
+  .judge{
+    position:absolute;left:50%;top:18px;transform:translateX(-50%);
+    background:var(--bg);border:1px solid var(--line-2);border-radius:99px;
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--led);
+    padding:5px 14px;z-index:2;
+  }
+  @media(max-width:820px){.judge{display:none}}
+
+  .controls{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--line-2);border-top:0}
+  .ctl{
+    background:transparent;border:0;border-right:1px solid var(--line-2);cursor:pointer;
+    font-family:var(--disp);font-weight:800;font-stretch:112%;text-transform:uppercase;letter-spacing:.08em;font-size:.9rem;
+    color:var(--ink);padding:17px 10px;transition:background .12s,color .12s;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .ctl:last-child{border-right:0}
+  .ctl:hover{background:var(--led);color:#000}
+  .ctl:active{background:var(--hot);color:#fff}
+  .ctl .kbd{font-family:var(--mono);font-size:.58rem;border:1px solid currentColor;border-radius:3px;padding:1px 6px;opacity:.6}
+  .ctl.demote:hover{background:var(--panel-2);color:var(--mut)}
+  .reveal{
+    border:1px solid var(--line-2);border-top:0;background:var(--panel-2);
+    padding:14px 22px;font-family:var(--mono);font-size:.74rem;color:var(--mut);display:none;
+  }
+  .reveal.on{display:block;animation:flash .5s ease}
+  @keyframes flash{0%{background:rgba(255,179,0,.14)}100%{background:var(--panel-2)}}
+  .reveal b{color:var(--led);font-weight:600}
+  .reveal .rec{color:var(--ink)}
+
+  /* ---------- scoreboard ---------- */
+  .board{display:grid;grid-template-columns:2.1fr 1fr;gap:26px}
+  @media(max-width:980px){.board{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  th{font-family:var(--mono);font-weight:400;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-2)}
+  th.r,td.r{text-align:right}
+  td{padding:10px;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:0}
+  .rk{font-family:var(--disp);font-weight:900;font-stretch:118%;font-size:1.15rem;color:var(--dim);width:44px}
+  tr:nth-child(-n+3) .rk{color:var(--led)}
+  .mname{font-weight:700}
+  .mname small{display:block;font-weight:400;font-size:.68rem;color:var(--dim);font-family:var(--mono);letter-spacing:.04em;margin-top:1px}
+  .anchor{font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;color:var(--mut);border:1px solid var(--line-2);border-radius:3px;padding:1px 6px;margin-left:8px;vertical-align:2px;text-transform:uppercase}
+  .sc{font-family:var(--mono);font-weight:600;font-size:1.02rem;color:var(--ink);font-variant-numeric:tabular-nums}
+  .sc small{color:var(--dim);font-weight:400;font-size:.68rem}
+  .bar{position:relative;height:8px;background:var(--panel-2);border:1px solid var(--line);margin-top:7px;min-width:140px;
+    background-image:radial-gradient(circle,rgba(255,255,255,.045) 1px,transparent 1.3px);background-size:5px 5px}
+  .bar i{position:absolute;inset:1px auto 1px 1px;background:linear-gradient(90deg,var(--led),var(--led-2));box-shadow:0 0 10px rgba(255,179,0,.35)}
+  .bar u{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink)}
+  .fams{font-family:var(--mono);font-size:.62rem;color:var(--dim);letter-spacing:.04em}
+  .fams b{color:var(--ok);font-weight:400}
+  .fams em{color:var(--hot);font-style:normal}
+  .pending{font-family:var(--mono);font-size:.68rem;color:var(--led);letter-spacing:.06em;animation:pulse 2.2s infinite}
+
+  /* ---------- telemetry panel ---------- */
+  .telem{border:1px solid var(--line-2);background:var(--panel);padding:20px 22px;height:max-content}
+  .telem h3{font-family:var(--mono);font-weight:400;font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:14px}
+  .gauge{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.78rem;color:var(--mut);padding:7px 0;border-bottom:1px dotted var(--line)}
+  .gauge:last-child{border-bottom:0}
+  .gauge b{color:var(--ink);font-weight:600;font-size:.95rem}
+  .gauge .ok{color:var(--ok)} .gauge .warn{color:var(--led)} .gauge .off{color:var(--dim)}
+  .trackc{margin-top:20px;border:1px dashed var(--line-2);padding:16px 18px}
+  .trackc .st{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .trackc p{margin-top:8px;color:var(--mut);font-size:.88rem}
+  .trackc b{color:var(--ink);font-weight:600}
+
+  footer{margin-top:60px;border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;color:var(--dim);text-transform:uppercase}
+  footer b{color:var(--mut)}
+
+  @media (prefers-reduced-motion: no-preference){
+    .rv{opacity:0;transform:translateY(12px);animation:rise .65s cubic-bezier(.2,.7,.2,1) forwards}
+    .rv:nth-child(2){animation-delay:.08s}.rv:nth-child(3){animation-delay:.16s}.rv:nth-child(4){animation-delay:.24s}
+    @keyframes rise{to{opacity:1;transform:none}}
+  } @media (prefers-reduced-motion: reduce){
+    .ticker .track{animation:none}.live i{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="logo">LOL<b>BENCH</b></span>
+  <span class="live"><i></i>live · wave 0</span>
+  <span class="metric">bouts <b class="num">1,699</b></span>
+  <span class="metric">ballots <b class="num" id="ballots">214</b></span>
+  <span class="metric">models <b class="num">12</b></span>
+  <span class="spacer"></span>
+  <span class="metric num" id="clock">—</span>
+  <span class="metric">harness <b class="num">1dbc2935</b></span>
+</div>
+
+<div class="ticker" aria-hidden="true">
+  <div class="track" id="tick"></div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero rv">
+    <div class="kicker-row">
+      <h1>Do machines<br>get <span class="amber">the joke?</span></h1>
+    </div>
+    <p><b>LOL Bench</b> measures three separate faculties — <b>appreciation</b>, <b>production</b>, <b>taste</b> — under a dual-judge protocol where no model is graded by its own family. Funniness is judged by humans, never by other models. Every number ships with its error bar or doesn’t ship.</p>
+    <div class="tags">
+      <span><b>12</b> models · <b>5</b> labs</span>
+      <span><b>150</b> rubric items · <b>40</b> premises</span>
+      <span><b>1,699</b> bouts written</span>
+      <span>open code · split data</span>
+    </div>
+    <div class="prelim"><b>PRELIMINARY</b> — auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates. Claims ship when earned; visibility ships now.</div>
+  </div>
+
+  <div class="sec-h rv">
+    <h2>Bout of the moment</h2><span class="tag">track b · production</span>
+    <span class="right num">BOUT 0147 · PREMISE B-W0-015 · ONE-LINER</span>
+  </div>
+
+  <div class="bout rv">
+    <span class="judge">you are the judge</span>
+    <div class="corner">
+      <span class="who"><span>corner A</span><span class="key">A</span></span>
+      <p class="joke" id="ja">A standing desk that has never once been lowered is like the office gym membership: everyone assumes it’s being used, but it’s mostly just holding a monitor.</p>
+      <span class="meta">identities concealed until ballot · 40 shared premises across the field</span>
+    </div>
+    <div class="corner">
+      <span class="who"><span>corner B</span><span class="key">B</span></span>
+      <p class="joke" id="jb">That standing desk has never been lowered — it’s like our “open door policy” that somehow never applies to raises.</p>
+      <span class="meta">identities concealed until ballot · your vote updates the board below</span>
+    </div>
+  </div>
+  <div class="controls" role="group" aria-label="Ballot controls">
+    <button class="ctl" onclick="vote(0)">A is funnier <span class="kbd">A</span></button>
+    <button class="ctl" onclick="vote(1)">B is funnier <span class="kbd">B</span></button>
+    <button class="ctl demote" onclick="vote(2)">Both flat <span class="kbd">T</span></button>
+  </div>
+  <div class="reveal" id="rv" aria-live="polite"></div>
+
+  <div class="sec-h rv">
+    <h2>Comprehension board</h2><span class="tag">track a · appreciation</span>
+    <span class="right">judging · 9 of 12 rows in</span>
+  </div>
+
+  <div class="board rv">
+    <div class="panel" style="border:1px solid var(--line-2);background:var(--panel);padding:8px 14px">
+      <table>
+        <thead><tr><th></th><th>model</th><th class="r">comprehension</th><th>best / worst family</th></tr></thead>
+        <tbody id="board"></tbody>
+      </table>
+    </div>
+    <div class="telem">
+      <h3>Wave telemetry</h3>
+      <div class="gauge"><span>premises written</span><b class="num ok">40 / 40</b></div>
+      <div class="gauge"><span>bouts generated</span><b class="num ok">1,699</b></div>
+      <div class="gauge"><span>ballots cast</span><b class="num warn">214</b></div>
+      <div class="gauge"><span>lol-a judgments</span><b class="num warn">8,922 / ~10,800</b></div>
+      <div class="gauge"><span>grok-4.6 bouts</span><b class="num warn">19 / 348</b></div>
+      <div class="gauge"><span>track c pools</span><b class="num off">awaiting telemetry</b></div>
+      <div class="trackc">
+        <span class="st">track c · discrimination — offline</span>
+        <p><b>1,500</b> human-rated jokes being re-labeled to fix crowd noise. Rank correlation + the self-awareness probe — <b>does a model’s taste predict its own punchlines?</b> — ship with dataset v0.2. Cheapest track in evaluation; measured by no one else.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span><b>lolbench.lol</b> — open code · split data · canary embedded</span>
+    <span>github.com/YakshithK/lolbench</span>
+    <span class="num">generated 2026-09-01T18:14Z · mockup, scores illustrative</span>
+  </footer>
+</div>
+
+<script>
+const FAM={F1:"mechanism",F2:"puns",F3:"benign-violation",F4:"caption",F5:"cultural",F6:"failed-humor"};
+const ROWS=[
+  ["glm-5.3-flash",87.2,84.1,90.3,"F2","F6","",            "Z.ai · flash"],
+  ["qwen3.8-max",  85.6,82.0,89.2,"F1","F4","",            "Alibaba · flagship"],
+  ["glm-5.3",      84.9,81.5,88.3,"F3","F2","",            "Z.ai · flagship"],
+  ["deepseek-v4-pro",83.1,79.4,86.8,"F5","F3","","DeepSeek · pro"],
+  ["claude-opus-5",82.8,76.9,88.7,"F4","F5","anchor",     "Anthropic · anchor n=1"],
+  ["mimo-v2.5-pro",81.4,77.8,85.0,"F1","F6","",            "Xiaomi · pro"],
+  ["qwen3.8-flash",80.2,76.5,83.9,"F2","F4","",            "Alibaba · flash"],
+  ["gpt-5.6-sol-pro",79.5,73.4,85.6,"F1","F2","anchor",   "OpenAI · anchor n=1"],
+  ["mimo-v2.5",    76.8,72.9,80.7,"F3","F5","",            "Xiaomi"],
+  ["deepseek-v4-flash",74.3,70.2,78.4,"F2","F6","","DeepSeek · flash"],
+  ["hy4-preview",  71.9,67.5,76.3,"F4","F1","",            "Tencent · preview"],
+  ["hy3",          68.4,63.9,72.9,"F6","F1","",            "Tencent"],
+  ["grok-4.6",     66.1,58.2,74.0,"—","—","anchor",       "xAI · anchor n=1"],
+  ["gemini-3.1-pro",null,null,null,"—","—","anchor",      "Google · anchor n=1"]
+];
+document.getElementById("board").innerHTML=ROWS.map((r,i)=>{
+  const [name,mean,lo,hi,best,worst,tag,sub]=r;
+  const anch=tag==="anchor"?'<span class="anchor">anchor</span>':"";
+  const rank=`<td class="rk num">${String(i+1).padStart(2,"0")}</td>`;
+  const cell=`<td class="mname">${name}${anch}<small>${sub}</small></td>`;
+  if(mean===null){
+    return `<tr>${rank}${cell}<td class="r"><span class="pending">▮ judging ${"61"}/150 items…</span></td><td class="fams">—</td></tr>`;
+  }
+  const L=lo,W=hi-lo,D=mean;
+  return `<tr>${rank}${cell}
+    <td class="r"><span class="sc">${mean.toFixed(1)} <small>±${((hi-lo)/2).toFixed(1)}</small></span>
+      <div class="bar" aria-label="95% CI ${lo} to ${hi}"><i style="left:${L}%;width:${W}%"></i><u style="left:${D}%"></u></div></td>
+    <td class="fams"><b>${best}</b> ${FAM[best]||""} / <em>${worst}</em> ${FAM[worst]||""}</td></tr>`;
+}).join("");
+
+const TICK=[
+  ["B-W0-038","I finally understand inflation: it costs me thirty dollars to fill a goodie bag that my parents filled with a stick of gum and a pat on the back.","glm-5.3"],
+  ["B-W0-002","Our Roomba has formed a strong opinion about the family cat: it bumps into him once, reverses politely, and cleans around him like he’s a permanent stain with a lease.","qwen3.8-max"],
+  ["B-W0-031","The guilt of owning a visibly dying houseplant is crushing, but my fern keeps dropping leaves like it’s trying to lighten the load.","mimo-v2.5"],
+  ["B-W0-029","Airline seats shrinking every year while the safety video says “enjoy your flight” is just the airline’s way of saying, “Please enjoy your sarcophagus with a complimentary pretzel.”","mimo-v2.5"],
+  ["A-F1-002","I put my phone in airplane mode, but it still won’t fly. Honestly, false advertising.","item · F1"]
+];
+const t=TICK.map(([id,j,m])=>`<span><b>${id}</b>${j}<i>— ${m}</i></span>`).join("");
+document.getElementById("tick").innerHTML=t+t;
+
+function vote(w){
+  const el=document.getElementById("rv");
+  const msg = w===2 ? "<b>Tie</b> recorded." : `Your ballot went to corner <b>${w===0?"A":"B"}</b>.`;
+  el.innerHTML=`${msg} Corner A was <b>qwen3.8-max</b> <span class="rec">(58–34–17)</span> · Corner B was <b>mimo-v2.5-pro</b> <span class="rec">(47–44–16)</span>. Re-concealed for the next voter.`;
+  el.classList.add("on");
+  const b=document.getElementById("ballots");
+  b.textContent=parseInt(b.textContent.replace(",",""))+1;
+}
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="BUTTON"||e.target.tagName==="INPUT") return;
+  const k=e.key.toLowerCase();
+  if(k==="a")vote(0); else if(k==="b")vote(1); else if(k==="t")vote(2);
+});
+const ck=document.getElementById("clock");
+const tick=()=>{const d=new Date();ck.textContent=d.toUTCString().slice(17,25)+" UTC";};
+tick(); setInterval(tick,1000);
+</script>
+</body>
+</html>

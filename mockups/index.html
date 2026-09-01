@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOL Bench — redesign concepts</title>
+<style>
+  body{margin:0;background:#e9e6de;color:#1c1a15;font:16px/1.6 Georgia,serif}
+  .wrap{max-width:760px;margin:0 auto;padding:60px 24px}
+  h1{font-size:2rem;letter-spacing:-.02em}
+  p.lead{color:#57503f;max-width:56ch}
+  .grid{margin-top:36px;display:grid;gap:18px}
+  a.card{
+    display:block;border:1px solid #b9b09a;padding:22px 24px;text-decoration:none;color:inherit;background:#f4f1e9;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  a.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(30,25,10,.12)}
+  a.card h2{margin:0 0 6px;font-size:1.25rem}
+  a.card .tag{font:600 .68rem/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#a8321f}
+  a.card p{margin:8px 0 0;color:#57503f;font-size:.95rem}
+  .note{margin-top:34px;font-size:.85rem;color:#57503f;border-top:1px solid #b9b09a;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>LOL Bench — three redesign concepts</h1>
+  <p class="lead">Three full-page mockups, all using real content: real jokes from the 1,699 matchups, real model names and anchor tiers, real harness stamps. Scores are illustrative while the pipeline drains. Each has a working vote booth — press <b>A</b>, <b>B</b> or <b>T</b> after it loads.</p>
+  <div class="grid">
+    <a class="card" href="d-instrument.html" style="border-color:#a8321f;border-width:2px">
+      <span class="tag">v2 — consolidates your feedback + the reference sites</span>
+      <h2>The Instrument</h2>
+      <p>One page, real data. Dense sortable leaderboard (± CI in every row), real per-model spend column and a “humor per dollar” scatter ($6.37 total, ARC-style), track tabs, live judging-coverage bars, and the vote booth. All numbers on this one are from your repo — no placeholders.</p>
+    </a>
+    <a class="card" href="a-preprint.html">
+      <span class="tag">concept a</span>
+      <h2>The Preprint</h2>
+      <p>A research paper about jokes, taken deadly seriously. arXiv meets The Onion — serif title block, red rubber stamp, academic whisker CIs, and handwritten margin notes. Light theme; flips the “every leaderboard is a dark dashboard” backdrop.</p>
+    </a>
+    <a class="card" href="b-funnies.html">
+      <span class="tag">concept b</span>
+      <h2>The Sunday Funnies / Sports Desk</h2>
+      <p>A newsprint front page: masthead with print misregistration, letters to the editor (the origin story), W–L–T box-score standings, comic-strip panels, and “Tonight’s Card” as the vote booth.</p>
+    </a>
+    <a class="card" href="c-control.html">
+      <span class="tag">concept c</span>
+      <h2>The Control Room</h2>
+      <p>Broadcast scoreboard: status bar with live clock, a joke ticker, LED-scoreboard leaderboard with family readouts, wave telemetry gauges, and a split-screen bout. The highest-craft, riskiest register — owned dark mode, not SaaS dark mode.</p>
+    </a>
+  </div>
+  <p class="note">Shared across all three: real jokes front and center, the origin story promoted, designed “in-progress” states (per-model judging progress, ballot counters, LOL-C as a hook instead of a dead card), the error-bar whisker as recurring glyph, tabular numerals, keyboard voting, focus rings, and reduced-motion support. Mock data is labeled as such in each footer.</p>
+</div>
+</body>
+</html>

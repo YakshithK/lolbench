@@ -12,7 +12,7 @@ max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning
 judge_max_tokens: 1500
 parallel_workers: 8         # per-candidate concurrent calls
 temperature: 0.9            # generation diversity; judge calls use temperature 0
-max_spend_usd: 0.85         # hard stop for THIS process's paid calls (matches remaining OR credits; raise after top-up)
+max_spend_usd: 7.00         # hard stop for THIS process's paid calls (matches remaining OR credits; raise after top-up)
 
 # Candidates: five free B.AI models for v0. Paid entries (OpenRouter/xAI)
 # stay disabled until keys land.
@@ -70,7 +70,6 @@ candidates:
     provider: openrouter
     model: google/gemini-3.1-pro-preview
     anchor: true
-    think: false
     enabled: true
   - name: claude-opus-5
     provider: openrouter
@@ -80,7 +79,7 @@ candidates:
     enabled: true
   - name: muse-spark-1.2-contributor
     provider: openrouter
-    model: meta/muse-spark-1.2-contributor
+    model: meta/muse-spark-1.2
     anchor: true
     think: false
     enabled: true

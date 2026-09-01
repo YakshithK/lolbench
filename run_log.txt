@@ -1,83 +1,825 @@
 === glm-5.3-flash ===
-[a] glm-5.3-flash: 750 calls to make
-[a] glm-5.3-flash A-F1-001|0 ok
-[a] glm-5.3-flash A-F1-001|1 ok
-[a] glm-5.3-flash A-F1-001|2 ok
-[a] glm-5.3-flash A-F1-001|3 ok
-[a] glm-5.3-flash A-F1-001|4 ok
-[a] glm-5.3-flash A-F1-002|0 ok
-[a] glm-5.3-flash A-F1-002|1 ok
-[a] glm-5.3-flash A-F1-002|2 ok
-[a] glm-5.3-flash A-F1-002|3 ok
-[a] glm-5.3-flash A-F1-002|4 ok
-[a] glm-5.3-flash A-F1-003|0 ok
-[a] glm-5.3-flash A-F1-003|1 ok
-[a] glm-5.3-flash A-F1-003|2 ok
-[a] glm-5.3-flash A-F1-003|3 ok
-[a] glm-5.3-flash A-F1-003|4 ok
-[a] glm-5.3-flash A-F1-004|0 ok
-[a] glm-5.3-flash A-F1-004|1 ok
-[a] glm-5.3-flash A-F1-004|2 ok
-[a] glm-5.3-flash A-F1-004|3 ok
-[a] glm-5.3-flash A-F1-004|4 ok
-[a] glm-5.3-flash A-F1-005|0 ok
-[a] glm-5.3-flash A-F1-005|1 ok
-[a] glm-5.3-flash A-F1-005|2 ok
-[a] glm-5.3-flash A-F1-005|3 ok
-[a] glm-5.3-flash A-F1-005|4 ok
-[a] glm-5.3-flash A-F1-006|0 ok
-[a] glm-5.3-flash A-F1-006|1 ok
-[a] glm-5.3-flash A-F1-006|2 ok
-[a] glm-5.3-flash A-F1-006|3 ok
-[a] glm-5.3-flash A-F1-006|4 ok
-[a] glm-5.3-flash A-F1-007|0 ok
-[a] glm-5.3-flash A-F1-007|1 ok
-[a] glm-5.3-flash A-F1-007|2 ok
-[a] glm-5.3-flash A-F1-007|3 ok
-[a] glm-5.3-flash A-F1-007|4 ok
-[a] glm-5.3-flash A-F1-008|0 ok
-[a] glm-5.3-flash A-F1-008|1 ok
-[a] glm-5.3-flash A-F1-008|2 ok
-[a] glm-5.3-flash A-F1-008|3 ok
-[a] glm-5.3-flash A-F1-008|4 ok
-[a] glm-5.3-flash A-F1-009|0 ok
-[a] glm-5.3-flash A-F1-009|1 ok
-[a] glm-5.3-flash A-F1-009|2 ok
-[a] glm-5.3-flash A-F1-009|3 ok
-[a] glm-5.3-flash A-F1-009|4 ok
-[a] glm-5.3-flash A-F1-010|0 ok
-[a] glm-5.3-flash A-F1-010|1 ok
-[a] glm-5.3-flash A-F1-010|2 ok
-[a] glm-5.3-flash A-F1-010|3 ok
-[a] glm-5.3-flash A-F1-010|4 ok
-[a] glm-5.3-flash A-F1-011|0 ok
-[a] glm-5.3-flash A-F1-011|1 ok
-[a] glm-5.3-flash A-F1-011|2 ok
-[a] glm-5.3-flash A-F1-011|3 ok
-[a] glm-5.3-flash A-F1-011|4 ok
-[a] glm-5.3-flash A-F1-012|0 ok
-[a] glm-5.3-flash A-F1-012|1 ok
-[a] glm-5.3-flash A-F1-012|2 ok
-[a] glm-5.3-flash A-F1-012|3 ok
-[a] glm-5.3-flash A-F1-012|4 ok
-[a] glm-5.3-flash A-F1-013|0 ok
-[a] glm-5.3-flash A-F1-013|1 ok
-[a] glm-5.3-flash A-F1-013|2 ok
-[a] glm-5.3-flash A-F1-013|3 ok
-[a] glm-5.3-flash A-F1-013|4 ok
-[a] glm-5.3-flash A-F1-014|0 ok
-[warn] glm-5.3-flash A-F1-014|1: The read operation timed out
-[a] glm-5.3-flash A-F1-014|2 ok
-[a] glm-5.3-flash A-F1-014|3 ok
-[a] glm-5.3-flash A-F1-014|4 ok
-[a] glm-5.3-flash A-F1-015|0 ok
-[a] glm-5.3-flash A-F1-015|1 ok
-[a] glm-5.3-flash A-F1-015|2 ok
-[a] glm-5.3-flash A-F1-015|3 ok
-[a] glm-5.3-flash A-F1-015|4 ok
-[a] glm-5.3-flash A-F1-016|0 ok
+[a] glm-5.3-flash: 7 calls to make
+[a] glm-5.3-flash A-F2-010|2 ok
 [a] glm-5.3-flash A-F1-016|1 ok
-[a] glm-5.3-flash A-F1-016|2 ok
-[a] glm-5.3-flash A-F1-016|3 ok
-[a] glm-5.3-flash A-F1-016|4 ok
-[a] glm-5.3-flash A-F1-017|0 ok
+[a] glm-5.3-flash A-F1-013|2 ok
+[a] glm-5.3-flash A-F2-017|0 ok
+[warn] glm-5.3-flash A-F1-004|1: HTTP Error 429: Too Many Requests
+[warn] glm-5.3-flash A-F3-025|0: HTTP Error 429: Too Many Requests
+[a] glm-5.3-flash A-F3-006|0 ok
+[b] glm-5.3-flash: 0 calls to make
+=== deepseek-v4-flash ===
+[a] deepseek-v4-flash: 38 calls to make
+[a] deepseek-v4-flash A-F1-008|1 ok
+[a] deepseek-v4-flash A-F6-015|1 ok
+[a] deepseek-v4-flash A-F6-016|1 ok
+[a] deepseek-v4-flash A-F2-022|1 ok
+[a] deepseek-v4-flash A-F6-017|0 ok
+[warn] deepseek-v4-flash A-F6-017|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-017|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-018|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-018|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-018|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-019|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-019|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F3-025|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-019|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F3-015|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F1-011|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F1-021|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F2-007|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-020|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-020|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-020|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-021|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F4-021|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-021|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-021|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-022|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-022|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-022|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-023|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-023|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-023|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-024|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-024|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-025|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-024|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-025|1: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-025|2: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash A-F6-016|2: HTTP Error 403: Forbidden
+[b] deepseek-v4-flash: 19 calls to make
+[warn] deepseek-v4-flash B-W0-003|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-004|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-005|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-008|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-007|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-002|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-006|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-001|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-012|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-009|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-010|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-015|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-011|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-013|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-016|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-014|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-018|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-019|0: HTTP Error 403: Forbidden
+[warn] deepseek-v4-flash B-W0-017|0: HTTP Error 403: Forbidden
+=== hy3 ===
+[a] hy3: 5 calls to make
+[warn] hy3 A-F1-018|1: HTTP Error 403: Forbidden
+[warn] hy3 A-F2-008|0: HTTP Error 403: Forbidden
+[warn] hy3 A-F1-011|2: HTTP Error 403: Forbidden
+[warn] hy3 A-F3-017|1: HTTP Error 403: Forbidden
+[warn] hy3 A-F6-005|0: HTTP Error 403: Forbidden
+[b] hy3: 0 calls to make
+=== mimo-v2.5 ===
+[a] mimo-v2.5: 36 calls to make
+[warn] mimo-v2.5 A-F1-003|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-001|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-001|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-002|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-002|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-002|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-003|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-001|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-003|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-004|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-005|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-004|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-004|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-005|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-006|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-005|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-006|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-006|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-007|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-007|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-007|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-008|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-008|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-008|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-009|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-009|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-009|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F2-011|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F1-010|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F2-007|1: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F2-016|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F3-011|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F4-006|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F5-004|0: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F6-014|2: HTTP Error 403: Forbidden
+[warn] mimo-v2.5 A-F6-007|2: HTTP Error 403: Forbidden
+[b] mimo-v2.5: 1 calls to make
+[warn] mimo-v2.5 B-W0-012|0: HTTP Error 403: Forbidden
+=== qwen3.8-flash ===
+[a] qwen3.8-flash: 6 calls to make
+[warn] qwen3.8-flash A-F2-013|1: HTTP Error 403: Forbidden
+[warn] qwen3.8-flash A-F2-013|0: HTTP Error 403: Forbidden
+[warn] qwen3.8-flash A-F5-020|2: HTTP Error 403: Forbidden
+[warn] qwen3.8-flash A-F4-006|2: HTTP Error 403: Forbidden
+[warn] qwen3.8-flash A-F2-021|2: HTTP Error 403: Forbidden
+[warn] qwen3.8-flash A-F2-013|2: HTTP Error 403: Forbidden
+[b] qwen3.8-flash: 0 calls to make
+=== glm-5.3 ===
+[a] glm-5.3: 0 calls to make
+[b] glm-5.3: 0 calls to make
+=== deepseek-v4-pro ===
+[a] deepseek-v4-pro: 0 calls to make
+[b] deepseek-v4-pro: 0 calls to make
+=== qwen3.8-max ===
+[a] qwen3.8-max: 0 calls to make
+[b] qwen3.8-max: 0 calls to make
+=== mimo-v2.5-pro ===
+[a] mimo-v2.5-pro: 0 calls to make
+[b] mimo-v2.5-pro: 0 calls to make
+=== hy4-preview ===
+[a] hy4-preview: 89 calls to make
+[a] hy4-preview A-F5-022|0 ok
+[a] hy4-preview A-F5-021|1 ok
+[a] hy4-preview A-F5-023|0 ok
+[a] hy4-preview A-F5-021|2 ok
+[a] hy4-preview A-F5-022|2 ok
+[a] hy4-preview A-F5-022|1 ok
+[a] hy4-preview A-F5-023|2 ok
+[a] hy4-preview A-F5-023|1 ok
+[a] hy4-preview A-F5-025|1 ok
+[a] hy4-preview A-F6-001|0 ok
+[warn] hy4-preview A-F5-024|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F5-024|0 ok
+[warn] hy4-preview A-F5-024|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F5-024|1 ok
+[a] hy4-preview A-F6-001|2 ok
+[a] hy4-preview A-F5-025|2 ok
+[a] hy4-preview A-F6-003|0 ok
+[a] hy4-preview A-F6-003|1 ok
+[warn] hy4-preview A-F5-024|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F5-024|2 ok
+[a] hy4-preview A-F6-001|1 ok
+[a] hy4-preview A-F5-025|0 ok
+[a] hy4-preview A-F6-003|2 ok
+[a] hy4-preview A-F6-002|0 ok
+[a] hy4-preview A-F6-005|0 ok
+[a] hy4-preview A-F6-004|0 ok
+[a] hy4-preview A-F6-002|2 ok
+[a] hy4-preview A-F6-002|1 ok
+[a] hy4-preview A-F6-006|0 ok
+[a] hy4-preview A-F6-004|2 ok
+[a] hy4-preview A-F6-006|1 ok
+[warn] hy4-preview A-F6-004|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-004|1 ok
+[a] hy4-preview A-F6-005|1 ok
+[warn] hy4-preview A-F6-005|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-005|2 ok
+[a] hy4-preview A-F6-007|0 ok
+[a] hy4-preview A-F6-007|2 ok
+[warn] hy4-preview A-F6-006|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-006|2 ok
+[warn] hy4-preview A-F6-007|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-007|1 ok
+[a] hy4-preview A-F6-008|1 ok
+[warn] hy4-preview A-F6-008|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-008|0 ok
+[a] hy4-preview A-F6-008|2 ok
+[a] hy4-preview A-F6-010|1 ok
+[a] hy4-preview A-F6-011|1 ok
+[warn] hy4-preview A-F6-009|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-009|0 ok
+[a] hy4-preview A-F6-010|2 ok
+[a] hy4-preview A-F6-012|0 ok
+[warn] hy4-preview A-F6-009|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-009|1 ok
+[a] hy4-preview A-F6-012|1 ok
+[warn] hy4-preview A-F6-010|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-010|0 ok
+[warn] hy4-preview A-F6-009|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-009|2 ok
+[a] hy4-preview A-F6-012|2 ok
+[warn] hy4-preview A-F6-011|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-011|0 ok
+[a] hy4-preview A-F6-011|2 ok
+[a] hy4-preview A-F6-013|0 ok
+[a] hy4-preview A-F6-013|1 ok
+[a] hy4-preview A-F6-015|2 ok
+[a] hy4-preview A-F6-014|2 ok
+[warn] hy4-preview A-F6-014|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-014|0 ok
+[warn] hy4-preview A-F6-013|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-013|2 ok
+[warn] hy4-preview A-F6-014|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-014|1 ok
+[a] hy4-preview A-F6-016|1 ok
+[a] hy4-preview A-F6-016|2 ok
+[warn] hy4-preview A-F6-015|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-015|0 ok
+[a] hy4-preview A-F6-015|1 ok
+[a] hy4-preview A-F6-016|0 ok
+[a] hy4-preview A-F6-017|1 ok
+[warn] hy4-preview A-F6-017|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-017|2 ok
+[warn] hy4-preview A-F6-017|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-017|0 ok
+[warn] hy4-preview A-F6-018|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-018|0 ok
+[warn] hy4-preview A-F6-018|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-018|1 ok
+[warn] hy4-preview A-F6-018|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-018|2 ok
+[a] hy4-preview A-F6-019|0 ok
+[warn] hy4-preview A-F6-019|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-019|1 ok
+[warn] hy4-preview A-F6-019|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-019|2 ok
+[warn] hy4-preview A-F6-020|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-020|1 ok
+[warn] hy4-preview A-F6-020|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-020|0 ok
+[warn] hy4-preview A-F6-021|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-021|0 ok
+[warn] hy4-preview A-F6-020|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-020|2 ok
+[warn] hy4-preview A-F6-021|1: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-021|1 ok
+[warn] hy4-preview A-F6-021|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-021|2 ok
+[a] hy4-preview A-F6-023|0 ok
+[a] hy4-preview A-F6-022|1 ok
+[warn] hy4-preview A-F6-022|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-022|0 ok
+[a] hy4-preview A-F6-023|1 ok
+[warn] hy4-preview A-F6-022|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-022|2 ok
+[warn] hy4-preview A-F6-024|0: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-024|0 ok
+[warn] hy4-preview A-F6-023|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-023|2 ok
+[a] hy4-preview A-F6-025|0 ok
+[a] hy4-preview A-F6-024|1 ok
+[warn] hy4-preview A-F6-024|2: empty content even at 8000 tokens, storing flagged empty
+[a] hy4-preview A-F6-024|2 ok
+[a] hy4-preview A-F6-025|1 ok
+[a] hy4-preview A-F6-025|2 ok
+[b] hy4-preview: 40 calls to make
+[b] hy4-preview B-W0-001|0 ok
+[warn] hy4-preview B-W0-004|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-004|0 ok
+[warn] hy4-preview B-W0-007|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-007|0 ok
+[warn] hy4-preview B-W0-008|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-008|0 ok
+[warn] hy4-preview B-W0-006|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-006|0 ok
+[warn] hy4-preview B-W0-002|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-002|0 ok
+[warn] hy4-preview B-W0-005|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-005|0 ok
+[warn] hy4-preview B-W0-003|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-003|0 ok
+[warn] hy4-preview B-W0-009|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-009|0 ok
+[warn] hy4-preview B-W0-011|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-011|0 ok
+[b] hy4-preview B-W0-014|0 ok
+[warn] hy4-preview B-W0-013|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-013|0 ok
+[warn] hy4-preview B-W0-010|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-010|0 ok
+[b] hy4-preview B-W0-012|0 ok
+[warn] hy4-preview B-W0-015|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-015|0 ok
+[warn] hy4-preview B-W0-016|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-016|0 ok
+[b] hy4-preview B-W0-017|0 ok
+[b] hy4-preview B-W0-019|0 ok
+[warn] hy4-preview B-W0-018|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-018|0 ok
+[warn] hy4-preview B-W0-021|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-021|0 ok
+[b] hy4-preview B-W0-020|0 ok
+[warn] hy4-preview B-W0-022|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-022|0 ok
+[warn] hy4-preview B-W0-024|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-024|0 ok
+[b] hy4-preview B-W0-023|0 ok
+[warn] hy4-preview B-W0-025|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-025|0 ok
+[b] hy4-preview B-W0-030|0 ok
+[warn] hy4-preview B-W0-026|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-026|0 ok
+[warn] hy4-preview B-W0-027|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-027|0 ok
+[warn] hy4-preview B-W0-029|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-029|0 ok
+[warn] hy4-preview B-W0-032|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-032|0 ok
+[warn] hy4-preview B-W0-031|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-031|0 ok
+[warn] hy4-preview B-W0-028|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-028|0 ok
+[warn] hy4-preview B-W0-033|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-033|0 ok
+[b] hy4-preview B-W0-034|0 ok
+[warn] hy4-preview B-W0-035|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-035|0 ok
+[warn] hy4-preview B-W0-036|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-036|0 ok
+[warn] hy4-preview B-W0-039|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-039|0 ok
+[warn] hy4-preview B-W0-037|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-037|0 ok
+[warn] hy4-preview B-W0-038|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-038|0 ok
+[warn] hy4-preview B-W0-040|0: empty content even at 8000 tokens, storing flagged empty
+[b] hy4-preview B-W0-040|0 ok
+=== gpt-5.6-sol-pro ===
+[a] gpt-5.6-sol-pro: 150 calls to make
+[a] gpt-5.6-sol-pro A-F1-003|0 ok
+[a] gpt-5.6-sol-pro A-F1-008|0 ok
+[a] gpt-5.6-sol-pro A-F1-007|0 ok
+[a] gpt-5.6-sol-pro A-F1-004|0 ok
+[a] gpt-5.6-sol-pro A-F1-005|0 ok
+[a] gpt-5.6-sol-pro A-F1-006|0 ok
+[a] gpt-5.6-sol-pro A-F1-002|0 ok
+[a] gpt-5.6-sol-pro A-F1-010|0 ok
+[a] gpt-5.6-sol-pro A-F1-001|0 ok
+[a] gpt-5.6-sol-pro A-F1-012|0 ok
+[a] gpt-5.6-sol-pro A-F1-014|0 ok
+[a] gpt-5.6-sol-pro A-F1-013|0 ok
+[a] gpt-5.6-sol-pro A-F1-011|0 ok
+[a] gpt-5.6-sol-pro A-F1-009|0 ok
+[a] gpt-5.6-sol-pro A-F1-016|0 ok
+[a] gpt-5.6-sol-pro A-F1-015|0 ok
+[a] gpt-5.6-sol-pro A-F1-020|0 ok
+[a] gpt-5.6-sol-pro A-F1-021|0 ok
+[a] gpt-5.6-sol-pro A-F1-018|0 ok
+[a] gpt-5.6-sol-pro A-F1-019|0 ok
+[a] gpt-5.6-sol-pro A-F1-022|0 ok
+[a] gpt-5.6-sol-pro A-F1-023|0 ok
+[a] gpt-5.6-sol-pro A-F1-024|0 ok
+[a] gpt-5.6-sol-pro A-F1-017|0 ok
+[a] gpt-5.6-sol-pro A-F1-025|0 ok
+[a] gpt-5.6-sol-pro A-F2-001|0 ok
+[a] gpt-5.6-sol-pro A-F2-004|0 ok
+[a] gpt-5.6-sol-pro A-F2-003|0 ok
+[a] gpt-5.6-sol-pro A-F2-002|0 ok
+[a] gpt-5.6-sol-pro A-F2-005|0 ok
+[a] gpt-5.6-sol-pro A-F2-006|0 ok
+[a] gpt-5.6-sol-pro A-F2-007|0 ok
+[a] gpt-5.6-sol-pro A-F2-009|0 ok
+[a] gpt-5.6-sol-pro A-F2-008|0 ok
+[a] gpt-5.6-sol-pro A-F2-011|0 ok
+[a] gpt-5.6-sol-pro A-F2-014|0 ok
+[a] gpt-5.6-sol-pro A-F2-010|0 ok
+[a] gpt-5.6-sol-pro A-F2-013|0 ok
+[a] gpt-5.6-sol-pro A-F2-015|0 ok
+[a] gpt-5.6-sol-pro A-F2-016|0 ok
+[a] gpt-5.6-sol-pro A-F2-018|0 ok
+[a] gpt-5.6-sol-pro A-F2-012|0 ok
+[a] gpt-5.6-sol-pro A-F2-017|0 ok
+[a] gpt-5.6-sol-pro A-F2-019|0 ok
+[a] gpt-5.6-sol-pro A-F2-020|0 ok
+[a] gpt-5.6-sol-pro A-F2-021|0 ok
+[a] gpt-5.6-sol-pro A-F2-022|0 ok
+[a] gpt-5.6-sol-pro A-F2-023|0 ok
+[a] gpt-5.6-sol-pro A-F3-001|0 ok
+[a] gpt-5.6-sol-pro A-F2-025|0 ok
+[a] gpt-5.6-sol-pro A-F2-024|0 ok
+[a] gpt-5.6-sol-pro A-F3-004|0 ok
+[a] gpt-5.6-sol-pro A-F3-002|0 ok
+[a] gpt-5.6-sol-pro A-F3-003|0 ok
+[a] gpt-5.6-sol-pro A-F3-005|0 ok
+[a] gpt-5.6-sol-pro A-F3-007|0 ok
+[a] gpt-5.6-sol-pro A-F3-006|0 ok
+[a] gpt-5.6-sol-pro A-F3-008|0 ok
+[a] gpt-5.6-sol-pro A-F3-009|0 ok
+[a] gpt-5.6-sol-pro A-F3-011|0 ok
+[a] gpt-5.6-sol-pro A-F3-012|0 ok
+[a] gpt-5.6-sol-pro A-F3-010|0 ok
+[a] gpt-5.6-sol-pro A-F3-014|0 ok
+[a] gpt-5.6-sol-pro A-F3-015|0 ok
+[a] gpt-5.6-sol-pro A-F3-016|0 ok
+[a] gpt-5.6-sol-pro A-F3-013|0 ok
+[a] gpt-5.6-sol-pro A-F3-017|0 ok
+[a] gpt-5.6-sol-pro A-F3-019|0 ok
+[a] gpt-5.6-sol-pro A-F3-018|0 ok
+[a] gpt-5.6-sol-pro A-F3-020|0 ok
+[a] gpt-5.6-sol-pro A-F3-022|0 ok
+[a] gpt-5.6-sol-pro A-F3-021|0 ok
+[a] gpt-5.6-sol-pro A-F3-023|0 ok
+[a] gpt-5.6-sol-pro A-F4-002|0 ok
+[a] gpt-5.6-sol-pro A-F3-025|0 ok
+[a] gpt-5.6-sol-pro A-F4-001|0 ok
+[a] gpt-5.6-sol-pro A-F4-003|0 ok
+[a] gpt-5.6-sol-pro A-F4-005|0 ok
+[a] gpt-5.6-sol-pro A-F4-007|0 ok
+[a] gpt-5.6-sol-pro A-F4-004|0 ok
+[a] gpt-5.6-sol-pro A-F4-008|0 ok
+[a] gpt-5.6-sol-pro A-F4-006|0 ok
+[a] gpt-5.6-sol-pro A-F4-010|0 ok
+[a] gpt-5.6-sol-pro A-F4-009|0 ok
+[a] gpt-5.6-sol-pro A-F4-013|0 ok
+[a] gpt-5.6-sol-pro A-F4-012|0 ok
+[a] gpt-5.6-sol-pro A-F4-014|0 ok
+[a] gpt-5.6-sol-pro A-F4-015|0 ok
+[a] gpt-5.6-sol-pro A-F4-011|0 ok
+[a] gpt-5.6-sol-pro A-F4-016|0 ok
+[warn] gpt-5.6-sol-pro A-F3-024|0: HTTP Error 429: Too Many Requests
+[a] gpt-5.6-sol-pro A-F4-024|0 ok
+[a] gpt-5.6-sol-pro A-F4-025|0 ok
+[a] gpt-5.6-sol-pro A-F5-001|0 ok
+[a] gpt-5.6-sol-pro A-F4-018|0 ok
+[warn] gpt-5.6-sol-pro A-F4-023|0: HTTP Error 429: Too Many Requests
+[a] gpt-5.6-sol-pro A-F4-017|0 ok
+[a] gpt-5.6-sol-pro A-F4-019|0 ok
+[a] gpt-5.6-sol-pro A-F5-002|0 ok
+[a] gpt-5.6-sol-pro A-F4-020|0 ok
+[a] gpt-5.6-sol-pro A-F4-021|0 ok
+[a] gpt-5.6-sol-pro A-F5-004|0 ok
+[a] gpt-5.6-sol-pro A-F5-005|0 ok
+[a] gpt-5.6-sol-pro A-F5-003|0 ok
+[a] gpt-5.6-sol-pro A-F5-007|0 ok
+[a] gpt-5.6-sol-pro A-F4-022|0 ok
+[a] gpt-5.6-sol-pro A-F5-008|0 ok
+[a] gpt-5.6-sol-pro A-F5-006|0 ok
+[a] gpt-5.6-sol-pro A-F5-009|0 ok
+[a] gpt-5.6-sol-pro A-F5-011|0 ok
+[a] gpt-5.6-sol-pro A-F5-012|0 ok
+[a] gpt-5.6-sol-pro A-F5-010|0 ok
+[a] gpt-5.6-sol-pro A-F5-013|0 ok
+[a] gpt-5.6-sol-pro A-F5-014|0 ok
+[a] gpt-5.6-sol-pro A-F5-016|0 ok
+[a] gpt-5.6-sol-pro A-F5-015|0 ok
+[a] gpt-5.6-sol-pro A-F5-017|0 ok
+[a] gpt-5.6-sol-pro A-F5-018|0 ok
+[a] gpt-5.6-sol-pro A-F5-021|0 ok
+[a] gpt-5.6-sol-pro A-F5-022|0 ok
+[a] gpt-5.6-sol-pro A-F5-020|0 ok
+[a] gpt-5.6-sol-pro A-F5-019|0 ok
+[a] gpt-5.6-sol-pro A-F6-001|0 ok
+[a] gpt-5.6-sol-pro A-F5-025|0 ok
+[a] gpt-5.6-sol-pro A-F5-023|0 ok
+[a] gpt-5.6-sol-pro A-F5-024|0 ok
+[a] gpt-5.6-sol-pro A-F6-003|0 ok
+[a] gpt-5.6-sol-pro A-F6-002|0 ok
+[a] gpt-5.6-sol-pro A-F6-004|0 ok
+[a] gpt-5.6-sol-pro A-F6-005|0 ok
+[a] gpt-5.6-sol-pro A-F6-007|0 ok
+[a] gpt-5.6-sol-pro A-F6-006|0 ok
+[a] gpt-5.6-sol-pro A-F6-008|0 ok
+[a] gpt-5.6-sol-pro A-F6-010|0 ok
+[a] gpt-5.6-sol-pro A-F6-012|0 ok
+[a] gpt-5.6-sol-pro A-F6-011|0 ok
+[a] gpt-5.6-sol-pro A-F6-009|0 ok
+[a] gpt-5.6-sol-pro A-F6-013|0 ok
+[a] gpt-5.6-sol-pro A-F6-014|0 ok
+[a] gpt-5.6-sol-pro A-F6-018|0 ok
+[a] gpt-5.6-sol-pro A-F6-016|0 ok
+[a] gpt-5.6-sol-pro A-F6-019|0 ok
+[a] gpt-5.6-sol-pro A-F6-015|0 ok
+[a] gpt-5.6-sol-pro A-F6-017|0 ok
+[a] gpt-5.6-sol-pro A-F6-020|0 ok
+[a] gpt-5.6-sol-pro A-F6-021|0 ok
+[a] gpt-5.6-sol-pro A-F6-022|0 ok
+[a] gpt-5.6-sol-pro A-F6-024|0 ok
+[a] gpt-5.6-sol-pro A-F6-025|0 ok
+[a] gpt-5.6-sol-pro A-F6-023|0 ok
+[b] gpt-5.6-sol-pro: 40 calls to make
+[b] gpt-5.6-sol-pro B-W0-005|0 ok
+[b] gpt-5.6-sol-pro B-W0-004|0 ok
+[b] gpt-5.6-sol-pro B-W0-009|0 ok
+[b] gpt-5.6-sol-pro B-W0-010|0 ok
+[b] gpt-5.6-sol-pro B-W0-011|0 ok
+[b] gpt-5.6-sol-pro B-W0-013|0 ok
+[b] gpt-5.6-sol-pro B-W0-014|0 ok
+[b] gpt-5.6-sol-pro B-W0-015|0 ok
+[b] gpt-5.6-sol-pro B-W0-012|0 ok
+[b] gpt-5.6-sol-pro B-W0-016|0 ok
+[b] gpt-5.6-sol-pro B-W0-017|0 ok
+[b] gpt-5.6-sol-pro B-W0-018|0 ok
+[b] gpt-5.6-sol-pro B-W0-019|0 ok
+[b] gpt-5.6-sol-pro B-W0-020|0 ok
+[b] gpt-5.6-sol-pro B-W0-021|0 ok
+[b] gpt-5.6-sol-pro B-W0-022|0 ok
+[b] gpt-5.6-sol-pro B-W0-023|0 ok
+[warn] gpt-5.6-sol-pro B-W0-008|0: HTTP Error 429: Too Many Requests
+[warn] gpt-5.6-sol-pro B-W0-006|0: HTTP Error 429: Too Many Requests
+[b] gpt-5.6-sol-pro B-W0-002|0 ok
+[b] gpt-5.6-sol-pro B-W0-024|0 ok
+[b] gpt-5.6-sol-pro B-W0-003|0 ok
+[b] gpt-5.6-sol-pro B-W0-001|0 ok
+[b] gpt-5.6-sol-pro B-W0-007|0 ok
+[b] gpt-5.6-sol-pro B-W0-025|0 ok
+[b] gpt-5.6-sol-pro B-W0-026|0 ok
+[b] gpt-5.6-sol-pro B-W0-027|0 ok
+[b] gpt-5.6-sol-pro B-W0-030|0 ok
+[b] gpt-5.6-sol-pro B-W0-031|0 ok
+[b] gpt-5.6-sol-pro B-W0-035|0 ok
+[b] gpt-5.6-sol-pro B-W0-034|0 ok
+[b] gpt-5.6-sol-pro B-W0-028|0 ok
+[b] gpt-5.6-sol-pro B-W0-032|0 ok
+[b] gpt-5.6-sol-pro B-W0-036|0 ok
+[b] gpt-5.6-sol-pro B-W0-039|0 ok
+[b] gpt-5.6-sol-pro B-W0-037|0 ok
+[b] gpt-5.6-sol-pro B-W0-040|0 ok
+[b] gpt-5.6-sol-pro B-W0-033|0 ok
+[b] gpt-5.6-sol-pro B-W0-038|0 ok
+[b] gpt-5.6-sol-pro B-W0-029|0 ok
+=== gemini-3.1-pro ===
+[a] gemini-3.1-pro: 150 calls to make
+[warn] gemini-3.1-pro A-F1-004|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-007|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-001|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-006|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-008|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-003|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-005|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-002|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-011|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-009|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-010|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-012|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-013|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-016|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-014|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-015|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-017|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-021|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-020|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-023|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-022|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-024|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-019|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-018|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F1-025|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-003|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-001|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-004|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-007|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-005|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-002|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-009|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-008|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-010|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-011|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-015|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-013|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-014|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-012|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-016|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-018|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-006|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-020|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-021|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-017|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-019|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-023|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-022|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-024|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-001|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-005|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-002|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-004|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F2-025|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-003|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-006|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-007|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-010|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-009|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-008|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-011|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-012|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-014|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-016|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-015|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-013|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-017|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-019|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-020|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-018|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-023|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-022|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-002|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-021|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-003|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-025|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-001|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F3-024|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-009|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-007|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-004|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-010|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-006|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-012|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-005|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-014|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-008|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-016|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-015|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-013|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-017|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-019|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-018|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-011|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-020|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-022|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-023|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-025|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-002|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-004|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-003|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-024|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-005|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-001|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F4-021|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-006|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-007|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-009|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-010|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-008|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-011|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-014|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-012|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-013|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-015|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-016|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-017|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-018|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-020|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-021|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-019|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-023|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-024|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-025|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-001|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F5-022|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-003|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-002|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-005|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-004|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-007|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-008|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-009|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-006|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-010|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-011|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-012|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-014|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-016|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-015|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-013|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-019|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-017|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-021|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-018|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-020|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-022|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-023|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-025|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro A-F6-024|0: HTTP Error 400: Bad Request
+[b] gemini-3.1-pro: 40 calls to make
+[warn] gemini-3.1-pro B-W0-008|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-002|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-003|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-004|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-001|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-005|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-006|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-007|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-014|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-012|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-009|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-013|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-010|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-020|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-017|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-018|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-016|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-019|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-021|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-024|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-023|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-025|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-022|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-026|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-029|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-030|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-011|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-031|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-028|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-033|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-032|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-035|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-034|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-036|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-037|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-039|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-015|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-040|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-027|0: HTTP Error 400: Bad Request
+[warn] gemini-3.1-pro B-W0-038|0: HTTP Error 400: Bad Request
+=== claude-opus-5 ===
+[a] claude-opus-5: 150 calls to make
+[a] claude-opus-5 A-F1-002|0 ok
+[a] claude-opus-5 A-F1-007|0 ok
+[a] claude-opus-5 A-F1-008|0 ok
+[a] claude-opus-5 A-F1-001|0 ok
+[a] claude-opus-5 A-F1-004|0 ok
+[a] claude-opus-5 A-F1-003|0 ok
+[a] claude-opus-5 A-F1-006|0 ok
+[a] claude-opus-5 A-F1-005|0 ok
+[a] claude-opus-5 A-F1-009|0 ok
+[a] claude-opus-5 A-F1-012|0 ok
+[a] claude-opus-5 A-F1-010|0 ok
+[a] claude-opus-5 A-F1-013|0 ok
+[a] claude-opus-5 A-F1-011|0 ok
+[a] claude-opus-5 A-F1-016|0 ok
+[a] claude-opus-5 A-F1-015|0 ok
+[a] claude-opus-5 A-F1-014|0 ok
+[a] claude-opus-5 A-F1-017|0 ok
+[a] claude-opus-5 A-F1-019|0 ok
+[a] claude-opus-5 A-F1-018|0 ok
+[a] claude-opus-5 A-F1-020|0 ok
+[a] claude-opus-5 A-F1-024|0 ok
+[a] claude-opus-5 A-F2-001|0 ok
+[a] claude-opus-5 A-F2-002|0 ok
+[a] claude-opus-5 A-F1-025|0 ok
+[a] claude-opus-5 A-F2-003|0 ok
+[a] claude-opus-5 A-F2-004|0 ok
+[a] claude-opus-5 A-F1-022|0 ok
+[a] claude-opus-5 A-F1-021|0 ok
+[a] claude-opus-5 A-F1-023|0 ok
+[a] claude-opus-5 A-F2-005|0 ok
+[a] claude-opus-5 A-F2-007|0 ok
+[a] claude-opus-5 A-F2-008|0 ok
+[a] claude-opus-5 A-F2-006|0 ok
+[a] claude-opus-5 A-F2-009|0 ok
+[a] claude-opus-5 A-F2-010|0 ok
+[a] claude-opus-5 A-F2-011|0 ok
+[a] claude-opus-5 A-F2-012|0 ok
+[a] claude-opus-5 A-F2-013|0 ok
+[a] claude-opus-5 A-F2-014|0 ok
+[a] claude-opus-5 A-F2-016|0 ok
+[a] claude-opus-5 A-F2-015|0 ok
+[a] claude-opus-5 A-F2-019|0 ok
+[a] claude-opus-5 A-F2-018|0 ok
+[a] claude-opus-5 A-F2-017|0 ok
+[a] claude-opus-5 A-F2-022|0 ok
+[a] claude-opus-5 A-F2-021|0 ok
+[a] claude-opus-5 A-F2-020|0 ok
+[a] claude-opus-5 A-F2-023|0 ok
+[a] claude-opus-5 A-F2-024|0 ok
+[a] claude-opus-5 A-F3-001|0 ok
+[a] claude-opus-5 A-F2-025|0 ok
+[a] claude-opus-5 A-F3-002|0 ok
+[a] claude-opus-5 A-F3-005|0 ok
+[a] claude-opus-5 A-F3-003|0 ok
+[a] claude-opus-5 A-F3-004|0 ok
+[a] claude-opus-5 A-F3-006|0 ok
+[a] claude-opus-5 A-F3-008|0 ok
+[a] claude-opus-5 A-F3-007|0 ok
+[a] claude-opus-5 A-F3-009|0 ok
+[a] claude-opus-5 A-F3-010|0 ok
+[a] claude-opus-5 A-F3-012|0 ok
+[a] claude-opus-5 A-F3-011|0 ok
+[a] claude-opus-5 A-F3-013|0 ok
+[a] claude-opus-5 A-F3-014|0 ok
+[a] claude-opus-5 A-F3-016|0 ok
+[a] claude-opus-5 A-F3-018|0 ok
+[a] claude-opus-5 A-F3-015|0 ok
+[a] claude-opus-5 A-F3-017|0 ok
+[a] claude-opus-5 A-F3-019|0 ok
+[a] claude-opus-5 A-F3-020|0 ok
+[a] claude-opus-5 A-F3-021|0 ok
+[a] claude-opus-5 A-F3-023|0 ok
+[a] claude-opus-5 A-F3-022|0 ok
+[a] claude-opus-5 A-F4-001|0 ok
+[a] claude-opus-5 A-F3-024|0 ok
+[a] claude-opus-5 A-F3-025|0 ok
+[a] claude-opus-5 A-F4-002|0 ok
+[a] claude-opus-5 A-F4-003|0 ok
+[a] claude-opus-5 A-F4-004|0 ok
+[a] claude-opus-5 A-F4-006|0 ok
+[a] claude-opus-5 A-F4-008|0 ok
+[a] claude-opus-5 A-F4-007|0 ok
+[a] claude-opus-5 A-F4-005|0 ok
+[a] claude-opus-5 A-F4-009|0 ok
+[a] claude-opus-5 A-F4-011|0 ok
+[a] claude-opus-5 A-F4-010|0 ok
+[a] claude-opus-5 A-F4-012|0 ok
+[a] claude-opus-5 A-F4-013|0 ok
+[a] claude-opus-5 A-F4-014|0 ok
+[a] claude-opus-5 A-F4-016|0 ok
+[a] claude-opus-5 A-F4-017|0 ok
+[a] claude-opus-5 A-F4-019|0 ok
+[a] claude-opus-5 A-F4-018|0 ok
+[a] claude-opus-5 A-F4-015|0 ok
+[a] claude-opus-5 A-F4-020|0 ok
+[a] claude-opus-5 A-F4-022|0 ok
+[a] claude-opus-5 A-F4-021|0 ok
+[a] claude-opus-5 A-F4-023|0 ok
+[a] claude-opus-5 A-F4-025|0 ok
+[a] claude-opus-5 A-F4-024|0 ok
