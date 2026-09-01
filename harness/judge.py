@@ -1,3 +1,4 @@
+import argparse
 import json
 import re
 import threading
@@ -36,7 +37,6 @@ def judgment_done_keys(path):
 
 
 def main():
-    import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None, help="cap judgments per judge (smoke tests)")
     args = parser.parse_args()
@@ -47,10 +47,10 @@ def main():
     judges = CFG["judges"]
     jt = CFG.get("judge_max_tokens", 1500)
     workers = max(1, int(CFG.get("parallel_workers", 1)))
-    lock = threading.Lock()
-    print_lock = threading.Lock()
     out = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     done = judgment_done_keys(out)
+    lock = threading.Lock()
+    print_lock = threading.Lock()
 
     outputs = {}
     for name in cands:
@@ -61,7 +61,7 @@ def main():
                 rows = rows[: args.limit]
             outputs[name] = rows
 
-    for j in judges:
+    def run_judge(j):
         jname = j["name"]
         excluded = set(j.get("exclude_models", []))
         todo = []
@@ -73,7 +73,8 @@ def main():
                 if key in done:
                     continue
                 todo.append((name, row, items.get(row["item_id"])))
-        print(f"[judge:{jname}] {len(todo)} judgments to make", flush=True)
+        with print_lock:
+            print(f"[judge:{jname}] {len(todo)} judgments to make", flush=True)
 
         def judge_worker(task):
             model, row, item = task
@@ -122,7 +123,11 @@ def main():
 
         with ThreadPoolExecutor(max_workers=workers) as ex:
             list(ex.map(judge_worker, todo))
-        print(f"[judge:{jname}] complete", flush=True)
+        with print_lock:
+            print(f"[judge:{jname}] complete", flush=True)
+
+    with ThreadPoolExecutor(max_workers=len(judges)) as jex:
+        list(jex.map(run_judge, judges))
 
     print("judge complete")
 
