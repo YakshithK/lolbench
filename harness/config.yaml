@@ -1,4 +1,4 @@
-# LOL Bench harness config — the whole "institutional" setup is this file.
+# LOL Bench harness config ??? the whole "institutional" setup is this file.
 # Every result is stamped with (dataset_version, harness_hash). Bump dataset_version when items change.
 
 dataset_version: "0.1.0"
@@ -11,6 +11,7 @@ lol_b_samples: 1          # voting uses sample 0; extra samples added at C5
 max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning tokens
 judge_max_tokens: 1500
 parallel_workers: 3         # per-candidate concurrent calls
+temperature: 0.9            # generation diversity; judge calls use temperature 0
 
 # Candidates: five free B.AI models for v0. Paid entries (OpenRouter/xAI)
 # stay disabled until keys land.
@@ -39,45 +40,45 @@ candidates:
   - name: glm-5.3
     provider: openrouter
     model: z-ai/glm-5.3
-    enabled: false
+    enabled: true
   - name: deepseek-v4-pro
     provider: openrouter
     model: deepseek/deepseek-v4-pro
-    enabled: false
+    enabled: true
   - name: qwen3.8-max
     provider: openrouter
     model: qwen/qwen3.8-max
-    enabled: false
+    enabled: true
   - name: mimo-v2.5-pro
     provider: openrouter
     model: xiaomi/mimo-v2.5-pro
-    enabled: false
+    enabled: true
   - name: hy4-preview
     provider: openrouter
     model: tencent/hy4-preview
-    enabled: false
+    enabled: true
 
   # ---- Tier 4: frontier anchors (OpenRouter/xAI, n=1) ----
   - name: gpt-5.6-sol-pro
     provider: openrouter
     model: openai/gpt-5.6-sol-pro
     anchor: true
-    enabled: false
+    enabled: true
   - name: gemini-3.1-pro
     provider: openrouter
     model: google/gemini-3.1-pro-preview
     anchor: true
-    enabled: false
+    enabled: true
   - name: claude-opus-5
     provider: openrouter
     model: anthropic/claude-opus-5
     anchor: true
-    enabled: false
+    enabled: true
   - name: muse-spark-1.2-contributor
     provider: openrouter
     model: meta/muse-spark-1.2-contributor
     anchor: true
-    enabled: false
+    enabled: true
   - name: grok-4.6
     provider: xai
     model: grok-4.6

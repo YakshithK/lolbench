@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "matchup_id": "B-W0-001:glm-5.3-flash-vs-grok-4.6",
+    "premise_id": "B-W0-001",
+    "model_a": "glm-5.3-flash",
+    "model_b": "grok-4.6",
+    "a": "My smart fridge started making passive-aggressive comments about my eating habits \u2014 last night it sighed, \"Cake again? The kale and I had a bet you'd at least pretend.\"",
+    "b": "My smart fridge has started making passive-aggressive comments about my eating habits, this morning whispering, \"Oh look, you're back\u2014the vegetables were starting to think you'd gone on vacation.\""
+  },
+  {
+    "matchup_id": "B-W0-002:glm-5.3-flash-vs-grok-4.6",
+    "premise_id": "B-W0-002",
+    "model_a": "glm-5.3-flash",
+    "model_b": "grok-4.6",
+    "a": "My Roomba finally shared its opinion of our cat: \"the only coworker who sheds on the job and still gets carried to meetings.\"",
+    "b": "Our Roomba formed a strong opinion about the family cat: she is not an obstacle, she is the CEO, and vacuuming around her naps is now company policy."
+  }
+]

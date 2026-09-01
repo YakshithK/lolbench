@@ -36,6 +36,11 @@ def judgment_done_keys(path):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--limit", type=int, default=None, help="cap judgments per judge (smoke tests)")
+    args = parser.parse_args()
+
     load_env()
     items = {i["id"]: i for i in load_jsonl(ROOT / CFG["paths"]["items_a"])}
     cands = [c["name"] for c in CFG["candidates"] if c.get("enabled")]
@@ -51,7 +56,10 @@ def main():
     for name in cands:
         path = ROOT / CFG["paths"]["outputs"] / name / "lol_a.jsonl"
         if path.exists():
-            outputs[name] = load_jsonl(path)
+            rows = load_jsonl(path)
+            if args.limit:
+                rows = rows[: args.limit]
+            outputs[name] = rows
 
     for j in judges:
         jname = j["name"]

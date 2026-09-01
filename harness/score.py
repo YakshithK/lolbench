@@ -24,7 +24,7 @@ def bootstrap_ci(xs, iters=1000, seed=42):
         m = mean(xs)
         return [m, m]
     rng = random.Random(seed)
-    ms = sorted(mean(rng.choice(xs) for _ in xs) for _ in range(iters))
+    ms = sorted(mean([rng.choice(xs) for _ in xs]) for _ in range(iters))
     return [round(ms[int(0.025 * iters)], 4), round(ms[int(0.975 * iters)], 4)]
 
 
@@ -104,7 +104,7 @@ def build_matchups():
     Deterministic sample index (0) for fairness; one matchup per pair per premise
     with sides shuffled so A/B position is random."""
     out_dir = ROOT / CFG["paths"]["outputs"]
-    models = sorted(p.name for p in out_dir.glob("*/lol_b.jsonl"))
+    models = sorted(p.parent.name for p in out_dir.glob("*/lol_b.jsonl"))
     if len(models) < 2:
         return []
     by_model = {}

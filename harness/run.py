@@ -217,11 +217,20 @@ def run_candidate(cand, items, premises):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("only", nargs="?", default=None, help="run a single candidate by name")
+    parser.add_argument("--limit", type=int, default=None, help="cap items/premises (smoke tests)")
+    parser.add_argument("--samples", type=int, default=None, help="override sample count (smoke tests)")
     args = parser.parse_args()
 
     load_env()
     items = load_jsonl(ROOT / CFG["paths"]["items_a"])
     premises = load_jsonl(ROOT / CFG["paths"]["premises_b"])
+    if args.limit:
+        items = items[: args.limit]
+        premises = premises[: args.limit]
+    if args.samples:
+        CFG["n_samples"] = args.samples
+        CFG["anchor_samples"] = args.samples
+        CFG["lol_b_samples"] = args.samples
     cands = [c for c in CFG["candidates"] if c.get("enabled")]
     if args.only:
         cands = [c for c in cands if c["name"] == args.only]
