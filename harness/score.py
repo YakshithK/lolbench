@@ -112,7 +112,7 @@ def build_matchups():
         for line in (out_dir / m / "lol_b.jsonl").read_text(encoding="utf-8").splitlines():
             if line.strip():
                 o = json.loads(line)
-                if o.get("sample") == 0:
+                if o.get("sample") == 0 and not o.get("empty"):
                     by_model.setdefault(m, {})[o["item_id"]] = strip_think(o["output"])
     premises = sorted(set().union(*[set(v.keys()) for v in by_model.values()]))
     matchups = []

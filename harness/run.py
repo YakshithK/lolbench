@@ -147,13 +147,23 @@ def run_candidate(cand, items, premises):
     def a_worker(task):
         item, s = task
         key = f'{item["id"]}|{s}'
-        try:
-            content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache[item["id"]]}], temp, mt)
-        except Exception as e:
+        content = None
+        budget = mt
+        for try_i in range(2):
+            try:
+                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache[item["id"]]}], temp, budget)
+            except Exception as e:
+                with PRINT_LOCK:
+                    print(f"[warn] {name} {key}: {e}", flush=True)
+                return
+            if content and content.strip():
+                break
+            budget = budget * 2
+        if not content or not content.strip():
             with PRINT_LOCK:
-                print(f"[warn] {name} {key}: {e}", flush=True)
-            return
-        append_result(out_a, {"item_id": item["id"], "sample": s, "output": content, "model": name, "ts": time.time()}, lock)
+                print(f"[warn] {name} {key}: empty content even at {budget} tokens, storing flagged empty", flush=True)
+        append_result(out_a, {"item_id": item["id"], "sample": s, "output": content or "", "empty": not (content and content.strip()), "model": name, "ts": time.time()}, lock)
+        done.add(key)
         with PRINT_LOCK:
             print(f"[a] {name} {key} ok", flush=True)
 
@@ -180,13 +190,23 @@ def run_candidate(cand, items, premises):
     def b_worker(task):
         prem, s = task
         key = f'{prem["id"]}|{s}'
-        try:
-            content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache_b[prem["id"]]}], temp, mt)
-        except Exception as e:
+        content = None
+        budget = mt
+        for try_i in range(2):
+            try:
+                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache_b[prem["id"]]}], temp, budget)
+            except Exception as e:
+                with PRINT_LOCK:
+                    print(f"[warn] {name} {key}: {e}", flush=True)
+                return
+            if content and content.strip():
+                break
+            budget = budget * 2
+        if not content or not content.strip():
             with PRINT_LOCK:
-                print(f"[warn] {name} {key}: {e}", flush=True)
-            return
-        append_result(out_b, {"item_id": prem["id"], "sample": s, "output": content, "model": name, "ts": time.time()}, lock)
+                print(f"[warn] {name} {key}: empty content even at {budget} tokens, storing flagged empty", flush=True)
+        append_result(out_b, {"item_id": prem["id"], "sample": s, "output": content or "", "empty": not (content and content.strip()), "model": name, "ts": time.time()}, lock)
+        done.add(key)
         with PRINT_LOCK:
             print(f"[b] {name} {key} ok", flush=True)
 

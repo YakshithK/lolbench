@@ -1,6 +1,8 @@
 import json
 import re
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import yaml
 
@@ -39,6 +41,9 @@ def main():
     cands = [c["name"] for c in CFG["candidates"] if c.get("enabled")]
     judges = CFG["judges"]
     jt = CFG.get("judge_max_tokens", 1500)
+    workers = max(1, int(CFG.get("parallel_workers", 1)))
+    lock = threading.Lock()
+    print_lock = threading.Lock()
     out = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     done = judgment_done_keys(out)
 
@@ -61,9 +66,11 @@ def main():
                     continue
                 todo.append((name, row, items.get(row["item_id"])))
         print(f"[judge:{jname}] {len(todo)} judgments to make", flush=True)
-        for model, row, item in todo:
+
+        def judge_worker(task):
+            model, row, item = task
             if item is None:
-                continue
+                return
             prompt = render(
                 ROOT / "harness" / "prompts" / "judge.md",
                 {
@@ -72,10 +79,10 @@ def main():
                     "gold_elements": "; ".join(item["gold_elements"]),
                 },
             )
-            messages = [
-                {"role": "user", "content": prompt},
-                {"role": "user", "content": f"Explanation to grade:\n{row['output']}"},
-            ]
+            messages = [{
+                "role": "user",
+                "content": prompt + "\n\nExplanation to grade:\n" + str(row["output"]),
+            }]
             got = None
             for attempt in range(3):
                 try:
@@ -84,7 +91,8 @@ def main():
                     if got:
                         break
                 except Exception as e:
-                    print(f"[warn] {jname} {model} {row['item_id']}|{row['sample']} try{attempt}: {e}", flush=True)
+                    with print_lock:
+                        print(f"[warn] {jname} {model} {row['item_id']}|{row['sample']} try{attempt}: {e}", flush=True)
             if got is None:
                 got = {"score": None, "reason": "judge failed to emit parseable JSON"}
             append_result(
@@ -99,8 +107,13 @@ def main():
                     "reason": got.get("reason"),
                     "ts": time.time(),
                 },
+                lock,
             )
-            done.add(f"{jname}|{model}|{row['item_id']}|{row['sample']}")
+            with print_lock:
+                print(f"[judge:{jname}] {model} {row['item_id']}|{row['sample']} -> {got.get('score')}", flush=True)
+
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            list(ex.map(judge_worker, todo))
         print(f"[judge:{jname}] complete", flush=True)
 
     print("judge complete")
