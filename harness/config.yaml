@@ -82,7 +82,7 @@ candidates:
     provider: xai
     model: grok-4.6
     anchor: true
-    enabled: false          # enable when XAI_API_KEY lands (owner has credits)
+    enabled: true           # key verified 2026-09-01; owner credits cover cost
 
 # Dual-judge protocol: every model is graded ONLY by judges from a different
 # family. DeepSeek grades the non-DeepSeek rows; Qwen grades the DeepSeek rows
