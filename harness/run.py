@@ -95,15 +95,16 @@ def throttle(provider):
     w["n"] += 1
 
 
-def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6, cost_key=None):
+def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6, cost_key=None, extra_payload=None):
     url = base_url or PROVIDER_URLS[provider]
     key = os.environ.get(ENV_KEYS.get(provider, ""), "")
     headers = {"Content-Type": "application/json"}
     if key:
         headers["Authorization"] = f"Bearer {key}"
-    payload = json.dumps(
-        {"model": model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens}
-    ).encode("utf-8")
+    body = {"model": model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens}
+    if extra_payload:
+        body.update(extra_payload)
+    payload = json.dumps(body).encode("utf-8")
     delay = 2.0
     for attempt in range(retries):
         throttle(provider)
@@ -168,6 +169,8 @@ def run_candidate(cand, items, premises):
     mt = CFG["max_output_tokens"]
     workers = max(1, int(CFG.get("parallel_workers", 1)))
     lock = threading.Lock()
+    # think: false -> disable reasoning via OpenRouter's unified param (cost control)
+    extra = {"reasoning": {"enabled": False}} if (cand.get("think") is False and provider == "openrouter") else None
 
     out_a = ROOT / CFG["paths"]["outputs"] / name / "lol_a.jsonl"
     done = done_keys(out_a)
@@ -192,7 +195,7 @@ def run_candidate(cand, items, premises):
         budget = mt
         for try_i in range(2):
             try:
-                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache[item["id"]]}], temp, budget, cost_key=name)
+                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache[item["id"]]}], temp, budget, cost_key=name, extra_payload=extra)
             except Exception as e:
                 with PRINT_LOCK:
                     print(f"[warn] {name} {key}: {e}", flush=True)
@@ -239,7 +242,7 @@ def run_candidate(cand, items, premises):
         budget = mt
         for try_i in range(2):
             try:
-                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache_b[prem["id"]]}], temp, budget, cost_key=name)
+                content = chat(provider, model, base_url, [{"role": "user", "content": prompt_cache_b[prem["id"]]}], temp, budget, cost_key=name, extra_payload=extra)
             except Exception as e:
                 with PRINT_LOCK:
                     print(f"[warn] {name} {key}: {e}", flush=True)

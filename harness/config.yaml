@@ -64,21 +64,25 @@ candidates:
     provider: openrouter
     model: openai/gpt-5.6-sol-pro
     anchor: true
+    think: false            # reasoning disabled: 4x cost cut; anchor tier discloses this
     enabled: true
   - name: gemini-3.1-pro
     provider: openrouter
     model: google/gemini-3.1-pro-preview
     anchor: true
+    think: false
     enabled: true
   - name: claude-opus-5
     provider: openrouter
     model: anthropic/claude-opus-5
     anchor: true
+    think: false
     enabled: true
   - name: muse-spark-1.2-contributor
     provider: openrouter
     model: meta/muse-spark-1.2-contributor
     anchor: true
+    think: false
     enabled: true
   - name: grok-4.6
     provider: xai
