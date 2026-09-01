@@ -10,7 +10,7 @@ anchor_samples: 1          # frontier anchors run once per item (wider CIs, flag
 lol_b_samples: 1          # voting uses sample 0; extra samples added at C5
 max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning tokens
 judge_max_tokens: 1500
-parallel_workers: 3         # per-candidate concurrent calls
+parallel_workers: 8         # per-candidate concurrent calls
 temperature: 0.9            # generation diversity; judge calls use temperature 0
 
 # Candidates: five free B.AI models for v0. Paid entries (OpenRouter/xAI)
