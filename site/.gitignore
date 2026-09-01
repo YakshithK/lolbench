@@ -1,2 +1,5 @@
 .vercel
 .env*
+
+run_log.txt
+run_err.txt
