@@ -3,151 +3,266 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LOL Bench - AI humor, measured honestly</title>
-<meta name="description" content="LOL Bench measures whether LLMs can appreciate, produce, and discriminate humor. Credibility-first: every number ships with its error bars.">
+<title>LOL Bench — AI humor, measured honestly</title>
+<meta name="description" content="Can LLMs get the joke? LOL Bench measures appreciation, production, and taste — with published error bars.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#0d0f14; --card:#161a22; --ink:#e8eaf0; --muted:#9aa3b2; --accent:#ffd166; --good:#7ad97a; --line:#242a35; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { background:var(--bg); color:var(--ink); font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,sans-serif; line-height:1.55; }
-  .wrap { max-width:880px; margin:0 auto; padding:24px 20px 64px; }
-  header h1 { font-size:2.2rem; letter-spacing:-0.02em; }
-  header h1 span { color:var(--accent); }
-  .tagline { color:var(--muted); margin-top:6px; }
-  .banner { margin:20px 0; padding:12px 16px; border:1px dashed var(--accent); border-radius:10px; background:rgba(255,209,102,.07); font-weight:600; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; margin:16px 0; }
-  .card h2 { font-size:1.15rem; margin-bottom:8px; }
-  .card p { color:var(--muted); }
-  .origin { border-left:3px solid var(--accent); }
-  .origin blockquote { margin:10px 0 0; padding-left:14px; border-left:2px solid var(--line); color:var(--ink); font-style:italic; }
-  table { width:100%; border-collapse:collapse; margin-top:12px; font-size:.95rem; }
-  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
-  th { color:var(--muted); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; }
-  .num { font-variant-numeric:tabular-nums; }
-  .muted { color:var(--muted); font-size:.9rem; }
-  .pill { display:inline-block; padding:2px 10px; border-radius:99px; border:1px solid var(--line); font-size:.78rem; color:var(--muted); margin-right:6px; }
-  .big { font-size:1.6rem; font-weight:700; }
-  footer { margin-top:36px; color:var(--muted); font-size:.85rem; }
-  a { color:var(--accent); text-decoration:none; }
-  code { background:var(--line); padding:1px 6px; border-radius:6px; font-size:.85em; }
-  .empty { color:var(--muted); font-style:italic; }
+  :root{
+    --bg:#08090d; --bg2:#0d0f16; --card:#12151e; --card2:#171b27;
+    --line:#232838; --line2:#2e3549;
+    --ink:#f2f4f9; --mut:#8b93a7; --dim:#5c6478;
+    --acc:#ffd166; --acc2:#ffb347; --good:#5dd39e; --bad:#e5484d;
+    --mono:'IBM Plex Mono',ui-monospace,monospace; --disp:'Space Grotesk',ui-sans-serif,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--disp);line-height:1.6;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--acc);color:#000}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+  /* ---------- hero ---------- */
+  header{padding:72px 0 40px;text-align:left}
+  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+  h1{font-size:clamp(2.6rem,7vw,4.4rem);line-height:.98;letter-spacing:-.03em;font-weight:700}
+  h1 .lol{color:var(--acc)}
+  .sub{margin-top:18px;max-width:640px;color:var(--mut);font-size:1.05rem}
+  .sub b{color:var(--ink);font-weight:500}
+  .hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .chip{font-family:var(--mono);font-size:.72rem;padding:5px 12px;border:1px solid var(--line2);border-radius:99px;color:var(--mut);background:var(--bg2)}
+  .chip.acc{border-color:rgba(255,209,102,.4);color:var(--acc)}
+
+  /* ---------- banner ---------- */
+  .banner{margin:8px 0 40px;padding:14px 18px;border:1px dashed rgba(255,209,102,.45);border-radius:12px;background:rgba(255,209,102,.05);font-size:.92rem}
+  .banner b{color:var(--acc)}
+  .banner .m{color:var(--mut)}
+
+  /* ---------- sections ---------- */
+  section{margin:56px 0}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+  .sec-head h2{font-size:1.5rem;letter-spacing:-.02em}
+  .sec-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;border-radius:99px;border:1px solid var(--line2);color:var(--mut)}
+  .sec-tag.live{border-color:rgba(93,211,158,.4);color:var(--good)}
+  .sec-tag.human{border-color:rgba(255,179,71,.4);color:var(--acc2)}
+  .sec-desc{color:var(--mut);max-width:720px;font-size:.95rem;margin-bottom:18px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .card + .card{margin-top:14px}
+
+  /* ---------- tables ---------- */
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  th{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line2)}
+  td{padding:12px;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .model{font-weight:500}
+  .model .anchor{font-family:var(--mono);font-size:.6rem;color:var(--acc2);border:1px solid rgba(255,179,71,.4);border-radius:4px;padding:1px 5px;margin-left:8px;vertical-align:2px}
+  .score{font-family:var(--mono);font-weight:600;font-size:1.05rem}
+  .ci{font-family:var(--mono);font-size:.72rem;color:var(--mut)}
+
+  /* CI bar */
+  .cibar{position:relative;height:6px;background:var(--bg);border-radius:3px;margin-top:6px;min-width:120px}
+  .cibar i{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:3px}
+  .cibar u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);border-radius:1px}
+
+  .fam{display:flex;gap:5px;flex-wrap:wrap}
+  .fam span{font-family:var(--mono);font-size:.62rem;padding:2px 7px;border-radius:5px;background:var(--bg2);border:1px solid var(--line);color:var(--mut)}
+  .fam span.hi{color:var(--good);border-color:rgba(93,211,158,.35)}
+  .fam span.lo{color:var(--bad);border-color:rgba(229,72,77,.35)}
+
+  /* ---------- vote booth ---------- */
+  .booth{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.booth{grid-template-columns:1fr}}
+  .joke-card{background:var(--card2);border:1px solid var(--line2);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:14px;min-height:180px}
+  .joke-card .who{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+  .joke-card .txt{font-size:1.08rem;line-height:1.55;flex:1}
+  .vote-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .btn{font-family:var(--disp);font-weight:700;font-size:.95rem;padding:11px 22px;border-radius:10px;border:1px solid var(--line2);background:var(--card2);color:var(--ink);cursor:pointer;transition:transform .06s,background .12s}
+  .btn:hover{background:var(--card)}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{background:var(--acc);border-color:var(--acc);color:#000}
+  .btn.primary:hover{background:var(--acc2)}
+  .kbd{font-family:var(--mono);font-size:.62rem;border:1px solid var(--line2);border-bottom-width:2px;border-radius:4px;padding:1px 5px;color:var(--dim);margin-left:8px}
+  .premise{font-family:var(--mono);font-size:.75rem;color:var(--dim);margin-top:14px}
+  .premise b{color:var(--mut);font-weight:500}
+
+  /* ---------- origin ---------- */
+  .origin{border-left:3px solid var(--acc);background:linear-gradient(90deg,rgba(255,209,102,.06),transparent 70%)}
+  .origin .tweet{padding:10px 0 10px 16px;border-left:2px solid var(--line2);margin:12px 0 0 2px}
+  .origin .tweet p{color:var(--ink);font-size:1.02rem}
+  .origin .tweet .h{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-bottom:2px}
+  footer{padding:48px 0 64px;color:var(--dim);font-size:.85rem;border-top:1px solid var(--line);margin-top:72px}
+  footer .row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  footer a{color:var(--mut)}
+  .mono{font-family:var(--mono)}
+  .empty{color:var(--dim);font-style:italic;padding:14px 0}
+  .stamp{font-family:var(--mono);font-size:.68rem;color:var(--dim)}
+  .skip{background:none;border:none;color:var(--dim);cursor:pointer;font-size:.8rem;text-decoration:underline;padding:4px}
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <header>
-    <h1>LOL <span>Bench</span></h1>
-    <div class="tagline">Can AI make you laugh? Measured in three faculties: appreciation, production, taste. Credibility-first.</div>
+    <div class="kicker">lolbench.lol &nbsp;·&nbsp; a benchmark for machine humor</div>
+    <h1>Do AI models<br>get <span class="lol">the joke?</span></h1>
+    <p class="sub"><b>LOL Bench</b> measures three separate faculties: <b>appreciation</b> (explaining humor), <b>production</b> (writing it), and <b>taste</b> (matching human judgment). Every score ships with its error bars. Funniness is judged by humans, never by other models.</p>
+    <div class="hero-meta">
+      <span class="chip acc">15 models</span>
+      <span class="chip">5 labs</span>
+      <span class="chip">150 rubric items · 40 premises</span>
+      <span class="chip">open code · split data</span>
+      <span class="chip">dual judge protocol</span>
+    </div>
   </header>
 
-  <div class="banner">PRELIMINARY - auto-judged, no human calibration yet. Every score below ships with n and a 95% CI. Judge model family is disjoint from scored candidates.</div>
+  <div class="banner" id="banner"><b>PRELIMINARY.</b> <span class="m">Auto-judged, no human calibration yet. Claims ship when earned; visibility ships now.</span></div>
 
-  <section class="card origin">
-    <h2>Origin</h2>
-    <p>Someone posted they were looking to fund someone making LLMs funny. Then:</p>
-    <blockquote>
-      <p>"Who's building LOL bench?"</p>
-      <p>"Give me a few hours."</p>
-      <p>"Get this guy a job stat."</p>
-    </blockquote>
-    <p class="muted" style="margin-top:8px">This site is the answer. The name is the callback.</p>
+  <section id="lol-a">
+    <div class="sec-head"><h2>LOL-A · Appreciation</h2><span class="sec-tag live" id="a-tag">populating</span></div>
+    <p class="sec-desc">Models explain why jokes are funny — mechanism, double meanings, benign violations, failed humor. Explanations are graded against human-written gold elements by two independent judges, each barred from its own model family. <span class="mono" id="a-n"></span></p>
+    <div class="card"><div id="a-body"><p class="empty">First overnight run in progress — scores land here when the pipeline drains.</p></div></div>
   </section>
 
-  <section class="card">
-    <h2>LOL-A - Appreciation <span class="pill">auto-judged</span></h2>
-    <p>150 items across six families: mechanism explanation, pun disambiguation, benign-violation reasoning, subtle inference, cultural reference, and failed-humor diagnosis ("why is this NOT funny"). Models must explain the joke; a disjoint-family judge grades explanations against expert gold elements.</p>
-    <div id="lol-a"><p class="empty">Scores populate after the first overnight run.</p></div>
+  <section id="lol-b">
+    <div class="sec-head"><h2>LOL-B · Production</h2><span class="sec-tag human">humans vote</span></div>
+    <p class="sec-desc">Every model writes under identical constrained premises. Anonymous pairs, one click, no accounts. Win rates with confidence intervals; no Elo until vote volume justifies it.</p>
+    <div class="card">
+      <div class="booth" id="booth">
+        <div class="joke-card"><div class="who">Joke A</div><div class="txt" id="ta">—</div></div>
+        <div class="joke-card"><div class="who">Joke B</div><div class="txt" id="tb">—</div></div>
+      </div>
+      <div class="vote-row">
+        <button class="btn primary" onclick="vote('A')">A is funnier<span class="kbd">A</span></button>
+        <button class="btn primary" onclick="vote('B')">B is funnier<span class="kbd">B</span></button>
+        <button class="btn" onclick="vote('tie')">Both flat<span class="kbd">T</span></button>
+        <button class="skip" onclick="nextPair()">skip</button>
+      </div>
+      <div class="premise" id="premise"></div>
+      <div id="b-stats" style="margin-top:20px"></div>
+    </div>
   </section>
 
-  <section class="card">
-    <h2>LOL-B - Production <span class="pill">humans vote</span></h2>
-    <p>Every model writes under the same constrained premises. You vote on anonymous pairs. Win rates with Wilson confidence intervals appear as votes accumulate. No Elo until the vote volume justifies it - that is the honesty policy.</p>
-    <div id="matchup"></div>
-    <div id="lol-b"><p class="empty">Voting opens when wave-0 outputs are published.</p></div>
-    <div id="lol-b-stats" style="margin-top:12px"></div>
+  <section id="lol-c">
+    <div class="sec-head"><h2>LOL-C · Taste</h2><span class="sec-tag">queued</span></div>
+    <p class="sec-desc">Does a model's internal sense of humor match ours? Rank-correlation against human-rated joke pools, plus the self-awareness probe: does a model's taste predict how its own jokes perform? Cheapest track, zero generation, measured by no one else.</p>
+    <div class="card"><p class="empty">Data pools in curation — first correlations ship with the next dataset version.</p></div>
   </section>
 
-  <section class="card">
-    <h2>LOL-C - Taste <span class="pill">automatic</span></h2>
-    <p>Does a model's internal sense of humor match ours? Rank-correlation against human-rated joke pools, plus the self-awareness probe: does a model's taste track its own output quality?</p>
-    <div id="lol-c"><p class="empty">Pending data import (graded joke pools).</p></div>
+  <section id="origin">
+    <div class="sec-head"><h2>Origin</h2></div>
+    <div class="card origin">
+      <p class="sec-desc" style="margin-bottom:0">Someone offered to fund work on making LLMs funny. The internet asked the obvious question:</p>
+      <div class="tweet"><div class="h">@quote — &ldquo;Who&rsquo;s building LOL bench?&rdquo;</div><p>&ldquo;Give me a few hours.&rdquo;</p></div>
+      <div class="tweet"><div class="h">@reply — &ldquo;Get this guy a job stat.&rdquo;</div><p>This site is the answer.</p></div>
+    </div>
   </section>
 
-  <section class="card">
-    <h2>Running tonight (wave 0)</h2>
-    <p><strong>Model lineup:</strong> GLM 5.3 Flash and DeepSeek V4 Flash (via B.AI). Every model answers the same 150 comprehension items and writes jokes for the same 40 constrained premises. Judging: DeepSeek grades GLM's explanations against gold rubrics; DeepSeek's own rows are held out of the leaderboard until a third judge family joins (no model grades its own family - that's the whole credibility policy).</p>
-    <p style="margin-top:8px">Sample premises from tonight's generation set:</p>
-    <ul class="muted" style="margin-top:6px;padding-left:20px">
-      <li>"A smart fridge that has started making passive-aggressive comments about your eating habits"</li>
-      <li>"A Roomba that has formed a strong opinion about the family cat"</li>
-      <li>"A weather app that said 10% chance of rain and was technically correct in the worst way"</li>
-      <li>"The hotel waffle machine that turns everyone into a professional"</li>
-    </ul>
-    <p class="muted" style="margin-top:8px">Scores and the voting booth populate as the overnight run drains. Re-check in the morning.</p>
-  </section>
-
-  <section class="card">
-    <h2>Why the banner matters</h2>
-    <p>Every prior attempt at humor evaluation died of judge mistrust, not topic disinterest. Research finding: human inter-annotator agreement on funniness caps around alpha ~0.45 - humans barely agree with each other. So LOL Bench publishes its own error bars first: judge-validity scores, human agreement, confidence intervals, on the leaderboard itself, not in an appendix. Claims ship when earned. Visibility ships now.</p>
+  <section id="method">
+    <div class="sec-head"><h2>Why trust a number here</h2></div>
+    <div class="card">
+      <p class="sec-desc" style="margin-bottom:14px">Every prior attempt at humor evaluation died of judge mistrust, not topic disinterest. So the protocol is built around the failure modes:</p>
+      <table>
+        <tr><th>Failure mode</th><th>Defense</th></tr>
+        <tr><td>One model grading its own family</td><td>Dual judges, each barred from its own family; self-rows dropped defensively at scoring</td></tr>
+        <tr><td>Judge opinions on &ldquo;funniness&rdquo;</td><td>Judges only check explanations against human-written gold elements — never judge funniness</td></tr>
+        <tr><td>Memorized benchmarks</td><td>Canaries, private split, fresh premises each wave</td></tr>
+        <tr><td>Overclaiming</td><td>Preliminary banner until human calibration exists; CIs on everything</td></tr>
+      </table>
+    </div>
   </section>
 
   <footer>
-    <div>Open code, split data. Test items are private; canary strings embedded.</div>
-    <div style="margin-top:6px"><span id="stamp"></span> &middot; <a href="https://github.com/YakshithK/lolbench">github.com/YakshithK/lolbench</a></div>
+    <div class="row">
+      <div><span class="stamp" id="stamp"></span></div>
+      <div><a href="https://github.com/YakshithK/lolbench">github.com/YakshithK/lolbench</a> · <span class="stamp">open code · split data · canary embedded</span></div>
+    </div>
   </footer>
 </div>
 
 <script>
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-async function boot(){
-  try{
-    const r=await fetch('./results.json');const j=await r.json();
-    document.getElementById('stamp').textContent='dataset v'+j.dataset_version+' / harness '+j.harness_hash+' / generated '+new Date(j.generated_at).toLocaleString();
-    const A=document.getElementById('lol-a');
-    const models=Object.keys(j.lol_a||{});
-    if(models.length){
-      const rows=models.sort((a,b)=>(j.lol_a[b].mean||0)-(j.lol_a[a].mean||0)).map(m=>{
-        const s=j.lol_a[m];
-        return '<tr><td>'+esc(m)+'</td><td class="num big">'+(s.mean*100).toFixed(1)+'</td><td class="num">'+(s.ci95[0]*100).toFixed(1)+' - '+(s.ci95[1]*100).toFixed(1)+'</td><td class="num">'+s.n_scored+'</td></tr>';
-      }).join('');
-      A.innerHTML='<table><tr><th>model</th><th>comprehension %</th><th>95% CI</th><th>n</th></tr>'+rows+'</table><p class="muted" style="margin-top:8px">Mean rubric score across explanations, element-hit graded (0 / 0.5 / 1). Higher is better. CIs are bootstrap.</p>';
+const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
+const pct = v => (v * 100).toFixed(1);
+
+let MATCHUPS = [], PAIR = null;
+
+async function boot() {
+  // results
+  try {
+    const j = await (await fetch('./results.json')).json();
+    document.getElementById('stamp').textContent =
+      `dataset v${j.dataset_version} · harness ${j.harness_hash} · ${new Date(j.generated_at).toLocaleString()}`;
+    if (j.banner) document.querySelector('#banner .m').textContent = ' ' + j.banner;
+    renderA(j.lol_a || {});
+  } catch (e) { console.log(e); }
+
+  // matchups
+  try { MATCHUPS = await (await fetch('./matchups.json')).json(); } catch (e) {}
+  if (MATCHUPS.length) { nextPair(); document.getElementById('b-stats').insertAdjacentHTML('beforebegin',''); }
+
+  // live vote stats
+  try {
+    const s = await (await fetch('/api/leaderboard')).json();
+    if (Array.isArray(s) && s.length) {
+      document.getElementById('b-stats').innerHTML =
+        `<table><tr><th>matchup</th><th class="num">A wins</th><th class="num">B wins</th><th class="num">ties</th><th class="num">n</th></tr>` +
+        s.map(x => `<tr><td class="model">${esc(x.model_a)} vs ${esc(x.model_b)}</td><td class="num">${x.wins_a}</td><td class="num">${x.wins_b}</td><td class="num">${x.ties}</td><td class="num">${x.total}</td></tr>`).join('') +
+        `</table>`;
     }
-    if(j.lol_b && j.lol_b.matchups && j.lol_b.matchups.length){ renderMatchup(j.lol_b.matchups); }
-    else{
-      try{ const m=await fetch('./matchups.json'); if(m.ok){ renderMatchup(await m.json()); } }catch(e){}
-    }
-    try{
-      const lb=await fetch('/api/leaderboard'); if(lb.ok){ const stats=await lb.json();
-        const el=document.getElementById('lol-b-stats');
-        if(Array.isArray(stats)&&stats.length){
-          el.innerHTML='<table><tr><th>matchup</th><th>A wins</th><th>B wins</th><th>ties</th><th>n</th></tr>'+stats.map(s=>'<tr><td>'+esc(s.model_a)+' vs '+esc(s.model_b)+'</td><td class="num">'+s.wins_a+'</td><td class="num">'+s.wins_b+'</td><td class="num">'+s.ties+'</td><td class="num">'+s.total+'</td></tr>').join('')+'</table>';
-        }
-      }
-    }catch(e){}
-  }catch(e){ console.log(e); }
+  } catch (e) {}
 }
-let currentPair=null;
-async function renderMatchup(matchups){
-  const box=document.getElementById('lol-b');
-  function show(){
-    currentPair=matchups[Math.floor(Math.random()*matchups.length)];
-    box.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
-      '<div class="card" style="margin:0"><h2>Joke A</h2><p style="color:var(--ink)">'+esc(currentPair.a)+'</p></div>'+
-      '<div class="card" style="margin:0"><h2>Joke B</h2><p style="color:var(--ink)">'+esc(currentPair.b)+'</p></div></div>'+
-      '<p class="muted" style="margin-top:10px">Premise: '+esc(currentPair.premise)+'</p>'+
-      '<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">'+
-      '<button onclick="vote(\'A\')">A is funnier</button><button onclick="vote(\'B\')">B is funnier</button><button onclick="vote(\'tie\')">Both flat</button></div>';
-  }
-  window.vote=async function(w){
-    if(!currentPair)return;
-    try{
-      await fetch('/api/vote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-        matchup_id:currentPair.matchup_id,premise_id:currentPair.premise_id,
-        model_a:currentPair.model_a,model_b:currentPair.model_b,winner:w})});
-      show();
-    }catch(e){alert('vote failed, try again');}
+
+function renderA(models) {
+  const rows = Object.entries(models);
+  if (!rows.length) return;
+  document.getElementById('a-tag').textContent = 'live · preliminary';
+  const max = 1;
+  const html = rows
+    .sort((x, y) => (y[1].mean || 0) - (x[1].mean || 0))
+    .map(([name, s]) => {
+      const lo = s.ci95 ? s.ci95[0] : s.mean, hi = s.ci95 ? s.ci95[1] : s.mean;
+      const fams = Object.entries(s.families || {});
+      const vals = fams.map(([, f]) => f.mean);
+      const hiF = fams.sort ? fams.slice().sort((a, b) => b[1].mean - a[1].mean) : [];
+      const best = hiF[0], worst = hiF[hiF.length - 1];
+      const famHtml = fams.length ? fams.map(([f, d]) =>
+        `<span class="${best && f === best[0] ? 'hi' : worst && f === worst[0] ? 'lo' : ''}">${esc(f)} ${pct(d.mean)}</span>`).join('') : '';
+      return `<tr>
+        <td class="model">${esc(name)}${s.anchor ? '<span class="anchor">ANCHOR</span>' : ''}</td>
+        <td class="num"><span class="score">${pct(s.mean)}</span><div class="cibar"><i style="left:${pct(lo)}%;width:${Math.max(1, pct(hi - lo))}%"></i><u style="left:${pct(s.mean)}%"></u></div><div class="ci">CI ${pct(lo)}–${pct(hi)} · n=${s.n_scored}</div></td>
+        <td><div class="fam">${famHtml || '—'}</div></td>
+      </tr>`;
+    }).join('');
+  document.getElementById('a-body').innerHTML =
+    `<table><tr><th>model</th><th class="num">comprehension</th><th>family breakdown</th></tr>${html}</table>
+     <p class="ci" style="margin-top:12px">Score = share of gold humor-mechanism elements identified (0 / 0.5 / 1 per explanation), averaged over 3 samples × 150 items. Anchor models run 1 sample per item. Bars show 95% bootstrap CI.</p>`;
+}
+
+function nextPair() {
+  if (!MATCHUPS.length) return;
+  PAIR = MATCHUPS[Math.floor(Math.random() * MATCHUPS.length)];
+  document.getElementById('ta').textContent = PAIR.a;
+  document.getElementById('tb').textContent = PAIR.b;
+  document.getElementById('premise').innerHTML = `<b>premise:</b> ${esc(PAIR.premise || PAIR.premise_id)} · models hidden until vote`;
+}
+
+async function vote(w) {
+  if (!PAIR) return;
+  const body = {
+    matchup_id: PAIR.matchup_id, premise_id: PAIR.premise_id,
+    model_a: PAIR.model_a, model_b: PAIR.model_b, winner: w
   };
-  show();
+  try { await fetch('/api/vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); } catch (e) {}
+  nextPair();
 }
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const k = e.key.toLowerCase();
+  if (k === 'a') vote('A'); else if (k === 'b') vote('B'); else if (k === 't') vote('tie');
+});
+
 boot();
 </script>
 </body>
