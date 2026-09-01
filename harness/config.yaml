@@ -77,11 +77,10 @@ candidates:
     anchor: true
     think: false
     enabled: true
-  - name: muse-spark-1.2-contributor
-    provider: openrouter
+  - name: muse-spark-1.2
+    provider: hackclub
     model: meta/muse-spark-1.2
     anchor: true
-    think: false
     enabled: true
   - name: grok-4.6
     provider: xai

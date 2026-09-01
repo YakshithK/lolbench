@@ -1,8 +1,8 @@
 {
   "dataset_version": "0.1.0",
   "harness_version": "0.1.2",
-  "harness_hash": "bef37b77df2009f6",
-  "generated_at": "2026-09-01T20:26:44.944463+00:00",
+  "harness_hash": "2c23cbba14ac30d5",
+  "generated_at": "2026-09-01T22:13:25.654250+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
   "lol_a": {
     "grok-4.6": {
@@ -210,25 +210,49 @@
       }
     },
     "gemini-3.1-pro": {
-      "mean": 1.0,
+      "mean": 0.9545,
       "ci95": [
-        1.0,
+        0.8939,
         1.0
       ],
-      "n_scored": 27,
+      "n_scored": 33,
       "items": 150,
       "samples_per_item": 3,
       "families": {
         "F1": {
           "mean": 1.0,
           "n": 27
+        },
+        "F4": {
+          "mean": 1.0,
+          "n": 4
+        },
+        "F6": {
+          "mean": 0.25,
+          "n": 2
+        }
+      }
+    },
+    "muse-spark-1.2": {
+      "mean": 0.9583,
+      "ci95": [
+        0.875,
+        1.0
+      ],
+      "n_scored": 24,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.958,
+          "n": 24
         }
       }
     }
   },
   "lol_b": {
     "status": "voting open at lolbench.lol - per-matchup win rates with Wilson CIs appear as votes accumulate. No Elo until vote volume justifies Bradley-Terry fitting (C5).",
-    "n_matchups": 2870
+    "n_matchups": 3712
   },
   "lol_c": {
     "status": "pending data import: graded joke pools (rJokesData/HAHA subsets) with owner curation."

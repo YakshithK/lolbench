@@ -20,6 +20,7 @@ PROVIDER_URLS = {
     "tokenrouter": "https://api.tokenrouter.com/v1/chat/completions",
     "openrouter": "https://openrouter.ai/api/v1/chat/completions",
     "xai": "https://api.x.ai/v1/chat/completions",
+    "hackclub": "https://ai.hackclub.com/proxy/v1/chat/completions",
 }
 
 ENV_KEYS = {
@@ -29,6 +30,7 @@ ENV_KEYS = {
     "tokenrouter": "TOKENROUTER_API_KEY",
     "openrouter": "OPENROUTER_API_KEY",
     "xai": "XAI_API_KEY",
+    "hackclub": "HACKCLUB_API_KEY",
 }
 
 WINDOWS = {}
@@ -57,7 +59,7 @@ MODEL_PRICES = {
     "glm-5.3": (1.4, 4.4), "deepseek-v4-pro": (1.6, 3.2),
     "qwen3.8-max": (2, 6), "mimo-v2.5-pro": (0.44, 0.87), "hy4-preview": (0.83, 2.5),
     "gpt-5.6-sol-pro": (2, 10), "gemini-3.1-pro": (2, 12),
-    "claude-opus-5": (5, 25), "muse-spark-1.2-contributor": (0.10, 0.20),
+    "claude-opus-5": (5, 25), "muse-spark-1.2": (0, 0),  # hackclub free tier
     "grok-4.6": (2, 6),
 }
 COST_LOG = ROOT / "outputs" / "cost_log.jsonl"
