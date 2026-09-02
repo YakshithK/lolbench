@@ -75,6 +75,20 @@ def load_valid_judgments(jpath):
     return [best[k] for k in order]
 
 
+def judge_family_map():
+    """judge name -> family, and candidate name -> family, from config.
+    Used to drop same-family judgments (self-enhancement bias) even for rows
+    already on disk from before the judge.py exclusion fix."""
+    judges = {j["name"]: j.get("family") for j in CFG["judges"]}
+    cands = {c["name"]: c.get("family") for c in CFG["candidates"]}
+    return judges, cands
+
+
+def same_family(o, judge_fam, cand_fam):
+    jf = judge_fam.get(o.get("judge"))
+    return jf is not None and jf == cand_fam.get(o.get("model"))
+
+
 def lol_a_scores():
     jpath = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     if not jpath.exists():
@@ -86,11 +100,14 @@ def lol_a_scores():
             if line.strip():
                 o = json.loads(line)
                 items[o["id"]] = o["family"]
+    judge_fam, cand_fam = judge_family_map()
     per_model = {}
     fam = {}
     rows = load_valid_judgments(jpath)
     for o in rows:
         if o.get("model") == o.get("judge_model"):
+            continue
+        if same_family(o, judge_fam, cand_fam):
             continue
         s = float(o["score"])
         per_model.setdefault(o["model"], []).append(s)
@@ -118,9 +135,12 @@ def judge_validity(jpath):
     on the same (model, item, sample) rows. Exact-match rate + Cohen's kappa."""
     if not jpath.exists():
         return {"n_pairs": 0}
+    judge_fam, cand_fam = judge_family_map()
     by_key = {}
     for o in load_valid_judgments(jpath):
         if o.get("model") == o.get("judge_model"):
+            continue
+        if same_family(o, judge_fam, cand_fam):
             continue
         by_key.setdefault((o["model"], o["item_id"], o["sample"]), {})[o["judge"]] = float(o["score"])
     pairs = [v for v in by_key.values() if len(v) == 2]

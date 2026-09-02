@@ -63,6 +63,7 @@ def main():
 
     load_env()
     items = {i["id"]: i for i in load_jsonl(ROOT / CFG["paths"]["items_a"])}
+    cand_family = {c["name"]: c.get("family") for c in CFG["candidates"]}
     cands = [c["name"] for c in CFG["candidates"] if c.get("enabled")]
     judges = CFG["judges"]
     jt = CFG.get("judge_max_tokens", 1500)
@@ -83,7 +84,11 @@ def main():
 
     def run_judge(j):
         jname = j["name"]
+        # A judge never grades its own family: exact model name, or any
+        # sibling candidate that shares the judge's `family` tag.
         excluded = set(j.get("exclude_models", []))
+        excluded |= {name for name, fam in cand_family.items() if fam and fam == j.get("family")}
+        excluded.add(j["model"])
         counts = valid_counts(out)
         # Under-judged models first: backfill before touching well-scored rows.
         todo = []

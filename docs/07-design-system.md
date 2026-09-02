@@ -45,7 +45,7 @@ missing, extend it via §10's mechanisms and update this file in the same PR.
 | `--red` | `#b3261e` | Uncertainty + warnings ONLY | CI whiskers, preliminary chip, `:focus-visible` outline, "just began"/"not started" status, sort emphasis on ink | Decoration, brand accent, links, buttons (except `.ctl:active` swap in §5) |
 | `--laugh` | `#ffc53d` | Performance + human moments | Highlighter mark, BENCH chip, score-bar fills, rank chips, active tab underline, scatter paid dots, `.ctl:active` fill, sort arrow on ink header, box-title ticks | Text color (contrast), page background |
 | `--laugh-deep` | `#8a6a00` | Yellow for small text | Kicker, bold model names inside reveal | Backgrounds |
-| `--tear` | `#2f83bd` | Completion + free | Full coverage bars, "$0.00 free tier" text | Warning, error, decoration |
+| `--tear` | `#2f83bd` | Completion + free | Full coverage bars | Warning, error, decoration |
 
 Anatomy rule: a new color may only be added if it maps to a part of the joke-telling anatomy or to
 a statistical meaning, and it must get a row in this table plus a rule in §9 in the same PR. Four
@@ -156,7 +156,7 @@ The chip is present until human calibration exists (content law §9.4).
 Full-width ruled strip, `border-top:2px solid var(--ink); border-bottom:1px solid var(--line-2)`,
 4 columns (2-col ≤ 820px), dividers = 1px `--line` left borders, first cell flush
 left. Cell: mono label 0.6rem over mono 600 1.3rem value + `small` qualifier. 3–4 facts, each a
-single number, e.g. Data refreshed / Models tracked / Bouts written / Total spend to date.
+single number, e.g. Data refreshed / Models tracked / Bouts written / Wave-0 jokes queued.
 Never cards, never boxes, never icons — a ruled strip only.
 
 ### 5.6 Tabs
@@ -176,14 +176,20 @@ sortable columns are `cursor:pointer` and carry `aria-sort`; the active sort arr
 line explaining metric, ± meaning, and disclosures.
 
 Columns (leaderboard): `#` · Model (name + mono lab subline + n=1 badge) · Score with ± ·
-CI bar (column headed "Uncertainty") · Scored n · Spotting-bad-jokes sub-score · Spend.
+CI bar (column headed "Uncertainty") · Scored n · Spotting-bad-jokes sub-score.
 Rank: mono, `--dim`; **top-3 rank chip**:
 `.rkchip { background:var(--laugh); color:var(--ink); padding:1px 7px; border-radius:3px }`.
 Ties break by n descending. Unscored rows: score cell says `pending` (never a dash), coverage bar
-still shown, spend cell says `queued` or `not started` (red). A model posts a score only once
+still shown. A model posts a score only once
 n_scored >= 10 (spec floor, docs/02); below that it renders as a pending row. The n=1 badge
 (replaces the old ANCHOR badge) discloses sample size in the visitor's own units and must be
 explained in the foot caption.
+
+No spend/cost column anywhere on the public site: what a provider currently charges (often $0
+via a promotional free tier) is a business fact about the provider, not a fact about the model,
+and stating it without the provider's own published pricing page as a citation misrepresents it
+as a durable property. Internal cost tracking stays in `outputs/cost_log.jsonl` for the owner's
+own budget guarding (docs/04) and never surfaces to visitors.
 
 Anchor badge: `n=1` in the §3 badge style after the model name; anchor rows must be
 disclosed in the foot caption ("runs once per item").
@@ -208,21 +214,16 @@ uncertainty interval drawn over it. Zero-width CI (n too small) is allowed and h
 (color never alone): `complete` (tear) / `draining` (ink-2) / `late start` (ink-2) /
 `just began` (red) / `not started` (red).
 
-### 5.10 Spend cell
-Mono 0.82rem. Paid: `$X.XX` + sublabel `paid`. Free: `$0.00` in `--tear` + sublabel
-`free tier`. Uncosted: `queued` / `not started` in `--dim`/`--red`. Never omit cost; cost is a
-first-class column wherever scores appear.
-
-### 5.11 Boxes
+### 5.10 Boxes
 1px `--line-2` border, white bg. Header row: 9px `--laugh` square + 800 title left, mono dim tag
 right, `border-bottom:1px solid var(--line)`. Body padding 16px. Boxes never nest
 (no cards in cards) and never carry shadows.
 
-### 5.12 Defense rows (protocol lists)
+### 5.11 Defense rows (protocol lists)
 3-column grid `1fr 16px 1fr`, hairline row separators: failure mode (`--mut`) → arrow `→`
 (`--ink`) → defense (600 ink). Used for "why trust a number here" content.
 
-### 5.13 Bout (vote booth)
+### 5.12 Bout (vote booth)
 2-col grid, 1px `--line-2` border, inner 1px divider, padding 20px 22px. Corner tag row: mono
 0.6rem ls 0.18em uppercase dim (`PANEL A` + `CONCEALED`). Joke: Newsreader italic 1.14rem.
 Controls: 3 equal cells (`A is funnier` / `B is funnier` / `Both flat`), 700 0.84rem, borders
@@ -230,16 +231,16 @@ between; hover = `--ink` bg + white text; pressed = `--laugh` bg + ink text; kbd
 0.56rem bordered chips. Keyboard `A`/`B`/`T` wired globally, ignored when focus is in a
 button/input. Identity disclosure only after the ballot, in the reveal.
 
-### 5.14 Reveal
+### 5.13 Reveal
 `aria-live="polite"`, hidden until `.on`, `--panel` bg, 1px `--line-2` border (no top border),
 mono 0.72rem. Format: `😂 <outcome>. Panel A was <b>model</b> · Panel B was <b>model</b>, both
 W–L–T. <human line>. Identities re-conceal for the next voter.` Bold names in `--laugh-deep`.
 
-### 5.15 Pending line
+### 5.14 Pending line
 Dashed 1px `--line-2` border, padding 16px 18px, 0.9rem `--mut` with 600 `--ink-2` lead-in.
 The only dashed element in the system; reserved for "not yet" states.
 
-### 5.16 Footer
+### 5.15 Footer
 `border-top:2px solid var(--ink)`, mono 0.64rem `--dim`, three cells: domain + trust line ·
 repo link · refresh stamp ending in `live partial data, not final rankings`.
 
@@ -300,10 +301,11 @@ autoplay anything: forbidden. Animated numbers only if they honor reduced-motion
    place with `pending`, never hidden, never filtered by default.
 4. `PRELIMINARY` chip until human calibration exists; no Elo claims before vote volume
    justifies Bradley–Terry; judges are family-disjoint or the number doesn't publish.
-5. Cost is displayed beside every score (spend column, humor-per-dollar view). A leaderboard
-   without cost is an incomplete leaderboard.
-6. Scatter grammar: x = spend (linear, $0 based), y = metric, paid dots = yellow with 1px ink
-   stroke, free dots = solid ink, mono labels adjacent, gridlines hairline `--line`.
+5. No spend/cost figure ever appears on the public site (see §5.7 note): a provider's current
+   price is a business fact, not a model fact, and stating it without citing the provider's own
+   published pricing misrepresents a promotional rate as a durable property.
+6. Scatter grammar: axes are metrics the model actually controls (score, n, family breakdown),
+   never a provider-billing axis; mono labels adjacent, gridlines hairline `--line`.
 
 ---
 
@@ -323,8 +325,9 @@ one PR. Ceiling: four accents.
 
 **Data contracts:** `site/results.json` → table (mean, ci95 [Wilson-floored at small n],
 n_scored, items, families incl. the failed-humor sub-score),
-topbar stamp fields, `spend` map (per-model USD from the harness cost log), `judge_validity`
+topbar stamp fields, `judge_validity`
 (agreement, kappa, n_pairs; rendered in the stat strip and the Judge validity box), `counts`.
+(`spend` stays internal — see §9.5 — and is never part of the public data contract.)
 `site/matchups.json` → bout panels + coverage; `/api/leaderboard` → standings when votes land
 (render `pending` until then). Scoring lags judging by design — render both (coverage vs scored n)
 rather than hiding either.
@@ -345,7 +348,7 @@ new space must be even and ≤ 56px, matching the §4 rhythm.
 7. Cards in cards; floating cards; equal-weight stat card rows (use the ruled strip).
 8. Letter-spaced kickers more than one per page; generic chip rows of metadata.
 9. Numbers without tabular-nums; means without ±; hidden partial rows; dashes as data.
-10. Elo claims before volume; funniness judged by a model; missing cost beside score.
+10. Elo claims before volume; funniness judged by a model; any spend/cost figure on the public site.
 11. Purple/blue gradient aesthetics in any form (they are the slop tell).
 12. Pill buttons, radius > 4px, drop caps outside approved concepts, ticker marquees.
 13. Color-only status (always pair with the §8.5 word); color-only links (underline or bold too).

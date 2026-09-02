@@ -21,87 +21,105 @@ candidates:
   - name: glm-5.3-flash
     provider: bai
     model: glm-5.3-flash
+    family: zai
     enabled: true
   - name: deepseek-v4-flash
     provider: bai
     model: deepseek-v4-flash
+    family: deepseek
     enabled: true
   - name: hy3
     provider: bai
     model: hy3
+    family: tencent
     enabled: true
   - name: mimo-v2.5
     provider: bai
     model: mimo-v2.5
+    family: xiaomi
     enabled: true
   - name: qwen3.8-flash
     provider: bai
     model: qwen3.8-flash
+    family: qwen
     enabled: true
   # ---- Tier 2: OSS flagship (OpenRouter, full run) ----
   - name: glm-5.3
     provider: openrouter
     model: z-ai/glm-5.3
+    family: zai
     enabled: true
   - name: deepseek-v4-pro
     provider: openrouter
     model: deepseek/deepseek-v4-pro
+    family: deepseek
     enabled: true
   - name: qwen3.8-max
     provider: openrouter
     model: qwen/qwen3.8-max
+    family: qwen
     enabled: true
   - name: mimo-v2.5-pro
     provider: openrouter
     model: xiaomi/mimo-v2.5-pro
+    family: xiaomi
     enabled: true
   - name: hy4-preview
     provider: openrouter
     model: tencent/hy4-preview
+    family: tencent
     enabled: true
 
   # ---- Tier 4: frontier anchors (OpenRouter/xAI, n=1) ----
   - name: gpt-5.6-sol-pro
     provider: openrouter
     model: openai/gpt-5.6-sol-pro
+    family: openai
     anchor: true
     think: false            # reasoning disabled: 4x cost cut; anchor tier discloses this
     enabled: true
   - name: gemini-3.1-pro
     provider: openrouter
     model: google/gemini-3.1-pro-preview
+    family: google
     anchor: true
     enabled: true
   - name: claude-opus-5
     provider: openrouter
     model: anthropic/claude-opus-5
+    family: anthropic
     anchor: true
     think: false
     enabled: true
   - name: muse-spark-1.2
     provider: hackclub
     model: meta/muse-spark-1.2
+    family: meta
     anchor: true
     enabled: true
   - name: grok-4.6
     provider: xai
     model: grok-4.6
+    family: xai
     anchor: true
     enabled: true           # key verified 2026-09-01; owner credits cover cost
 
 # Dual-judge protocol: every model is graded ONLY by judges from a different
-# family. DeepSeek grades the non-DeepSeek rows; Qwen grades the DeepSeek rows
-# (and everything else, giving most models two independent judge scores).
-# Inter-judge agreement on shared rows = free judge-validity signal.
+# family. Exclusion is by family (the `family` tag on each candidate/judge
+# above), not by exact model name — a judge from lab X must never grade any
+# candidate from lab X, including sibling models it isn't literally running as.
+# exclude_models stays available for one-off manual excludes on top of that.
 judges:
   - name: deepseek-judge
     provider: bai
     model: deepseek-v4-flash
-    exclude_models: [deepseek-v4-flash]
+    family: deepseek
+    exclude_models: []
   - name: qwen-judge
     provider: bai
     model: qwen3.8-flash
-    exclude_models: [qwen3.8-flash]
+    family: qwen
+    exclude_models: []
 
 # Free-tier style rate limits (requests per minute); 0 = unlimited.
 rate_limits_rpm:
