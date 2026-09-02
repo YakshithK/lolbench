@@ -58,6 +58,9 @@ export default async function handler(req) {
     body: JSON.stringify({ matchup_id, premise_id, model_a, model_b, winner, voter_hash }),
   });
 
+  if (r.status === 409) {
+    return new Response(JSON.stringify({ error: "already voted on this matchup" }), { status: 409, headers: cors });
+  }
   if (!r.ok) {
     return new Response(JSON.stringify({ error: "db error" }), { status: 502, headers: cors });
   }

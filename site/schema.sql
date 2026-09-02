@@ -28,6 +28,9 @@ select
 from votes
 group by matchup_id, premise_id, model_a, model_b;
 
--- Basic duplicate-vote damping per matchup (read-only guard: leaderboard
--- counts every vote, but anomalies are visible via voter_hash distribution).
-create index if not exists votes_voter_idx on votes (voter_hash, matchup_id);
+-- One ballot per (voter, matchup): a refresh that re-rolls the SAME pairing,
+-- or a direct repeat call to /api/vote with the same matchup_id, is rejected
+-- at the database level (PostgREST returns 409 on the unique violation).
+-- A voter can still vote on a DIFFERENT matchup — this stops stuffing one
+-- pairing, not repeat legitimate participation.
+create unique index if not exists votes_one_per_matchup on votes (voter_hash, matchup_id);

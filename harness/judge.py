@@ -10,6 +10,12 @@ import yaml
 from run import ROOT, CFG, chat, load_jsonl, load_env, append_result, render
 
 
+REFUSAL_RE = re.compile(
+    r"not provided|were not provided|was not provided|cannot be (evaluated|graded|verified)",
+    re.I,
+)
+
+
 def extract_json(text):
     m = re.search(r"\{.*\}", text, re.S)
     if not m:
@@ -17,6 +23,13 @@ def extract_json(text):
     try:
         o = json.loads(m.group(0))
         if "score" in o and o["score"] in (0, 0.5, 1, "0", "0.5", "1"):
+            # The judge always receives the joke text and gold elements in the
+            # prompt; a claim that they were "not provided" is a hallucinated
+            # refusal, not a real verdict. Measured: true on 61/69 of these
+            # (88%) against non-empty explanations. Force a retry instead of
+            # accepting it as a score.
+            if REFUSAL_RE.search(o.get("reason") or ""):
+                return None
             return o
     except Exception:
         return None

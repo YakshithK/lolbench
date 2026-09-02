@@ -57,9 +57,17 @@ def harness_hash():
     return h.hexdigest()[:16]
 
 
+REFUSAL_RE = re.compile(
+    r"not provided|were not provided|was not provided|cannot be (evaluated|graded|verified)",
+    re.I,
+)
+
+
 def load_valid_judgments(jpath):
     """Dedupe by (judge, model, item, sample), latest line wins, drop nulls.
-    Both judges' rows are kept: the dual-judge protocol pools them."""
+    Both judges' rows are kept: the dual-judge protocol pools them.
+    Also drops hallucinated-refusal rows recorded before judge.py's
+    REFUSAL_RE fix existed (measured 61/69 false claims of missing input)."""
     best = {}
     order = []
     for line in jpath.read_text(encoding="utf-8-sig").splitlines():
@@ -67,6 +75,8 @@ def load_valid_judgments(jpath):
             continue
         o = json.loads(line)
         if o.get("score") is None:
+            continue
+        if REFUSAL_RE.search(o.get("reason") or ""):
             continue
         k = (o["judge"], o["model"], o["item_id"], o["sample"])
         if k not in best:
