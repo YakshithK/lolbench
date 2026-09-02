@@ -162,7 +162,9 @@ Never cards, never boxes, never icons — a ruled strip only.
 ### 5.6 Tabs
 `border-bottom:1px solid var(--line-2)`; buttons 700 0.88rem `--mut`, padding 11px 16px,
 `margin-bottom:-1px`, transparent 2px bottom border. Active: `--ink` text + 2px `var(--laugh)`
-underline. Hover: `--ink` text only. Small mono count suffix allowed. Wire with
+underline. Hover: `--ink` text only. Small mono count suffix allowed. Labels are plain-English
+questions (`LOL-A · Do they get the joke?`), never internal track jargon alone. A track with no
+data gets no tab; it earns one pending-line instead. Wire with
 `role=tablist/tab/tabpanel`, `aria-selected`, `aria-controls`, `hidden` attribute on panels.
 
 ### 5.7 Data table (the hero component)
@@ -173,13 +175,17 @@ sortable columns are `cursor:pointer` and carry `aria-sort`; the active sort arr
 `#fbfaf5`. Foot: caption strip on `--panel`, mono 0.66rem `--mut` — every table gets a caption
 line explaining metric, ± meaning, and disclosures.
 
-Columns (leaderboard): `#` · Model (name + mono lab subline + anchor badge) · Score with ± ·
-CI bar · Scored n · Judging coverage · Spend. Rank: mono, `--dim`; **top-3 rank chip**:
+Columns (leaderboard): `#` · Model (name + mono lab subline + n=1 badge) · Score with ± ·
+CI bar (column headed "Uncertainty") · Scored n · Spotting-bad-jokes sub-score · Spend.
+Rank: mono, `--dim`; **top-3 rank chip**:
 `.rkchip { background:var(--laugh); color:var(--ink); padding:1px 7px; border-radius:3px }`.
 Ties break by n descending. Unscored rows: score cell says `pending` (never a dash), coverage bar
-still shown, spend cell says `queued` or `not started` (red).
+still shown, spend cell says `queued` or `not started` (red). A model posts a score only once
+n_scored >= 10 (spec floor, docs/02); below that it renders as a pending row. The n=1 badge
+(replaces the old ANCHOR badge) discloses sample size in the visitor's own units and must be
+explained in the foot caption.
 
-Anchor badge: `ANCHOR` in the §3 badge style after the model name; anchor rows must be
+Anchor badge: `n=1` in the §3 badge style after the model name; anchor rows must be
 disclosed in the foot caption ("runs once per item").
 
 ### 5.8 CI whisker bar (the signature glyph)
@@ -315,10 +321,13 @@ word; aria per §7; no new colors; no gradients; entry added to §5 with exact p
 **New color:** only via the anatomy rule in §2; add token row + law in §9 + contrast check in
 one PR. Ceiling: four accents.
 
-**Data contracts:** `site/results.json` → table (mean, ci95, n_scored, items, families),
-topbar stamp fields; `site/matchups.json` → bout panels + coverage; `/api/leaderboard` →
-standings when votes land (render `pending` until then). Scoring lags judging by design —
-render both (coverage vs scored n) rather than hiding either.
+**Data contracts:** `site/results.json` → table (mean, ci95 [Wilson-floored at small n],
+n_scored, items, families incl. the failed-humor sub-score),
+topbar stamp fields, `spend` map (per-model USD from the harness cost log), `judge_validity`
+(agreement, kappa, n_pairs; rendered in the stat strip and the Judge validity box), `counts`.
+`site/matchups.json` → bout panels + coverage; `/api/leaderboard` → standings when votes land
+(render `pending` until then). Scoring lags judging by design — render both (coverage vs scored n)
+rather than hiding either.
 
 **Breakpoints:** 940 / 900 / 820 / 760 only. **Spacing:** reuse component paddings verbatim;
 new space must be even and ≤ 56px, matching the §4 rhythm.

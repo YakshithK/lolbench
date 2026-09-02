@@ -5,7 +5,7 @@ A benchmark for whether LLMs can appreciate, produce, and discriminate humor —
 Origin: someone posted they were *"looking to fund someone making LLMs funny"*. A quote tweet asked *"Who's building LOL bench?"* The reply: *"Give me a few hours."* The response: *"Get this guy a job stat."* This is the answer.
 
 ## Status
-SPEC ONLY — no code yet. All numbers below are from verified research (see `docs/`).
+LIVE at lolbench.lol: 15 models generated, dual-judge scoring in progress, wave-0 voting open. Track C ships with dataset v0.2.
 
 ## De-scoped on day 1 (deliberately)
 No GitHub org, no CI, no datasheets, no versioning machinery. The whole benchmark reruns via three commands: `run.py` → `judge.py` → `score.py`. Institutional upgrades happen only when contributors appear.

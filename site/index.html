@@ -67,9 +67,10 @@
   table{width:100%;border-collapse:collapse;min-width:880px}
   thead th{
     font-family:var(--mono);font-weight:500;font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
-    color:#f4f2ea;text-align:left;padding:12px 14px;background:var(--ink);white-space:nowrap;cursor:pointer;user-select:none;
+    color:#f4f2ea;text-align:left;padding:12px 14px;background:var(--ink);white-space:nowrap;
   }
-  thead th:hover{color:#fff}
+  thead th.sortable{cursor:pointer;user-select:none}
+  thead th.sortable:hover{color:#fff}
   thead th .arr{color:var(--laugh);margin-left:3px}
   th.r,td.r{text-align:right}
   tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;background:#fff}
@@ -86,9 +87,6 @@
   .bar{position:relative;height:10px;background:var(--panel);border:1px solid var(--line)}
   .bar i{position:absolute;top:1px;bottom:1px;left:1px;background:var(--laugh)}
   .bar b{position:absolute;top:2px;bottom:2px;background:var(--red)}
-  .fam{display:flex;gap:5px;flex-wrap:wrap;white-space:normal}
-  .fam span{font-family:var(--mono);font-size:.62rem;padding:2px 7px;border-radius:3px;background:var(--panel);border:1px solid var(--line);color:var(--mut)}
-  .fam span.hi{color:var(--ink);border-color:var(--laugh);background:var(--laugh)}
   .spend{font-family:var(--mono);font-size:.82rem}
   .spend small{display:block;font-size:.58rem;color:var(--dim);letter-spacing:.04em}
   .free{color:var(--tear)}
@@ -164,37 +162,36 @@
     </div>
 
     <div class="statstrip num rv" role="list">
-      <div class="stat" role="listitem"><div class="k">Models tracked</div><div class="v" id="st-models">—</div></div>
-      <div class="stat" role="listitem"><div class="k">Bouts written</div><div class="v" id="st-bouts">—</div></div>
-      <div class="stat" role="listitem"><div class="k">Ballots cast</div><div class="v" id="st-ballots">—</div></div>
+      <div class="stat" role="listitem"><div class="k">Models scored</div><div class="v" id="st-models">pending</div></div>
+      <div class="stat" role="listitem"><div class="k">Judge agreement</div><div class="v" id="st-jv">pending</div></div>
+      <div class="stat" role="listitem"><div class="k">Ballots cast</div><div class="v" id="st-ballots">pending</div></div>
     </div>
 
     <div class="tabs" role="tablist" aria-label="Tracks">
-      <button class="tab" role="tab" aria-selected="true" aria-controls="a" id="tab-a">LOL-A · Appreciation <small id="tab-a-n"></small></button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="b" id="tab-b">LOL-B · Production <small id="tab-b-n"></small></button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="c" id="tab-c">LOL-C · Taste <small>v0.2</small></button>
+      <button class="tab" role="tab" aria-selected="true" aria-controls="a" id="tab-a">LOL-A · Do they get the joke? <small id="tab-a-n"></small></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="b" id="tab-b">LOL-B · Can they be funny? <small id="tab-b-n"></small></button>
     </div>
   </header>
 
   <!-- ============ TRACK A ============ -->
   <section role="tabpanel" id="a" aria-labelledby="tab-a">
-    <p class="panel-note rv">Models explain why jokes are funny; explanations are scored against human-written <b>gold elements</b> by two judges, each barred from its own family. The table is <b>sortable</b>: click a header. Yellow chips mark the top three.</p>
+    <p class="panel-note rv">We asked every model to explain <b>why jokes are funny</b>. Two AI judges score each explanation against the human-written list of things a good explanation must catch. Two AI families, so neither judge ever grades its own family. Sort by any underlined column; yellow chips mark the top three.</p>
 
     <div class="tbl rv">
       <table aria-describedby="a-cap">
         <thead>
           <tr>
             <th class="r">#</th>
-            <th>Model</th>
-            <th class="r" aria-sort="descending" id="th-mean">Comprehension <span class="arr">↓</span></th>
-            <th>95% CI</th>
-            <th class="r">Scored</th>
-            <th>Strongest / weakest family</th>
+            <th class="sortable" id="th-name">Model</th>
+            <th class="r sortable" aria-sort="descending" id="th-mean">Comprehension <span class="arr">↓</span></th>
+            <th title="95% confidence interval">Uncertainty</th>
+            <th class="r sortable" id="th-n">Scored</th>
+            <th class="r" title="Failed-humor items: explain why a joke is NOT funny. No other benchmark tests this.">Spotting bad jokes <span style="color:#f4f2ea;opacity:.6;font-weight:400;text-transform:none;letter-spacing:0">· why a joke fails</span></th>
             <th class="r">Spend</th>
           </tr>
         </thead>
         <tbody id="rows"><tr><td colspan="7" class="panel-note" style="padding:16px">Loading scores…</td></tr></tbody>
-        <tfoot><tr><td colspan="7" id="a-cap">Share of gold humor-mechanism elements identified (0 / ½ / 1 per explanation), averaged over 3 samples × 150 items · red whiskers show 95% bootstrap interval · anchor tier runs once per item, disclosed per row.</td></tr></tfoot>
+        <tfoot><tr><td colspan="7" id="a-cap">Score = share of the required joke mechanics each explanation caught (0 / ½ / 1 per item). Red band = 95% confidence interval: where the true score plausibly sits. Wider red = fewer explanations judged so far. A model posts a score once 10+ explanations are judged; before that it shows pending. <span class="badge" style="margin:0 2px">n=1</span> anchors ran once per item, so their bands stay wide. Small samples are floored at a binomial interval, so a lucky 3-for-3 cannot claim 100 with zero doubt.</td></tr></tfoot>
       </table>
     </div>
 
@@ -206,19 +203,23 @@
           <div class="d-row"><span class="a">Judges “rating funniness”</span><span class="arr">→</span><span class="b2">They only match explanations to human gold elements</span></div>
           <div class="d-row"><span class="a">Memorized benchmarks</span><span class="arr">→</span><span class="b2">Canaries, private split, fresh premises each wave</span></div>
           <div class="d-row"><span class="a">Overclaiming</span><span class="arr">→</span><span class="b2">CIs on everything; preliminary banner until human calibration</span></div>
-          <div class="d-row"><span class="a">Top-5 saturation</span><span class="arr">→</span><span class="b2">Two flat waves and the next wave gets harder by design</span></div>
         </div>
       </div>
       <div class="box rv">
-        <div class="box-h"><h3>Spend, disclosed</h3><span class="t">per model, to date</span></div>
-        <div class="bd"><p class="panel-note">Each cell is what that model actually cost in benchmark API calls. Free-tier models are $0.00 by design; anchors bought their spots honestly. Cost sits beside every score because a leaderboard without cost is an incomplete leaderboard.</p></div>
+        <div class="box-h"><h3>Judge validity</h3><span class="t">do the two judges agree?</span></div>
+        <div class="bd">
+          <p class="panel-note" id="jv-note">Both judges grade the same rows independently. Their agreement is the free validity signal: if two model families concord on explanations, the rubric (not one model's taste) is doing the work. Human calibration replaces this signal at C5.</p>
+          <div class="d-row" style="margin-top:12px"><span class="a">Exact agreement</span><span class="arr">→</span><span class="b2 num" id="jv-agree">pending</span></div>
+          <div class="d-row"><span class="a">Cohen's kappa</span><span class="arr">→</span><span class="b2 num" id="jv-kappa">pending</span></div>
+          <div class="d-row"><span class="a">Rows both judged</span><span class="arr">→</span><span class="b2 num" id="jv-pairs">pending</span></div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ============ TRACK B ============ -->
   <section role="tabpanel" id="b" aria-labelledby="tab-b" hidden>
-    <p class="panel-note"><b>Generation is complete:</b> every model wrote jokes under the same 40 constrained premises. Anonymous pair below: vote once, identities reveal after. Win rates with Wilson intervals appear as ballots land; no Elo until volume justifies Bradley–Terry. <b>The judge is you.</b></p>
+    <p class="panel-note rv">Every model wrote jokes under the same <b>40 constrained premises</b>. Anonymous pair below: vote once, identities reveal after. Win rates with Wilson intervals appear as ballots land; no Elo until volume justifies Bradley-Terry. <b>The judge is you.</b></p>
 
     <div class="bout">
       <div><div class="bt"><span>Panel A</span><span>concealed</span></div><p class="joke" id="ja">Loading…</p></div>
@@ -238,20 +239,18 @@
         <div class="bd" id="standings"><p class="panel-note" style="margin:4px 0 0">Loading ballots…</p></div>
       </div>
       <div class="box">
-        <div class="box-h"><h3>Coverage</h3><span class="t">bouts per model</span></div>
-        <div class="bd"><table style="min-width:0">
-          <thead><tr><th>Model</th><th class="r">Bouts</th><th>Status</th></tr></thead>
-          <tbody id="covb"><tr><td colspan="3" class="panel-note">Loading…</td></tr></tbody>
-        </table></div>
+        <div class="box-h"><h3>How ballots become rankings</h3><span class="t">protocol</span></div>
+        <div class="bd defense">
+          <div class="d-row"><span class="a">Ballot stuffing</span><span class="arr">→</span><span class="b2">No accounts; IP hashed for dedupe only, nothing stored raw</span></div>
+          <div class="d-row"><span class="a">Position bias</span><span class="arr">→</span><span class="b2">A/B sides shuffled per matchup; identities conceal until after your ballot</span></div>
+          <div class="d-row"><span class="a">Small-n overclaim</span><span class="arr">→</span><span class="b2">Wilson intervals per matchup; Elo only when volume justifies Bradley-Terry</span></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ TRACK C ============ -->
-  <section role="tabpanel" id="c" aria-labelledby="tab-c" hidden>
-    <p class="panel-note">Does a model’s internal sense of humor match ours? Rank correlation against human-rated joke pools, plus the self-awareness probe: <b>does a model’s taste predict its own punchlines?</b></p>
-    <div class="pending-line"><b>In preparation.</b> Cheapest track in evaluation (zero generation, fully automatic), and no published benchmark covers it. Pools ship with dataset v0.2; the correlations land here, error bars attached.</div>
-  </section>
+  <!-- ============ TRACK C = pending one-liner, no tab until data exists = -->
+  <div class="pending-line"><b>LOL-C · taste</b> is the third faculty: does a model's own sense of humor match ours? Pools ship with dataset v0.2; correlations land here with error bars attached.</div>
 
 </div>
 
@@ -259,7 +258,7 @@
   <div class="wrap frow">
     <span>lolbench.lol · open code · split data · canary embedded</span>
     <a href="https://github.com/YakshithK/lolbench">github.com/YakshithK/lolbench</a>
-    <span id="footstamp">refreshed — · live partial data, not final rankings</span>
+    <span id="footstamp">live partial data, not final rankings</span>
   </div>
 </footer>
 
@@ -274,7 +273,7 @@ let RESULTS=null, MATCHUPS=[], PAIR=null;
 document.querySelectorAll(".tab").forEach(t=>{
   t.addEventListener("click",()=>{
     document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===t?"true":"false"));
-    ["a","b","c"].forEach(id=>{document.getElementById(id).hidden=(id!==t.getAttribute("aria-controls"));});
+    ["a","b"].forEach(id=>{document.getElementById(id).hidden=(id!==t.getAttribute("aria-controls"));});
   });
 });
 
@@ -308,48 +307,76 @@ function nextPair(){
 
 /* ---------- LOL-A ---------- */
 let sortDir=-1, sortK="mean";
+const MIN_N=10; // spec floor (docs/02: n>=10); below this a model shows pending, not a score
 function renderA(){
-  const models=RESULTS?Object.entries(RESULTS.lol_a||{}):[];
+  const models=RESULTS?Object.entries(RESULTS.lol_a||{}).filter(([n,s])=>(s.n_scored||0)>=MIN_N):[];
   document.getElementById("tab-a-n").textContent=models.length?`n=${models.length}`:"scoring";
   const tbody=document.getElementById("rows");
   if(!models.length){tbody.innerHTML='<tr><td colspan="7" class="panel-note" style="padding:16px">Judging in progress; rows mount as scores land.</td></tr>';return;}
   const rankOf=new Map([...models].sort((a,b)=>((b[1].mean||0)-(a[1].mean||0))||((b[1].n_scored||0)-(a[1].n_scored||0))).map((m,i)=>[m[0],i+1]));
-  const rows=[...models].sort((a,b)=>{
+  // All 15 models render: scored rows in rank order, the rest inline as pending (design law: never hidden).
+  const known=new Map(models);
+  Object.keys(LABS).forEach(n=>{if(!known.has(n))known.set(n,null);});
+  const rows=[...known.entries()].sort((a,b)=>{
     if(sortK==="name")return sortDir*a[0].localeCompare(b[0]);
-    if(sortK==="n")return sortDir*((a[1].n_scored||0)-(b[1].n_scored||0));
-    return sortDir*((a[1].mean||0)-(b[1].mean||0));
+    if(sortK==="n")return sortDir*(((a[1]&&a[1].n_scored)||0)-((b[1]&&b[1].n_scored)||0));
+    const am=a[1]?a[1].mean||0:-1, bm=b[1]?b[1].mean||0:-1;
+    return sortDir*(am-bm);
   });
+  const spend=RESULTS.spend||{};
   tbody.innerHTML=rows.map(([name,s])=>{
     try{
+      const anchor=/opus|sol-pro|gemini|muse|grok/.test(name)?'<span class="badge" title="Frontier model: ran once per item (n=1), so its uncertainty band is wide.">n=1</span>':"";
+      const usd=spend[name]!=null?spend[name]:(SPEND[name]||0);
+      const spendCell=usd>0?`$${usd.toFixed(2)}<small>paid</small>`:'<span class="free">$0.00</span><small>free tier</small>';
+      if(!s){
+        const rk=`<span style="color:var(--dim)">··</span>`;
+        return `<tr>
+        <td class="rk num">${rk}</td>
+        <td><div class="mname" style="color:var(--mut)">${esc(name)}${anchor}</div><div class="msub">${esc(LABS[name]||"")}</div></td>
+        <td class="r"><small style="color:var(--dim)">pending</small></td>
+        <td class="barcell"><div class="bar" aria-label="pending judgment"></div></td>
+        <td class="r num" style="color:var(--dim)">0</td>
+        <td class="r"><small style="color:var(--dim)">pending</small></td>
+        <td class="r"><span class="spend">${spendCell}</span></td>
+      </tr>`;
+      }
       const r=rankOf.get(name), rk=String(r).padStart(2,"0");
       const chip=r<=3?`<span class="rkchip">${rk}</span>`:rk;
-      const anchor=/opus|sol-pro|gemini|muse|grok/.test(name)?'<span class="badge">anchor</span>':"";
       const mean=(s.mean||0)*100, lo=((s.ci95&&s.ci95[0])!=null?s.ci95[0]:s.mean||0)*100, hi=((s.ci95&&s.ci95[1])!=null?s.ci95[1]:s.mean||0)*100;
-      const fams=Object.entries(s.families||{}).sort((a,b)=>b[1].mean-a[1].mean);
-      const famHtml=fams.length?fams.map(([f,d],i)=>`<span class="${i===0?"hi":""}">${esc(f)} ${(d.mean*100).toFixed(0)}</span>`).join(""):"—";
-      const usd=SPEND[name]||0;
-      const spend=usd>0?`$${usd.toFixed(2)}<small>paid</small>`:'<span class="free">$0.00</span><small>free tier</small>';
+      const f6=s.families&&s.families.F6&&s.families.F6.n?`${(s.families.F6.mean*100).toFixed(0)}<small style="color:var(--mut);font-weight:400;font-size:.68rem"> n=${s.families.F6.n}</small>`:`<small style="color:var(--dim)">pending</small>`;
       return `<tr>
         <td class="rk num">${chip}</td>
         <td><div class="mname">${esc(name)}${anchor}</div><div class="msub">${esc(LABS[name]||"")}</div></td>
         <td class="r"><span class="sc">${mean.toFixed(1)}</span> <small>±${((hi-lo)/2).toFixed(1)}</small></td>
         <td class="barcell"><div class="bar" aria-label="95% CI ${lo.toFixed(1)} to ${hi.toFixed(1)}"><i style="width:${Math.max(1,mean)}%"></i><b style="left:${lo}%;width:${Math.max(1,hi-lo)}%"></b></div></td>
         <td class="r num" style="color:var(--mut)">${s.n_scored||0}</td>
-        <td><div class="fam">${famHtml}</div></td>
-        <td class="r"><span class="spend">${spend}</span></td>
+        <td class="r num" style="font-family:var(--mono);font-weight:600;font-size:.92rem">${f6}</td>
+        <td class="r"><span class="spend">${spendCell}</span></td>
       </tr>`;
     }catch(err){return `<tr><td colspan="7" class="panel-note">row error: ${esc(name)}</td></tr>`;}
   }).join("");
 }
 document.getElementById("th-mean").addEventListener("click",()=>{sortK="mean";sortDir=-sortDir;renderA();});
-document.querySelector('#a thead th:nth-child(2)').addEventListener("click",()=>{sortK="name";sortDir=-sortDir||1;if(sortDir===-1)sortDir=1;renderA();});
-document.querySelector('#a thead th:nth-child(5)').addEventListener("click",()=>{sortK="n";sortDir=-sortDir;renderA();});
+document.getElementById("th-name").addEventListener("click",()=>{sortDir=sortK==="name"?-sortDir:1;sortK="name";renderA();});
+document.getElementById("th-n").addEventListener("click",()=>{sortK="n";sortDir=-sortDir;renderA();});
 
 /* ---------- stats ---------- */
 function renderStats(){
-  document.getElementById("st-models").textContent=RESULTS?Object.keys(RESULTS.lol_a||{}).length+" scored":"—";
-  document.getElementById("st-bouts").textContent=MATCHUPS.length?MATCHUPS.length.toLocaleString():"—";
-  document.getElementById("st-bouts").insertAdjacentHTML("beforeend"," <small>· 40 premises</small>");
+  const models=RESULTS?Object.keys(RESULTS.lol_a||{}):[];
+  document.getElementById("st-models").textContent=models.length?models.length+" of 15":"pending";
+  const jv=RESULTS.judge_validity||{};
+  const jvEl=document.getElementById("st-jv");
+  if(jv.agreement!=null)jvEl.innerHTML=`${(jv.agreement*100).toFixed(0)}% <small>kappa ${(jv.kappa??0).toFixed(2)}</small>`;
+  else jvEl.textContent="pending";
+}
+async function renderBallots(){
+  const el=document.getElementById("st-ballots");
+  try{
+    const s=await (await fetch("/api/leaderboard")).json();
+    const total=Array.isArray(s)?s.reduce((t,x)=>t+(x.total||0),0):0;
+    el.textContent=total?total.toLocaleString():"0";
+  }catch(e){el.textContent="0";}
 }
 
 /* ---------- LOL-B ---------- */
@@ -357,16 +384,6 @@ function renderBout(){
   document.getElementById("tab-b-n").textContent=MATCHUPS.length?MATCHUPS.length.toLocaleString()+" bouts":"mounting";
   if(MATCHUPS.length)nextPair();
   else{document.getElementById("ja").textContent="Bouts mount when matchups publish.";document.getElementById("jb").textContent="…";}
-}
-function renderCoverage(){
-  const appear={};
-  MATCHUPS.forEach(m=>{appear[m.model_a]=(appear[m.model_a]||0)+1;appear[m.model_b]=(appear[m.model_b]||0)+1;});
-  const names=Object.keys(LABS);
-  document.getElementById("covb").innerHTML=names.map(n=>{
-    const v=appear[n]||0, full=v>=560, st=full?"complete":v>280?"draining":v>70?"late start":v>0?"just began":"not started";
-    const col=full?"var(--tear)":v>70?"var(--ink-2)":"var(--red)";
-    return `<tr><td><div class="mname" style="font-size:.84rem">${esc(n)}</div></td><td class="r num">${v}</td><td><span class="ct num" style="color:${col};font-family:var(--mono);font-size:.66rem">${st}</span></td></tr>`;
-  }).join("");
 }
 async function loadStandings(){
   try{
@@ -381,6 +398,16 @@ async function loadStandings(){
   }catch(e){
     document.getElementById("standings").innerHTML='<p class="panel-note" style="margin:4px 0 0">Standings load once the API is reachable.</p>';
   }
+  renderBallots();
+}
+
+/* ---------- judge validity ---------- */
+function renderJudgeValidity(){
+  const jv=RESULTS.judge_validity||{};
+  if(jv.agreement==null)return;
+  document.getElementById("jv-agree").textContent=(jv.agreement*100).toFixed(1)+"%";
+  document.getElementById("jv-kappa").textContent=(jv.kappa??0).toFixed(2);
+  document.getElementById("jv-pairs").textContent=(jv.n_pairs||0).toLocaleString();
 }
 
 /* ---------- boot: each step isolated so one failure never blanks the page ---------- */
@@ -395,13 +422,13 @@ async function loadStandings(){
     }
   }catch(e){console.error("results",e)}
   safe("renderA",renderA);
+  safe("jv",renderJudgeValidity);
   try{
     MATCHUPS=await (await fetch("./matchups.json")).json();
     if(!Array.isArray(MATCHUPS))MATCHUPS=[];
   }catch(e){console.error("matchups",e)}
   safe("stats",renderStats);
   safe("bout",renderBout);
-  safe("coverage",renderCoverage);
   safe("standings",loadStandings);
 })();
 </script>

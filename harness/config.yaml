@@ -9,7 +9,8 @@ n_samples: 3
 anchor_samples: 1          # frontier anchors run once per item (wider CIs, flagged in UI)
 lol_b_samples: 1          # voting uses sample 0; extra samples added at C5
 max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning tokens
-judge_max_tokens: 1500
+judge_max_tokens: 3000      # judges are reasoning models too; budget covers reasoning + JSON
+judge_workers: 3            # per judge; 2 judges x 3 = 6 concurrent B.AI calls (free-tier safe)
 parallel_workers: 8         # per-candidate concurrent calls
 temperature: 0.9            # generation diversity; judge calls use temperature 0
 max_spend_usd: 7.00         # hard stop for THIS process's paid calls (matches remaining OR credits; raise after top-up)
@@ -104,7 +105,7 @@ judges:
 
 # Free-tier style rate limits (requests per minute); 0 = unlimited.
 rate_limits_rpm:
-  bai: 0
+  bai: 60                   # quota storm on 2026-09-01 burned 7.7k calls; pace the free tier
   openrouter: 0
   xai: 0
   groq: 30

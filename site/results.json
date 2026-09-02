@@ -1,9 +1,30 @@
 {
   "dataset_version": "0.1.0",
   "harness_version": "0.1.2",
-  "harness_hash": "2c23cbba14ac30d5",
-  "generated_at": "2026-09-01T22:13:25.654250+00:00",
+  "harness_hash": "778c2be600e237c0",
+  "generated_at": "2026-09-02T00:41:58.724444+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
+  "counts": {
+    "judgments_valid": 607,
+    "judge_pairs": 249
+  },
+  "judge_validity": {
+    "n_pairs": 249,
+    "agreement": 0.9036,
+    "kappa": 0.368
+  },
+  "spend": {
+    "claude-opus-5": 1.18,
+    "deepseek-v4-flash": 0.0,
+    "gemini-3.1-pro": 2.5,
+    "glm-5.3-flash": 0.0,
+    "gpt-5.6-sol-pro": 1.25,
+    "grok-4.6": 0.38,
+    "hy3": 0.0,
+    "hy4-preview": 1.62,
+    "muse-spark-1.2": 0.0,
+    "qwen3.8-flash": 0.0
+  },
   "lol_a": {
     "grok-4.6": {
       "mean": 0.9251,
@@ -44,7 +65,7 @@
     "glm-5.3-flash": {
       "mean": 0.9474,
       "ci95": [
-        0.8421,
+        0.7536,
         1.0
       ],
       "n_scored": 19,
@@ -68,7 +89,7 @@
     "hy4-preview": {
       "mean": 0.8571,
       "ci95": [
-        0.6667,
+        0.6536,
         1.0
       ],
       "n_scored": 21,
@@ -120,7 +141,7 @@
     "hy3": {
       "mean": 0.875,
       "ci95": [
-        0.625,
+        0.5291,
         1.0
       ],
       "n_scored": 8,
@@ -148,7 +169,7 @@
     "qwen3.8-flash": {
       "mean": 1.0,
       "ci95": [
-        1.0,
+        0.4385,
         1.0
       ],
       "n_scored": 3,
@@ -236,7 +257,7 @@
     "muse-spark-1.2": {
       "mean": 0.9583,
       "ci95": [
-        0.875,
+        0.7976,
         1.0
       ],
       "n_scored": 24,
@@ -246,6 +267,70 @@
         "F1": {
           "mean": 0.958,
           "n": 24
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "mean": 0.9138,
+      "ci95": [
+        0.7579,
+        1.0
+      ],
+      "n_scored": 29,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.914,
+          "n": 29
+        }
+      }
+    },
+    "qwen3.8-max": {
+      "mean": 1.0,
+      "ci95": [
+        0.8794,
+        1.0
+      ],
+      "n_scored": 28,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 1.0,
+          "n": 28
+        }
+      }
+    },
+    "glm-5.3": {
+      "mean": 0.9643,
+      "ci95": [
+        0.8229,
+        1.0
+      ],
+      "n_scored": 28,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.964,
+          "n": 28
+        }
+      }
+    },
+    "mimo-v2.5-pro": {
+      "mean": 1.0,
+      "ci95": [
+        0.8794,
+        1.0
+      ],
+      "n_scored": 28,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 1.0,
+          "n": 28
         }
       }
     }

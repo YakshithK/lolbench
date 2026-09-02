@@ -24,16 +24,36 @@ def extract_json(text):
 
 
 def judgment_done_keys(path):
+    """A judgment is 'done' only when it produced a valid score.
+    Null rows (judge quota failures / unparseable output) must retry on the
+    next run, otherwise a single quota storm permanently blanks the board."""
     keys = set()
     if path.exists():
         for line in path.read_text(encoding="utf-8-sig").splitlines():
             if line.strip():
                 try:
                     o = json.loads(line)
-                    keys.add(f'{o["judge"]}|{o["model"]}|{o["item_id"]}|{o["sample"]}')
+                    if o.get("score") is not None:
+                        keys.add(f'{o["judge"]}|{o["model"]}|{o["item_id"]}|{o["sample"]}')
                 except Exception:
                     pass
     return keys
+
+
+def valid_counts(path):
+    """Valid-judgment count per (judge, model) so under-judged models go first."""
+    counts = {}
+    if path.exists():
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            if line.strip():
+                try:
+                    o = json.loads(line)
+                    if o.get("score") is not None:
+                        k = (o["judge"], o["model"])
+                        counts[k] = counts.get(k, 0) + 1
+                except Exception:
+                    pass
+    return counts
 
 
 def main():
@@ -46,7 +66,7 @@ def main():
     cands = [c["name"] for c in CFG["candidates"] if c.get("enabled")]
     judges = CFG["judges"]
     jt = CFG.get("judge_max_tokens", 1500)
-    workers = max(1, int(CFG.get("parallel_workers", 1)))
+    workers = max(1, int(CFG.get("judge_workers", CFG.get("parallel_workers", 1))))
     out = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     done = judgment_done_keys(out)
     lock = threading.Lock()
@@ -64,15 +84,17 @@ def main():
     def run_judge(j):
         jname = j["name"]
         excluded = set(j.get("exclude_models", []))
+        counts = valid_counts(out)
+        # Under-judged models first: backfill before touching well-scored rows.
         todo = []
         for name, rows in outputs.items():
             if name in excluded:
                 continue
-            for row in rows:
-                key = f"{jname}|{name}|{row['item_id']}|{row['sample']}"
-                if key in done:
-                    continue
-                todo.append((name, row, items.get(row["item_id"])))
+            model_rows = [r for r in rows if f"{jname}|{name}|{r['item_id']}|{r['sample']}" not in done]
+            model_rows.sort(key=lambda r: counts.get((jname, name), 0))
+            todo.extend((name, r, items.get(r["item_id"])) for r in model_rows)
+        # Item-major order inside the sort group keeps checkpoint progress coherent.
+        todo.sort(key=lambda t: (counts.get((jname, t[0]), 0), t[1]["item_id"], t[1]["sample"]))
         with print_lock:
             print(f"[judge:{jname}] {len(todo)} judgments to make", flush=True)
 
@@ -93,17 +115,23 @@ def main():
                 "content": prompt + "\n\nExplanation to grade:\n" + str(row["output"]),
             }]
             got = None
-            for attempt in range(3):
+            # B.AI reasoning models spend max_tokens on hidden reasoning; when the
+            # budget starves, content comes back empty or truncated. Escalate.
+            budget = jt
+            for attempt in range(5):
                 try:
-                    raw = chat(j["provider"], j["model"], j.get("base_url"), messages, 0.0, jt)
+                    raw = chat(j["provider"], j["model"], j.get("base_url"), messages, 0.0, budget)
                     got = extract_json(raw)
                     if got:
                         break
                 except Exception as e:
                     with print_lock:
                         print(f"[warn] {jname} {model} {row['item_id']}|{row['sample']} try{attempt}: {e}", flush=True)
+                    time.sleep(2 * (attempt + 1))
+                budget = int(budget * 1.6)
             if got is None:
                 got = {"score": None, "reason": "judge failed to emit parseable JSON"}
+                time.sleep(5)
             append_result(
                 out,
                 {

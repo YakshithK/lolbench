@@ -25,7 +25,19 @@ def bootstrap_ci(xs, iters=1000, seed=42):
         return [m, m]
     rng = random.Random(seed)
     ms = sorted(mean([rng.choice(xs) for _ in xs]) for _ in range(iters))
-    return [round(ms[int(0.025 * iters)], 4), round(ms[int(0.975 * iters)], 4)]
+    lo, hi = ms[int(0.025 * iters)], ms[int(0.975 * iters)]
+    # Small-sample floor: resampling a near-constant handful produces a
+    # degenerate interval (3-for-3 shows as 100 +/- 0). Wilson's 95% interval
+    # on the mean-as-proportion is the standard honest floor for tiny n.
+    n = len(xs)
+    if n < 30:
+        p = mean(xs)
+        z = 1.96
+        denom = 1 + z * z / n
+        center = (p + z * z / (2 * n)) / denom
+        half = z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / denom
+        lo, hi = min(lo, center - half), max(hi, center + half)
+    return [round(max(0.0, lo), 4), round(min(1.0, hi), 4)]
 
 
 def harness_hash():
@@ -45,10 +57,28 @@ def harness_hash():
     return h.hexdigest()[:16]
 
 
+def load_valid_judgments(jpath):
+    """Dedupe by (judge, model, item, sample), latest line wins, drop nulls.
+    Both judges' rows are kept: the dual-judge protocol pools them."""
+    best = {}
+    order = []
+    for line in jpath.read_text(encoding="utf-8-sig").splitlines():
+        if not line.strip():
+            continue
+        o = json.loads(line)
+        if o.get("score") is None:
+            continue
+        k = (o["judge"], o["model"], o["item_id"], o["sample"])
+        if k not in best:
+            order.append(k)
+        best[k] = o
+    return [best[k] for k in order]
+
+
 def lol_a_scores():
     jpath = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     if not jpath.exists():
-        return {}
+        return {}, 0
     items = {}
     ipath = ROOT / CFG["paths"]["items_a"]
     if ipath.exists():
@@ -58,12 +88,8 @@ def lol_a_scores():
                 items[o["id"]] = o["family"]
     per_model = {}
     fam = {}
-    for line in jpath.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        o = json.loads(line)
-        if o.get("score") is None:
-            continue
+    rows = load_valid_judgments(jpath)
+    for o in rows:
         if o.get("model") == o.get("judge_model"):
             continue
         s = float(o["score"])
@@ -84,7 +110,36 @@ def lol_a_scores():
             "samples_per_item": CFG["n_samples"],
             "families": families,
         }
-    return out
+    return out, len(rows)
+
+
+def judge_validity(jpath):
+    """Free judge-validity signal: agreement between the two independent judges
+    on the same (model, item, sample) rows. Exact-match rate + Cohen's kappa."""
+    if not jpath.exists():
+        return {"n_pairs": 0}
+    by_key = {}
+    for o in load_valid_judgments(jpath):
+        if o.get("model") == o.get("judge_model"):
+            continue
+        by_key.setdefault((o["model"], o["item_id"], o["sample"]), {})[o["judge"]] = float(o["score"])
+    pairs = [v for v in by_key.values() if len(v) == 2]
+    if not pairs:
+        return {"n_pairs": 0}
+    agree = sum(1 for v in pairs if len(set(v.values())) == 1)
+    n = len(pairs)
+    p_o = agree / n
+    # Cohen's kappa over the 3-point scale {0, 0.5, 1}
+    labels = (0.0, 0.5, 1.0)
+    a = [v["deepseek-judge"] for v in pairs]
+    b = [v["qwen-judge"] for v in pairs]
+    p_e = sum((a.count(x) / n) * (b.count(x) / n) for x in labels)
+    kappa = (p_o - p_e) / (1 - p_e) if p_e < 1 else 1.0
+    return {
+        "n_pairs": n,
+        "agreement": round(p_o, 4),
+        "kappa": round(kappa, 4),
+    }
 
 
 def lol_b_placeholder():
@@ -136,14 +191,37 @@ def build_matchups():
     return matchups
 
 
+def spend_by_model():
+    """Per-model USD actually spent, from the harness cost log (generation + judging)."""
+    log = ROOT / "outputs" / "cost_log.jsonl"
+    if not log.exists():
+        return {}
+    totals = {}
+    for line in log.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        o = json.loads(line)
+        totals[o.get("model", "unknown")] = totals.get(o.get("model", "unknown"), 0) + float(o.get("usd", 0))
+    return {m: round(v, 2) for m, v in sorted(totals.items())}
+
+
 def main():
+    jpath = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
+    jv = judge_validity(jpath)
+    lol_a, n_valid = lol_a_scores()
     results = {
         "dataset_version": CFG["dataset_version"],
         "harness_version": CFG["harness_version"],
         "harness_hash": harness_hash(),
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
-        "lol_a": lol_a_scores(),
+        "counts": {
+            "judgments_valid": n_valid,
+            "judge_pairs": jv.get("n_pairs", 0),
+        },
+        "judge_validity": jv,
+        "spend": spend_by_model(),
+        "lol_a": lol_a,
         "lol_b": {**lol_b_placeholder(), "n_matchups": 0},
         "lol_c": lol_c_placeholder(),
     }
