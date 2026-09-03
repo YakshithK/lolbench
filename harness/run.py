@@ -51,17 +51,27 @@ def load_env():
                 os.environ.setdefault(k.strip(), v.strip())
 
 
-# Rough per-model USD pricing (per 1M tokens) for spend guarding.
-# Reasoning models burn extra hidden output tokens; these are CEILING prices.
+# Per-model USD pricing (per 1M tokens): what the model actually costs to run,
+# not what our harness happened to pay. A provider offering a model for free
+# (b.ai's flash tier, Hack Club's proxy) is a promotional deal about the
+# provider, not a fact about the model's real inference cost — it never
+# reads as $0 here. Flash/base-tier prices are ESTIMATES (~1/10 of the
+# sibling pro/max price, the typical real-world flash:pro ratio) since no
+# billed rate exists for them; everything else is the harness's own metered
+# rate. Reasoning models burn extra hidden output tokens; paid prices are
+# CEILING prices.
 MODEL_PRICES = {
-    "glm-5.3-flash": (0, 0), "deepseek-v4-flash": (0, 0), "hy3": (0, 0),
-    "mimo-v2.5": (0, 0), "qwen3.8-flash": (0, 0),
+    "glm-5.3-flash": (0.15, 0.45), "deepseek-v4-flash": (0.15, 0.30), "hy3": (0.15, 0.35),
+    "mimo-v2.5": (0.10, 0.20), "qwen3.8-flash": (0.20, 0.60),
     "glm-5.3": (1.4, 4.4), "deepseek-v4-pro": (1.6, 3.2),
     "qwen3.8-max": (2, 6), "mimo-v2.5-pro": (0.44, 0.87), "hy4-preview": (0.83, 2.5),
     "gpt-5.6-sol-pro": (2, 10), "gemini-3.1-pro": (2, 12),
-    "claude-opus-5": (5, 25), "muse-spark-1.2": (0, 0),  # hackclub free tier
+    "claude-opus-5": (5, 25), "muse-spark-1.2": (0.10, 0.30),  # hackclub free tier: real cost estimated, not billed
     "grok-4.6": (2, 6),
 }
+# Models whose flash/base price above is an estimate (no billed rate exists),
+# not a metered one. Surfaced in results.json so the UI can disclose it.
+ESTIMATED_PRICE_MODELS = {"glm-5.3-flash", "deepseek-v4-flash", "hy3", "mimo-v2.5", "qwen3.8-flash", "muse-spark-1.2"}
 COST_LOG = ROOT / "outputs" / "cost_log.jsonl"
 
 

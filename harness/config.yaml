@@ -68,7 +68,10 @@ candidates:
     provider: openrouter
     model: tencent/hy4-preview
     family: tencent
-    enabled: true
+    enabled: false          # removed 2026-09: burns its whole token budget on hidden
+                             # reasoning ~27-77% of the time (confirmed via cost log
+                             # cross-reference), producing empty outputs that score as
+                             # comprehension failures rather than infrastructure ones
 
   # ---- Tier 4: frontier anchors (OpenRouter/xAI, n=1) ----
   - name: gpt-5.6-sol-pro

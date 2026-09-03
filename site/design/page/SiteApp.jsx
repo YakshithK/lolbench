@@ -1,9 +1,14 @@
 const { Topbar, Footer, Kicker, Headline, Lede, StatBand, Panel } = window.LOLBenchDesignSystem_ab2c27;
 
+const COUNT_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+  "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
+
 function SiteApp() {
   const data = window.LOLB;
   const f6 = data.mechanismRows.map(r => r.values.F6).filter(v => v != null);
   const allMissF6 = f6.length > 0 && f6.every(v => v < 90);
+  const total = data.scored.length + data.unrankable.length;
+  const countWord = COUNT_WORDS[total] || String(total);
   return (
     <>
       <Topbar current="scores" stamp={data.stamp}
@@ -16,7 +21,7 @@ function SiteApp() {
         <div className="rv" style={{ display: "grid", gridTemplateColumns: "1.25fr 1fr", gap: "56px", alignItems: "end", padding: "var(--hero-pad)", borderBottom: "var(--border)" }}>
           <div>
             <Kicker>wave 00 / open results</Kicker>
-            <Headline>Fifteen models walk<br />into a bar.</Headline>
+            <Headline>{countWord[0].toUpperCase() + countWord.slice(1)} models walk<br />into a bar.</Headline>
             <Lede>{allMissF6
               ? "All of them can explain why a real joke works. None of them reliably knows why a fake one doesn't."
               : "We are measuring whether a model can explain a joke, write one, and tell good ones from bad."}</Lede>

@@ -17,7 +17,7 @@
     "glm-5.3-flash": "Z.ai", "deepseek-v4-flash": "DeepSeek", "hy3": "Tencent",
     "mimo-v2.5": "Xiaomi", "qwen3.8-flash": "Alibaba", "glm-5.3": "Z.ai",
     "deepseek-v4-pro": "DeepSeek", "qwen3.8-max": "Alibaba", "mimo-v2.5-pro": "Xiaomi",
-    "hy4-preview": "Tencent", "gpt-5.6-sol-pro": "OpenAI", "gemini-3.1-pro": "Google",
+    "gpt-5.6-sol-pro": "OpenAI", "gemini-3.1-pro": "Google",
     "claude-opus-5": "Anthropic", "muse-spark-1.2": "Meta", "grok-4.6": "xAI"
   };
   var MIN_N = 10; // rankable floor, matches harness/score.py's published spec
@@ -46,16 +46,11 @@
   });
   rankable.sort(function (a, b) { return b.y - a.y; });
 
-  // "leader" = best score within its price tier, where the tier is known.
-  // Models with no logged cost at all (see docs) sit outside either tier and
-  // are excluded from cost framing rather than guessed at.
-  var free = rankable.filter(function (r) { return r.x === 0; });
-  var paid = rankable.filter(function (r) { return typeof r.x === "number" && r.x > 0; });
-  var bestFree = free.sort(function (a, b) { return b.y - a.y; })[0];
-  var bestPaid = paid.sort(function (a, b) { return b.y - a.y; })[0];
-  rankable.forEach(function (r) {
-    r.leader = (bestFree && r.name === bestFree.name) || (bestPaid && r.name === bestPaid.name);
-  });
+  // "leader" = single best comprehension score. There's no genuine free tier
+  // to split on anymore: every model now carries a real (if estimated) cost,
+  // so a free-vs-paid leader split would be comparing a model against itself.
+  var bestOverall = [...rankable].sort(function (a, b) { return b.y - a.y; })[0];
+  rankable.forEach(function (r) { r.leader = bestOverall && r.name === bestOverall.name; });
 
   var mechanisms = ["F1", "F2", "F3", "F4", "F5", "F6"];
   var mechanismRows = rankable.map(function (r) {
@@ -104,7 +99,7 @@
   var jv = results.judge_validity || {};
 
   window.LOLB = {
-    stamp: "v" + (results.dataset_version || "0.0.0") + " · " + models.length + " models · $" + totalSpend.toFixed(2) + " logged",
+    stamp: "v" + (results.dataset_version || "0.0.0") + " · " + models.length + " models · ~$" + totalSpend.toFixed(2) + " est. cost",
     itemsCount: itemsCount,
     totalSpend: totalSpend,
     judgeAgreement: jv.agreement != null ? Math.round(jv.agreement * 1000) / 10 : null,
@@ -112,12 +107,12 @@
     judgePairs: jv.n_pairs || 0,
     scored: rankable,
     unrankable: unrankable,
-    pending: Math.max(0, 15 - models.length),
+    pending: 0, // every currently-enabled candidate is present in lolA; nothing mid-run right now
     mechanisms: mechanisms,
     mechanismRows: mechanismRows,
     written: written,
     bouts: bouts.length ? bouts : [{ id: "no bouts yet", premise: "—", modelA: "—", modelB: "—", a: "Bouts publish once wave-0 generation lands.", b: "…", ballots: 0 }],
-    excludedFromCost: models.filter(function (m) { return !Object.prototype.hasOwnProperty.call(spend, m); })
+    costEstimated: true // every figure in `spend` is derived (see harness/score.py spend_by_model), never metered
   };
 
   // Best-effort real ballot counts; leaves ballots:0 if the API isn't reachable.

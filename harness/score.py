@@ -7,12 +7,18 @@ from pathlib import Path
 
 import yaml
 
+from run import MODEL_PRICES, ESTIMATED_PRICE_MODELS
+
 
 def strip_think(text):
     return re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip()
 
 ROOT = Path(__file__).resolve().parents[1]
 CFG = yaml.safe_load((ROOT / "harness" / "config.yaml").read_text(encoding="utf-8"))
+
+
+def enabled_candidates():
+    return {c["name"] for c in CFG["candidates"] if c.get("enabled")}
 
 
 def mean(xs):
@@ -111,10 +117,13 @@ def lol_a_scores():
                 o = json.loads(line)
                 items[o["id"]] = o["family"]
     judge_fam, cand_fam = judge_family_map()
+    enabled = enabled_candidates()
     per_model = {}
     fam = {}
     rows = load_valid_judgments(jpath)
     for o in rows:
+        if o.get("model") not in enabled:
+            continue
         if o.get("model") == o.get("judge_model"):
             continue
         if same_family(o, judge_fam, cand_fam):
@@ -146,8 +155,11 @@ def judge_validity(jpath):
     if not jpath.exists():
         return {"n_pairs": 0}
     judge_fam, cand_fam = judge_family_map()
+    enabled = enabled_candidates()
     by_key = {}
     for o in load_valid_judgments(jpath):
+        if o.get("model") not in enabled:
+            continue
         if o.get("model") == o.get("judge_model"):
             continue
         if same_family(o, judge_fam, cand_fam):
@@ -189,7 +201,8 @@ def build_matchups():
     Deterministic sample index (0) for fairness; one matchup per pair per premise
     with sides shuffled so A/B position is random."""
     out_dir = ROOT / CFG["paths"]["outputs"]
-    models = sorted(p.parent.name for p in out_dir.glob("*/lol_b.jsonl"))
+    enabled = enabled_candidates()
+    models = sorted(p.parent.name for p in out_dir.glob("*/lol_b.jsonl") if p.parent.name in enabled)
     if len(models) < 2:
         return []
     by_model = {}
@@ -222,23 +235,44 @@ def build_matchups():
 
 
 def spend_by_model():
-    """Per-model USD actually spent, from the harness cost log (generation + judging)."""
-    log = ROOT / "outputs" / "cost_log.jsonl"
-    if not log.exists():
-        return {}
-    totals = {}
-    for line in log.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        o = json.loads(line)
-        totals[o.get("model", "unknown")] = totals.get(o.get("model", "unknown"), 0) + float(o.get("usd", 0))
-    return {m: round(v, 2) for m, v in sorted(totals.items())}
+    """Per-model USD cost, priced at what the model actually costs to run
+    (MODEL_PRICES), not what our harness happened to be billed.
+
+    Deliberately ignores outputs/cost_log.jsonl for this figure: it only
+    caught a fraction of real calls for some models (e.g. 7 logged calls for
+    glm-5.3-flash against ~900 real generations - cost logging clearly
+    wasn't active for the whole run), so "has any logged tokens" cannot mean
+    "fully accounted for". The only source that's complete for every model
+    is the actual output text on disk. Token counts are estimated from that
+    text (~4 chars/token, the standard rough approximation; input assumed to
+    run a quarter of output length, matching this project's short prompt
+    templates against longer explanations/jokes). Every figure returned here
+    is an estimate - the return value is a single flat map, and the caller
+    should present it as such rather than implying per-call metering."""
+    enabled = enabled_candidates()
+    spend = {}
+    for m in enabled:
+        chars = 0
+        for rel in (f"outputs/{m}/lol_a.jsonl", f"outputs/{m}/lol_b.jsonl"):
+            p = ROOT / rel
+            if not p.exists():
+                continue
+            for line in p.read_text(encoding="utf-8-sig").splitlines():
+                if not line.strip():
+                    continue
+                chars += len(json.loads(line).get("output") or "")
+        tout = chars // 4
+        tin = tout // 4
+        pin, pout = MODEL_PRICES.get(m, (5, 25))
+        spend[m] = round(tin / 1e6 * pin + tout / 1e6 * pout, 2)
+    return spend, {m: True for m in enabled}
 
 
 def main():
     jpath = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     jv = judge_validity(jpath)
     lol_a, n_valid = lol_a_scores()
+    spend, spend_estimated = spend_by_model()
     results = {
         "dataset_version": CFG["dataset_version"],
         "harness_version": CFG["harness_version"],
@@ -250,7 +284,8 @@ def main():
             "judge_pairs": jv.get("n_pairs", 0),
         },
         "judge_validity": jv,
-        "spend": spend_by_model(),
+        "spend": spend,
+        "spend_estimated": spend_estimated,
         "lol_a": lol_a,
         "lol_b": {**lol_b_placeholder(), "n_matchups": 0},
         "lol_c": lol_c_placeholder(),

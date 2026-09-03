@@ -6,19 +6,22 @@
 <meta name="theme-color" content="#07080a">
 <title>LOL Bench · Leaderboard</title>
 <link rel="icon" href="./design/assets/mark.svg">
-<link rel="stylesheet" href="./design/styles.css">
+<!-- Bump ?v= below whenever a file under site/design/ changes: none of these
+     are content-hashed, so an un-versioned URL can serve a stale cached copy
+     to a returning visitor after a deploy. -->
+<link rel="stylesheet" href="./design/styles.css?v=3">
 <style>@media(max-width:1080px){.wrap>div[style*="1.25fr"],.wrap>div[style*="var(--main-cols)"]{grid-template-columns:1fr!important;gap:26px!important}}</style>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script src="./design/_ds_bundle.js"></script>
-<script src="./design/boot.js"></script>
+<script src="./design/_ds_bundle.js?v=3"></script>
+<script src="./design/boot.js?v=3"></script>
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel" src="./design/page/Tracks.jsx"></script>
-<script type="text/babel" src="./design/page/Charts.jsx"></script>
-<script type="text/babel" src="./design/page/Sidebar.jsx"></script>
-<script type="text/babel" src="./design/page/SiteApp.jsx"></script>
+<script type="text/babel" src="./design/page/Tracks.jsx?v=3"></script>
+<script type="text/babel" src="./design/page/Charts.jsx?v=3"></script>
+<script type="text/babel" src="./design/page/Sidebar.jsx?v=3"></script>
+<script type="text/babel" src="./design/page/SiteApp.jsx?v=3"></script>
 </body>
 </html>

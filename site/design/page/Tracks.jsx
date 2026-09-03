@@ -20,7 +20,7 @@ function Tracks({ data }) {
       <TrackPanel index="01" status={scoredStatus} question="Does it get the joke?"
         method="It explains why a joke works. We check that against notes a human wrote."
         chart={<Sparkline bars={bars} pending={data.pending} />}
-        caption="one bar per model, best first · lime = best in its price tier · orange = too thin to trust · dark = still being judged" />
+        caption="one bar per model, best first · lime = best score on the board · orange = too thin to trust · dark = still being judged" />
       <TrackPanel index="02" status="you are the judge" statusTone="ink" question="Can it land one?"
         method="Two models write on the same setup. Humans pick the funnier line, blind."
         chart={<Sparkline min={0} max={writtenTarget} bars={written} />}

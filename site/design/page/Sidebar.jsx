@@ -47,20 +47,17 @@ function VotePanel({ bouts }) {
 
 function Sidebar({ data }) {
   // Adapted: the prototype's footer sentence assumed exactly one unrankable
-  // model always existed. The full run finished with all 15 past n>=10, so
+  // model always existed. Every currently-enabled candidate cleared n>=10, so
   // that footer only appears when there's actually something to disclose.
   const footerParts = [];
   data.unrankable.forEach(m => {
     footerParts.push(`${m.name} scored ${m.y.toFixed(1)} on ${m.n} answer${m.n === 1 ? "" : "s"}: too thin to rank, so it sits outside the table.`);
   });
   if (data.pending > 0) footerParts.push(`${data.pending} more model${data.pending === 1 ? "" : "s"} still being judged.`);
-  if (data.excludedFromCost && data.excludedFromCost.length) {
-    footerParts.push(`${data.excludedFromCost.length} scored model${data.excludedFromCost.length === 1 ? "" : "s"} ranked here don't appear on the cost chart: no real cost was ever logged for their runs.`);
-  }
 
   return (
     <div style={{ display: "grid", gap: "26px", alignContent: "start" }}>
-      <Panel title="Standings" meta="lime = best in its price tier" pad={false}>
+      <Panel title="Standings" meta="lime = best score on the board" pad={false}>
         <Standings
           rows={data.scored.map(m => ({ label: m.name, leader: m.leader, score: <ScoreCell value={m.y} plusMinus={(m.hi - m.lo) / 2} /> }))}
           unranked={data.unrankable.map(m => ({ label: m.name, score: <ScoreCell value={m.y} on={m.n} /> }))}

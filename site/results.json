@@ -1,29 +1,49 @@
 {
   "dataset_version": "0.1.0",
   "harness_version": "0.1.2",
-  "harness_hash": "eb1d59e5f2d68d90",
-  "generated_at": "2026-09-02T19:40:12.719129+00:00",
+  "harness_hash": "b0aecef69399d33e",
+  "generated_at": "2026-09-03T15:41:00.943224+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
   "counts": {
     "judgments_valid": 9456,
-    "judge_pairs": 3361
+    "judge_pairs": 2922
   },
   "judge_validity": {
-    "n_pairs": 3361,
-    "agreement": 0.8828,
-    "kappa": 0.5088
+    "n_pairs": 2922,
+    "agreement": 0.8754,
+    "kappa": 0.3594
   },
   "spend": {
-    "claude-opus-5": 1.18,
-    "deepseek-v4-flash": 0.0,
-    "gemini-3.1-pro": 2.5,
-    "glm-5.3-flash": 0.0,
-    "gpt-5.6-sol-pro": 1.25,
-    "grok-4.6": 0.38,
-    "hy3": 0.0,
-    "hy4-preview": 1.62,
-    "muse-spark-1.2": 0.0,
-    "qwen3.8-flash": 0.0
+    "deepseek-v4-pro": 0.21,
+    "claude-opus-5": 0.79,
+    "grok-4.6": 0.12,
+    "glm-5.3-flash": 0.04,
+    "gemini-3.1-pro": 0.31,
+    "deepseek-v4-flash": 0.02,
+    "qwen3.8-flash": 0.03,
+    "gpt-5.6-sol-pro": 0.16,
+    "mimo-v2.5": 0.01,
+    "qwen3.8-max": 0.34,
+    "mimo-v2.5-pro": 0.05,
+    "glm-5.3": 0.44,
+    "muse-spark-1.2": 0.01,
+    "hy3": 0.02
+  },
+  "spend_estimated": {
+    "deepseek-v4-pro": true,
+    "claude-opus-5": true,
+    "grok-4.6": true,
+    "glm-5.3-flash": true,
+    "gemini-3.1-pro": true,
+    "deepseek-v4-flash": true,
+    "qwen3.8-flash": true,
+    "gpt-5.6-sol-pro": true,
+    "mimo-v2.5": true,
+    "qwen3.8-max": true,
+    "mimo-v2.5-pro": true,
+    "glm-5.3": true,
+    "muse-spark-1.2": true,
+    "hy3": true
   },
   "lol_a": {
     "grok-4.6": {
@@ -94,42 +114,6 @@
         },
         "F6": {
           "mean": 0.667,
-          "n": 150
-        }
-      }
-    },
-    "hy4-preview": {
-      "mean": 0.6901,
-      "ci95": [
-        0.6575,
-        0.7188
-      ],
-      "n_scored": 889,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.876,
-          "n": 149
-        },
-        "F2": {
-          "mean": 0.554,
-          "n": 147
-        },
-        "F3": {
-          "mean": 0.913,
-          "n": 150
-        },
-        "F4": {
-          "mean": 0.757,
-          "n": 146
-        },
-        "F5": {
-          "mean": 0.694,
-          "n": 147
-        },
-        "F6": {
-          "mean": 0.347,
           "n": 150
         }
       }
@@ -569,7 +553,7 @@
   },
   "lol_b": {
     "status": "voting open at lolbench.lol - per-matchup win rates with Wilson CIs appear as votes accumulate. No Elo until vote volume justifies Bradley-Terry fitting (C5).",
-    "n_matchups": 3712
+    "n_matchups": 3588
   },
   "lol_c": {
     "status": "pending data import: graded joke pools (rJokesData/HAHA subsets) with owner curation."

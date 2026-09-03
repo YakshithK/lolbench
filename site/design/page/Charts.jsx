@@ -1,17 +1,14 @@
 const { Panel, Scatter, Heatmap, DotMatrix, BarList } = window.LOLBenchDesignSystem_ab2c27;
 
 function Charts({ data }) {
-  // Only models with a real logged cost go on the cost axis — five models ran
-  // before cost-tracking existed and have no true number, so they're excluded
-  // here rather than shown as $0 (which would misreport them as free tier).
-  const withCost = data.scored.filter(m => typeof m.x === "number");
-  const points = withCost.map(m => ({ label: m.name, x: m.x, y: m.y, lo: m.lo, hi: m.hi, leader: m.leader, thin: m.thin }));
-  const bestOnBoard = [...withCost].sort((a, b) => b.y - a.y)[0];
-  const cheapestGood = [...withCost].filter(m => m.x === 0).sort((a, b) => b.y - a.y)[0];
+  const points = data.scored.map(m => ({ label: m.name, x: m.x, y: m.y, lo: m.lo, hi: m.hi, leader: m.leader, thin: m.thin }));
+  const bestOnBoard = [...data.scored].sort((a, b) => b.y - a.y)[0];
+  const cheapestSpend = Math.min(...data.scored.map(m => m.x));
+  const cheapestGood = data.scored.filter(m => m.x === cheapestSpend).sort((a, b) => b.y - a.y)[0];
   const scatterCaption = bestOnBoard
-    ? `Among the ${withCost.length} models with a real logged cost, the best score is ${bestOnBoard.name} at ${bestOnBoard.y.toFixed(1)} for $${bestOnBoard.x.toFixed(2)}.`
-      + (cheapestGood ? ` The best free model, ${cheapestGood.name}, reaches ${cheapestGood.y.toFixed(1)} for nothing.` : "")
-      + (data.excludedFromCost.length ? ` ${data.excludedFromCost.length} more models aren't plotted here: their runs predate cost-tracking, so no real number exists for them.` : "")
+    ? `The best score on the board is ${bestOnBoard.name} at ${bestOnBoard.y.toFixed(1)} for an estimated $${bestOnBoard.x.toFixed(2)}.`
+      + (cheapestGood && cheapestGood.name !== bestOnBoard.name ? ` The cheapest model to run, ${cheapestGood.name} at $${cheapestGood.x.toFixed(2)}, still reaches ${cheapestGood.y.toFixed(1)}.` : "")
+      + ` Every figure here is estimated from output length and a per-model price table, not billed per call — none of these providers' current "free tier" deals mean the model itself costs nothing to run.`
     : "Cost data isn't available yet for any scored model.";
 
   const matrixSource = [...data.scored, ...data.unrankable];
@@ -33,10 +30,10 @@ function Charts({ data }) {
   // balances the two without touching the reusable Panel/BarList components.
   return (
     <div style={{ display: "grid", gap: "26px" }}>
-      <Panel size="lg" title="Score against cost" meta="dots are models · the orange bar is the range · lime = best in its price tier" pad={false}
+      <Panel size="lg" title="Score against cost" meta="dots are models · the orange bar is the range · lime = best score on the board" pad={false}
         caption={scatterCaption}>
         <Scatter points={points} xMax={Math.ceil((Math.max(0.5, ...points.map(p => p.x)) * 1.15) * 2) / 2}
-          rule={bestOnBoard ? { at: bestOnBoard.y, label: `best confirmed-cost score so far: ${bestOnBoard.y.toFixed(1)}` } : undefined} />
+          rule={bestOnBoard ? { at: bestOnBoard.y, label: `best score so far: ${bestOnBoard.y.toFixed(1)}` } : undefined} />
       </Panel>
       <Panel title="How much data is behind each number" meta="one square = 10 graded answers · partial square = fewer than 10"
         caption={`Shown: the ${matrix.length} models with the most graded answers so far, out of ${totalCount} total. Orange means the sample is too thin to trust.`}>
