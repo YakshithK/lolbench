@@ -1,4 +1,5 @@
 import hashlib
+import itertools
 import json
 import random
 import re
@@ -63,17 +64,18 @@ def harness_hash():
     return h.hexdigest()[:16]
 
 
-REFUSAL_RE = re.compile(
-    r"not provided|were not provided|was not provided|cannot be (evaluated|graded|verified)",
-    re.I,
-)
+from judge import is_refusal
 
 
 def load_valid_judgments(jpath):
     """Dedupe by (judge, model, item, sample), latest line wins, drop nulls.
     Both judges' rows are kept: the dual-judge protocol pools them.
     Also drops hallucinated-refusal rows recorded before judge.py's
-    REFUSAL_RE fix existed (measured 61/69 false claims of missing input)."""
+    is_refusal() fix existed (measured 106 confirmed false claims of missing
+    input against non-empty output, 105/106 from deepseek-judge - matching
+    "gold/essential element" plus a negation word catches every phrasing
+    found; matching negation words alone over-fires on real explanations
+    that legitimately discuss what a joke's setup is missing)."""
     best = {}
     order = []
     for line in jpath.read_text(encoding="utf-8-sig").splitlines():
@@ -82,7 +84,7 @@ def load_valid_judgments(jpath):
         o = json.loads(line)
         if o.get("score") is None:
             continue
-        if REFUSAL_RE.search(o.get("reason") or ""):
+        if is_refusal(o.get("reason")):
             continue
         k = (o["judge"], o["model"], o["item_id"], o["sample"])
         if k not in best:
@@ -164,18 +166,34 @@ def judge_validity(jpath):
             continue
         if same_family(o, judge_fam, cand_fam):
             continue
+        if o.get("fallback_used"):
+            # This row's real judge_model isn't the one its "judge" slot
+            # implies (the primary failed 5x and the other configured judge
+            # filled in). If that same model is also answering the OTHER
+            # slot for this (model,item,sample), counting it here would be
+            # one model agreeing with itself, not independent corroboration.
+            continue
         by_key.setdefault((o["model"], o["item_id"], o["sample"]), {})[o["judge"]] = float(o["score"])
-    pairs = [v for v in by_key.values() if len(v) == 2]
-    if not pairs:
+    # Pool every pairwise comparison rather than assuming two fixed judge
+    # names: with 3+ judges configured, a given row may have been graded by
+    # any 2 (occasionally 3) of them, and which 2 varies by candidate family.
+    score_pairs = []
+    for v in by_key.values():
+        vals = list(v.values())
+        if len(vals) < 2:
+            continue
+        score_pairs.extend(itertools.combinations(vals, 2))
+    if not score_pairs:
         return {"n_pairs": 0}
-    agree = sum(1 for v in pairs if len(set(v.values())) == 1)
-    n = len(pairs)
+    agree = sum(1 for a, b in score_pairs if a == b)
+    n = len(score_pairs)
     p_o = agree / n
-    # Cohen's kappa over the 3-point scale {0, 0.5, 1}
+    # Cohen's kappa over the 3-point scale {0, 0.5, 1}, pooled across
+    # whichever judge-pairs actually occurred.
     labels = (0.0, 0.5, 1.0)
-    a = [v["deepseek-judge"] for v in pairs]
-    b = [v["qwen-judge"] for v in pairs]
-    p_e = sum((a.count(x) / n) * (b.count(x) / n) for x in labels)
+    a_vals = [p[0] for p in score_pairs]
+    b_vals = [p[1] for p in score_pairs]
+    p_e = sum((a_vals.count(x) / n) * (b_vals.count(x) / n) for x in labels)
     kappa = (p_o - p_e) / (1 - p_e) if p_e < 1 else 1.0
     return {
         "n_pairs": n,

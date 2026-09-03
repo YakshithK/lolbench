@@ -118,10 +118,19 @@ judges:
     model: deepseek-v4-flash
     family: deepseek
     exclude_models: []
+    enabled: false          # provider free-tier deal ended 2026-09; can't call DeepSeek
+                             # anymore. Left in this list (not deleted) so historical
+                             # judgments it already made keep their correct family
+                             # tag for same-family exclusion checks on old data.
   - name: qwen-judge
     provider: bai
     model: qwen3.8-flash
     family: qwen
+    exclude_models: []
+  - name: glm-judge
+    provider: bai
+    model: glm-5.3-flash
+    family: zai
     exclude_models: []
 
 # Free-tier style rate limits (requests per minute); 0 = unlimited.
