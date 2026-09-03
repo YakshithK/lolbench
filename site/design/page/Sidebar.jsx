@@ -1,4 +1,5 @@
-const { Panel, Standings, ScoreCell, Bout, BallotControls, Reveal, StatusChip } = window.LOLBenchDesignSystem_ab2c27;
+const { Panel, Standings, ScoreCell, Bout, BallotControls, Reveal, StatusChip, BarList } = window.LOLBenchDesignSystem_ab2c27;
+const WRITTEN_TARGET = 40;
 
 function VotePanel({ bouts }) {
   const [i, setI] = React.useState(0);
@@ -67,6 +68,10 @@ function Sidebar({ data }) {
         />
       </Panel>
       <VotePanel bouts={data.bouts} />
+      <Panel title="Who has written their jokes" meta={`jokes written of ${WRITTEN_TARGET}`}
+        caption={`${WRITTEN_TARGET} jokes each is a full wave-0 set. Counts below are non-empty jokes actually produced, not attempts.`}>
+        <BarList target={WRITTEN_TARGET} rows={data.written} />
+      </Panel>
     </div>
   );
 }

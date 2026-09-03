@@ -25,14 +25,17 @@ function Charts({ data }) {
     ? <>Every model scored on F6 lands lowest on that column, from {f6Worst && f6Worst.label + " (" + f6Worst.v + ")"} to {f6Best && f6Best.label + " (" + f6Best.v + ")"} — none has cracked the 90s that every model reaches on the other five. Dark cells mean that model hasn't been given jokes of that kind yet.</>
     : "Mechanism data lands as families get judged.";
 
-  const writtenTarget = 40;
   const totalCount = data.scored.length + data.unrankable.length;
 
+  // "Who has written their jokes" moved to the sidebar (see Sidebar.jsx):
+  // this column was 4 panels tall against the sidebar's 2, leaving a block
+  // of empty space under the shorter column. Moving one panel across
+  // balances the two without touching the reusable Panel/BarList components.
   return (
     <div style={{ display: "grid", gap: "26px" }}>
       <Panel size="lg" title="Score against cost" meta="dots are models · the orange bar is the range · lime = best in its price tier" pad={false}
         caption={scatterCaption}>
-        <Scatter points={points} xMax={Math.max(1, ...points.map(p => p.x)) * 1.15 || 2}
+        <Scatter points={points} xMax={Math.ceil((Math.max(0.5, ...points.map(p => p.x)) * 1.15) * 2) / 2}
           rule={bestOnBoard ? { at: bestOnBoard.y, label: `best confirmed-cost score so far: ${bestOnBoard.y.toFixed(1)}` } : undefined} />
       </Panel>
       <Panel title="How much data is behind each number" meta="one square = 10 graded answers · partial square = fewer than 10"
@@ -42,10 +45,6 @@ function Charts({ data }) {
       <Panel title="Which kinds of joke they miss" meta="the dataset sorts jokes into six mechanisms, F1 to F6"
         caption={heatCaption}>
         <Heatmap columns={data.mechanisms} warnColumn="F6" rows={data.mechanismRows} />
-      </Panel>
-      <Panel title="Who has written their jokes" meta={`jokes written of ${writtenTarget}`}
-        caption={`${writtenTarget} jokes each is a full wave-0 set. Counts below are non-empty jokes actually produced, not attempts.`}>
-        <BarList target={writtenTarget} rows={data.written} />
       </Panel>
     </div>
   );
