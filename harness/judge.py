@@ -38,14 +38,27 @@ def extract_json(text):
         return None
     try:
         o = json.loads(m.group(0))
-        if "score" in o and o["score"] in (0, 0.5, 1, "0", "0.5", "1"):
-            # The judge always receives the joke text and gold elements in the
-            # prompt; a claim that they were missing is a hallucinated
-            # refusal, not a real verdict (see is_refusal). Force a retry
-            # instead of accepting it as a score.
-            if is_refusal(o.get("reason")):
-                return None
-            return o
+        if "score" not in o:
+            return None
+        try:
+            raw = float(o["score"])
+        except (TypeError, ValueError):
+            return None
+        if not (0 <= raw <= 100):
+            return None
+        # Judges are prompted on a 0-100 scale (finer than the old fixed
+        # {0, 0.5, 1} points) but stored normalized to 0-1, so every existing
+        # stat downstream (mean, bootstrap CI, thresholds) keeps working
+        # unchanged - they already operate on a 0-1 float, just a coarser one
+        # before this change.
+        o["score"] = round(raw / 100.0, 4)
+        # The judge always receives the joke text and gold elements in the
+        # prompt; a claim that they were missing is a hallucinated
+        # refusal, not a real verdict (see is_refusal). Force a retry
+        # instead of accepting it as a score.
+        if is_refusal(o.get("reason")):
+            return None
+        return o
     except Exception:
         return None
     return None

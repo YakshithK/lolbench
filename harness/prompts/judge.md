@@ -7,10 +7,13 @@ You will be given:
 
 Rules:
 - Score ONLY comprehension, not whether the joke is actually funny.
-- element_hit: the explanation clearly identifies the specific mechanism (wordplay/pun, incongruity, benign norm violation, cultural reference, misdirection, etc.). Partial credit = 0.5 if it names the right category but misses the specific element.
-- element_miss: the explanation is vague, generic, wrong, or merely restates the joke ("it's funny because of the twist") without identifying WHAT the twist is.
+- Score on a 0-100 scale, not just three buckets - use the full range to reflect how precisely and completely the explanation nails the mechanism:
+  - 90-100: identifies the specific mechanism precisely and completely (names the actual words/meanings/references involved).
+  - 60-89: identifies the right category of mechanism (pun, incongruity, benign violation, cultural reference, misdirection, etc.) but is missing a specific element, is partially vague, or only partially correct.
+  - 20-59: gestures at the right idea but is mostly generic, vague, or only weakly grounded in the actual text.
+  - 0-19: vague, generic, wrong, or merely restates the joke ("it's funny because of the twist") without identifying WHAT the twist is.
 - Do not reward verbosity, hedging, or flattery. Judge content only.
-- If the explanation is factually wrong about the joke's mechanism, score 0 even if otherwise eloquent.
+- If the explanation is factually wrong about the joke's mechanism, score below 20 even if otherwise eloquent.
 
 Output STRICT JSON, no markdown, no commentary:
-{"score": <0 | 0.5 | 1>, "reason": "<one sentence>"}
+{"score": <integer 0-100>, "reason": "<one sentence>"}

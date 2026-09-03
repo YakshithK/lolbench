@@ -152,8 +152,16 @@ def lol_a_scores():
 
 
 def judge_validity(jpath):
-    """Free judge-validity signal: agreement between the two independent judges
-    on the same (model, item, sample) rows. Exact-match rate + Cohen's kappa."""
+    """Free judge-validity signal: agreement between independent judges on the
+    same (model, item, sample) rows. Reports mean point distance (0-100 scale)
+    and Pearson correlation - NOT exact-match rate / Cohen's kappa, which are
+    built for categorical labels. Judges score continuously (0-100, stored as
+    0-1) as of harness_version 0.1.4; two independent judges essentially never
+    land on the exact same float, so exact-match agreement would collapse
+    toward 0 for reasons that have nothing to do with real disagreement -
+    a metric mismatch, not an actual validity drop. Distance/correlation are
+    the correct statistics for continuous ratings and match the language the
+    human spot-check tool already uses ("N pts off")."""
     if not jpath.exists():
         return {"n_pairs": 0}
     judge_fam, cand_fam = judge_family_map()
@@ -185,20 +193,26 @@ def judge_validity(jpath):
         score_pairs.extend(itertools.combinations(vals, 2))
     if not score_pairs:
         return {"n_pairs": 0}
-    agree = sum(1 for a, b in score_pairs if a == b)
     n = len(score_pairs)
-    p_o = agree / n
-    # Cohen's kappa over the 3-point scale {0, 0.5, 1}, pooled across
-    # whichever judge-pairs actually occurred.
-    labels = (0.0, 0.5, 1.0)
     a_vals = [p[0] for p in score_pairs]
     b_vals = [p[1] for p in score_pairs]
-    p_e = sum((a_vals.count(x) / n) * (b_vals.count(x) / n) for x in labels)
-    kappa = (p_o - p_e) / (1 - p_e) if p_e < 1 else 1.0
+    mean_abs_dist_pts = sum(abs(a - b) for a, b in score_pairs) / n * 100
+
+    mean_a, mean_b = mean(a_vals), mean(b_vals)
+    cov = sum((a - mean_a) * (b - mean_b) for a, b in score_pairs)
+    var_a = sum((a - mean_a) ** 2 for a in a_vals)
+    var_b = sum((b - mean_b) ** 2 for b in b_vals)
+    correlation = cov / ((var_a * var_b) ** 0.5) if var_a > 0 and var_b > 0 else 0.0
+
+    # Exact-match rate is still reported, but as a labeled secondary fact
+    # (meaningful mainly for old discrete-scale rows still in the pool
+    # alongside new continuous ones), never as the headline validity number.
+    exact_match = sum(1 for a, b in score_pairs if a == b) / n
     return {
         "n_pairs": n,
-        "agreement": round(p_o, 4),
-        "kappa": round(kappa, 4),
+        "mean_abs_distance_pts": round(mean_abs_dist_pts, 1),
+        "correlation": round(correlation, 4),
+        "exact_match_rate": round(exact_match, 4),
     }
 
 

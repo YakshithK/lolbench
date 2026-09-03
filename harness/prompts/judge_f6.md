@@ -13,16 +13,18 @@ A model may argue the opposite verdict (for example, that the text works as a
 deliberate anti-joke or deadpan bit) and still be correct, if the argument is
 specific and grounded in the actual text.
 
-Score the argument, not the verdict:
-- 1: A clear verdict, defended with a SPECIFIC, textually-grounded mechanism.
+Score the argument, not the verdict, on a 0-100 scale:
+- 90-100: a clear verdict, defended with a SPECIFIC, textually-grounded mechanism.
   Arguing "fails" must show there is no real comic device present (matching or
   improving on the reference notes' reasoning). Arguing "works" (e.g. anti-humor,
   deadpan) must name the SPECIFIC expectation being deliberately subverted and why
   the flat delivery itself is the device - not just assert "this is intentional"
   without grounding it in actual words from the text.
-- 0.5: A verdict with a named mechanism that is generic, hedged, or only
-  partially grounded in the text.
-- 0: No real verdict, no mechanism identified, the explanation contradicts
+- 60-89: a verdict with a named mechanism that is mostly grounded but slightly
+  generic, hedged, or missing one piece of specificity.
+- 20-59: a verdict is stated but the mechanism is vague, generic, or only
+  loosely connected to the actual text.
+- 0-19: no real verdict, no mechanism identified, the explanation contradicts
   itself, or it invents a mechanism that is not actually present in the text.
 - Do not penalize a model for disagreeing with the reference notes' verdict.
   Penalize only ungrounded, generic, or self-contradictory reasoning.
@@ -39,4 +41,4 @@ acceptable answer):
 {{gold_elements}}
 
 Output STRICT JSON, no markdown, no commentary:
-{"score": <0 | 0.5 | 1>, "reason": "<one sentence>"}
+{"score": <integer 0-100>, "reason": "<one sentence>"}

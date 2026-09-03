@@ -43,7 +43,7 @@ function SiteApp() {
           { label: "jokes in the set", value: String(data.itemsCount), note: "written and checked by hand" },
           { label: "who grades", value: "2 models", note: "from other labs, never the one being graded" },
           { label: "who decides funny", value: "you do", note: "no model ever rates a punchline" },
-          { label: "judge agreement", value: data.judgeAgreement != null ? data.judgeAgreement.toFixed(1) + "%" : "pending", note: data.judgeAgreement != null ? `κ ${data.judgeKappa} on ${data.judgePairs.toLocaleString()} double-judged pairs — not yet checked against a human` : "no dual-judged pairs yet" }
+          { label: "judge distance", value: data.judgeDistance != null ? data.judgeDistance.toFixed(1) + " pts" : "pending", note: data.judgeDistance != null ? `r=${data.judgeCorrelation} on ${data.judgePairs.toLocaleString()} double-judged pairs — not yet checked against a human` : "no dual-judged pairs yet" }
         ]} />
       </div>
       <Footer />
