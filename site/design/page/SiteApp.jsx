@@ -7,7 +7,11 @@ function SiteApp() {
   return (
     <>
       <Topbar current="scores" stamp={data.stamp}
-        nav={[{ label: "scores" }, { label: "vote" }, { label: "the jokes" }, { label: "how it works" }, { label: "github", href: "https://github.com/YakshithK/lolbench" }]} />
+        nav={[
+          { label: "scores" },
+          { label: "vote", onClick: e => { e.preventDefault(); document.getElementById("vote-panel").scrollIntoView({ behavior: "smooth" }); } },
+          { label: "github", href: "https://github.com/YakshithK/lolbench" }
+        ]} />
       <div className="wrap">
         <div className="rv" style={{ display: "grid", gridTemplateColumns: "1.25fr 1fr", gap: "56px", alignItems: "end", padding: "var(--hero-pad)", borderBottom: "var(--border)" }}>
           <div>
@@ -34,7 +38,7 @@ function SiteApp() {
           { label: "jokes in the set", value: String(data.itemsCount), note: "written and checked by hand" },
           { label: "who grades", value: "2 models", note: "from other labs, never the one being graded" },
           { label: "who decides funny", value: "you do", note: "no model ever rates a punchline" },
-          { label: "total cost", value: "$" + data.totalSpend.toFixed(2), note: data.excludedFromCost.length ? `logged; ${data.excludedFromCost.length} runs predate cost-tracking` : "every run disclosed" }
+          { label: "judge agreement", value: data.judgeAgreement != null ? data.judgeAgreement.toFixed(1) + "%" : "pending", note: data.judgeAgreement != null ? `κ ${data.judgeKappa} on ${data.judgePairs.toLocaleString()} double-judged pairs — not yet checked against a human` : "no dual-judged pairs yet" }
         ]} />
       </div>
       <Footer />

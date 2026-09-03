@@ -26,19 +26,21 @@ function VotePanel({ bouts }) {
     return () => document.removeEventListener("keydown", onKey);
   });
   return (
-    <Panel title="Which one is funnier?" meta={<StatusChip tone="ink">authors hidden</StatusChip>} pad={false}>
-      <Bout key={bout.id} a={bout.a} b={bout.b} />
-      <BallotControls onVote={cast} />
-      <Reveal open={!!ballot}>
-        {ballot ? <>
-          Ballot to {ballot}. Panel a was <b style={{ color: "var(--accent-brand)" }}>{bout.modelA}</b>, panel b was <b style={{ color: "var(--accent-brand)" }}>{bout.modelB}</b>.{" "}
-          {bout.ballots ? "Ballots on this pair to date: " + bout.ballots + "." : "Yours is the first ballot that touches these two."} Authors re-conceal for the next voter.
-        </> : null}
-      </Reveal>
-      <div style={{ borderTop: "var(--border)", padding: "var(--panel-foot-pad)", fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--ink-3)" }}>
-        {bout.id + " · premise " + bout.premise + " · " + bout.ballots + " ballots on this pair"}
-      </div>
-    </Panel>
+    <div id="vote-panel">
+      <Panel title="Which one is funnier?" meta={<StatusChip tone="ink">authors hidden</StatusChip>} pad={false}>
+        <Bout key={bout.id} a={bout.a} b={bout.b} />
+        <BallotControls onVote={cast} />
+        <Reveal open={!!ballot}>
+          {ballot ? <>
+            Ballot to {ballot}. Panel a was <b style={{ color: "var(--accent-brand)" }}>{bout.modelA}</b>, panel b was <b style={{ color: "var(--accent-brand)" }}>{bout.modelB}</b>.{" "}
+            {bout.ballots ? "Ballots on this pair to date: " + bout.ballots + "." : "Yours is the first ballot that touches these two."} Authors re-conceal for the next voter.
+          </> : null}
+        </Reveal>
+        <div style={{ borderTop: "var(--border)", padding: "var(--panel-foot-pad)", fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--ink-3)" }}>
+          {bout.id + " · premise " + bout.premise + " · " + bout.ballots + " ballots on this pair"}
+        </div>
+      </Panel>
+    </div>
   );
 }
 

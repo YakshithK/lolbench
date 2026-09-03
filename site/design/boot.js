@@ -101,11 +101,15 @@
   Object.keys(spend).forEach(function (k) { totalSpend += spend[k]; });
 
   var itemsCount = models.length ? lolA[models[0]].items : 150;
+  var jv = results.judge_validity || {};
 
   window.LOLB = {
     stamp: "v" + (results.dataset_version || "0.0.0") + " · " + models.length + " models · $" + totalSpend.toFixed(2) + " logged",
     itemsCount: itemsCount,
     totalSpend: totalSpend,
+    judgeAgreement: jv.agreement != null ? Math.round(jv.agreement * 1000) / 10 : null,
+    judgeKappa: jv.kappa != null ? Math.round(jv.kappa * 100) / 100 : null,
+    judgePairs: jv.n_pairs || 0,
     scored: rankable,
     unrankable: unrankable,
     pending: Math.max(0, 15 - models.length),
