@@ -1,0 +1,27 @@
+/* Separation is hairlines on a dark canvas. No shadows, no radii above 0. */
+:root{
+  --border:1px solid var(--rule); /* @kind other */
+  --border-axis:1px solid var(--rule-2); /* @kind other */
+  --radius:0px;
+  --radius-max:0px;
+  --shadow-none:none;
+
+  /* chart primitives */
+  --bar-h:8px;
+  --square:9px;          /* one square = 10 graded answers */
+  --square-partial:4px;  /* fewer than 10 */
+  --dot-r:5.5px;
+  --whisker-w:2px;
+  --heat-cell-h:30px;
+  --spark-h:56px;
+
+  /* the mark */
+  --mark-w:26px;
+  --mark-h:17px;
+  --mark-stroke:8;
+
+  --focus-outline:2px solid var(--accent-brand); /* @kind other */
+  --focus-offset:2px;
+  --motion-state:.12s; /* @kind other */
+  --motion-reveal:.5s cubic-bezier(.2,.7,.2,1); /* @kind other */
+}

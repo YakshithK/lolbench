@@ -1,0 +1,14 @@
+/* The canvas is engraved, not flat: a 56px grid at one step above black. */
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark}
+body{background:var(--canvas);background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:var(--grid-cell) var(--grid-cell);color:var(--ink);font-family:var(--body);font-size:var(--body-size);line-height:var(--body-leading);-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}
+a:hover{color:var(--ink)}
+:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-offset)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:var(--wrap-max);margin:0 auto;padding:0 var(--wrap-pad)}
+@media (prefers-reduced-motion: no-preference){
+  .rv{opacity:0;transform:translateY(6px);animation:rise var(--motion-reveal) forwards}
+  .rv:nth-child(2){animation-delay:.05s}.rv:nth-child(3){animation-delay:.1s}.rv:nth-child(4){animation-delay:.15s}
+  @keyframes rise{to{opacity:1;transform:none}}
+}

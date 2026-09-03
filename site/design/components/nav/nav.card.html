@@ -1,0 +1,26 @@
+<!-- @dsCard group="Components" viewport="700x340" name="Tracks and views" subtitle="Track panels, view switcher" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{padding:18px 20px;background:var(--canvas)}</style><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script><script src="../../_ds_bundle.js"></script></head><body><div id="root"></div><script type="text/babel">
+const {TrackPanel,Tabs,Sparkline}=window.LOLBenchDesignSystem_ab2c27;
+function Demo(){
+ const [v,setV]=React.useState("plot");
+ return <>
+  <div style={{display:"flex",justifyContent:"flex-end",marginBottom:16}}>
+   <Tabs value={v} onChange={setV} tabs={[{id:"plot",label:"plot"},{id:"table",label:"table"},{id:"vote",label:"vote"}]}/>
+  </div>
+  <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:1,background:"var(--rule)",border:"var(--border)"}}>
+   <TrackPanel index="01" status="10 of 15 scored" question="Does it get the joke?"
+    method="It explains why a joke works. We check that against notes a human wrote."
+    chart={<Sparkline pending={5} bars={[{label:"a",value:100,thin:true},{label:"b",value:95.8,leader:true},{label:"c",value:94.7},{label:"d",value:92.5},{label:"e",value:88.7},{label:"f",value:87.5},{label:"g",value:85.7},{label:"h",value:75,thin:true},{label:"i",value:74.2}]}/>}
+    caption="orange = too thin to trust · dark = still being judged"/>
+   <TrackPanel index="02" status="you are the judge" statusTone="ink" question="Can it land one?"
+    method="Two models write on the same setup. Humans pick the funnier line, blind."
+    chart={<Sparkline min={0} max={348} bars={[{label:"a",value:348},{label:"b",value:348},{label:"c",value:340},{label:"d",value:192},{label:"e",value:85},{label:"f",value:19,thin:true}]}/>}
+    caption="jokes written per model · 348 is a full set"/>
+   <TrackPanel index="03" status="next data drop" statusTone="quiet" question="Does it laugh with us?"
+    method="It ranks 1,500 jokes best to worst. We compare its ranking to ours."
+    caption="cheapest skill to test · no benchmark covers it"/>
+  </div>
+ </>;
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script></body></html>

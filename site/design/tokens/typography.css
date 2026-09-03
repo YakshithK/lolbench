@@ -1,0 +1,46 @@
+/* Five roles, no more: display, panel title, body, joke, data. */
+:root{
+  --display:'Bricolage Grotesque',sans-serif; /* @kind font */
+  --mono:'Azeret Mono',ui-monospace,monospace; /* @kind font */
+  --body:'Sora',sans-serif; /* @kind font */
+
+  --font-display:var(--display);
+  --font-numeric:var(--mono);
+  --font-ui:var(--body);
+
+  /* base */
+  --body-size:15px;
+  --body-leading:1.55;
+
+  /* display, fluid across the three breakpoints */
+  --h1-size:clamp(2.75rem,7vw,5.875rem);
+  --h1-weight:800; /* @kind other */
+  --h1-tracking:-.035em;
+  --h1-leading:.9;
+
+  --h2-size:1.375rem;   /* section heading */
+  --h3-size:1.5rem;     /* track panel title */
+  --h4-size:1.0625rem;  /* panel title */
+
+  /* body + jokes */
+  --sub-size:1.375rem;
+  --lede-weight:200; /* @kind other */
+  --joke-size:1.0625rem;
+  --joke-leading:1.45;
+
+  /* data + labels, all mono */
+  --data-size:.8125rem;
+  --data-lg-size:1.5rem;
+  --label-size:.625rem;
+  --label-tracking:.14em;
+  --kicker-tracking:.24em;
+  --caption-size:.6875rem;   /* 11px, the floor */
+  --stamp-size:.6875rem;
+
+  --wt-light:300; /* @kind other */
+  --wt-regular:400; /* @kind other */
+  --wt-medium:500; /* @kind other */
+  --wt-semibold:600; /* @kind other */
+  --wt-bold:700; /* @kind other */
+  --wt-heavy:800; /* @kind other */
+}

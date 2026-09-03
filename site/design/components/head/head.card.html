@@ -1,0 +1,18 @@
+<!-- @dsCard group="Components" viewport="700x420" name="Header" subtitle="Kicker, headline, lede, status chips, stat band" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{padding:18px 20px;background:var(--canvas)}</style><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script><script src="../../_ds_bundle.js"></script></head><body><div id="root"></div><script type="text/babel">
+const {Kicker,Headline,Lede,StatusChip,StatBand}=window.LOLBenchDesignSystem_ab2c27;
+ReactDOM.createRoot(document.getElementById("root")).render(<>
+ <Kicker>wave 00 / open results</Kicker>
+ <Headline size="46px">Fifteen models walk into a bar.</Headline>
+ <Lede measure="46ch">Ten of them explained the bar. We are measuring which ones can also be funny.</Lede>
+ <div style={{display:"flex",gap:20,marginTop:20,flexWrap:"wrap"}}>
+  <StatusChip>10 of 15 scored</StatusChip><StatusChip tone="ink">you are the judge</StatusChip>
+  <StatusChip tone="quiet">next data drop</StatusChip><StatusChip tone="warn">too thin to trust</StatusChip>
+ </div>
+ <StatBand stats={[
+  {label:"jokes in the set",value:"150",note:"written and checked by hand"},
+  {label:"who grades",value:"2 models",note:"never the one being graded"},
+  {label:"who decides funny",value:"you do",note:"no model rates a punchline"},
+  {label:"total cost",value:"$6.37",note:"every run disclosed"}]}/>
+</>);
+</script></body></html>

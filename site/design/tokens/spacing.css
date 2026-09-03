@@ -1,0 +1,40 @@
+/* Layout is a 1300px wrap on a 56px engraved grid. */
+:root{
+  --wrap-max:1300px;
+  --wrap-pad:34px;
+  --grid-cell:56px;
+
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:10px;
+  --space-4:12px;
+  --space-5:14px;
+  --space-6:16px;
+  --space-7:18px;
+  --space-8:20px;
+  --space-9:26px;
+  --space-10:30px;
+  --space-11:34px;
+  --space-12:52px;
+  --space-13:58px;
+
+  --topbar-h:56px;
+  --hero-pad:58px 0 36px; /* @kind spacing */
+  --panel-head-pad:15px 18px; /* @kind spacing */
+  --panel-body-pad:18px; /* @kind spacing */
+  --panel-foot-pad:12px 18px; /* @kind spacing */
+  --cell-pad:11px 18px; /* @kind spacing */
+  --track-pad:20px; /* @kind spacing */
+  --band-pad:18px 20px; /* @kind spacing */
+
+  --gap-panel:26px;
+  --gap-hairline:1px;
+  --main-cols:1.55fr 1fr; /* @kind other */
+  --track-cols:repeat(3,1fr); /* @kind other */
+
+  /* breakpoints: 1080 and 680 only */
+  --bp-stack:1080px;
+  --bp-narrow:680px;
+
+  --hit-min:44px;
+}

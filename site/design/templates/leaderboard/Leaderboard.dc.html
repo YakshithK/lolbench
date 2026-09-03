@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Leaderboard page" description="The full lolbench.lol instrument: setup/punchline hero, the three skills as three chart panels, score-against-cost scatter, sample-size matrix, per-mechanism heatmap, standings, the vote booth and the method band." -->
+<helmet><link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 44"><path d="M10 12 Q36 40 62 12" fill="none" stroke="%23d4ff4f" stroke-width="8"/><line x1="10" y1="1" x2="10" y2="14" stroke="%23d4ff4f" stroke-width="8"/><line x1="62" y1="1" x2="62" y2="14" stroke="%23d4ff4f" stroke-width="8"/></svg>'><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;400;500;600;700&family=Sora:wght@200;300;400;600&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{background:#07080a}@media(max-width:1080px){#b3tracks,#b3grid,#b3hero,#b3votegrid{grid-template-columns:1fr!important}#b3title{font-size:66px!important}#b3heat{overflow-x:auto}}@media(max-width:680px){#b3title{font-size:44px!important}}</style></helmet>
+<div style="background:#07080a;background-image:linear-gradient(#0f1216 1px,transparent 1px),linear-gradient(90deg,#0f1216 1px,transparent 1px);background-size:56px 56px;color:#eceae5;font-family:'Sora',sans-serif;font-size:15px;line-height:1.55;padding:0 0 90px;min-height:100vh">
+
+<div style="border-bottom:1px solid #191d22;background:#07080a">
+<div style="max-width:1300px;margin:0 auto;padding:0 34px;height:56px;display:flex;align-items:center;gap:32px">
+<span style="display:inline-flex;align-items:center;gap:9px"><svg width="26" height="17" viewBox="0 0 72 44" aria-label="LOL Bench"><path d="M10 12 Q36 40 62 12" fill="none" stroke="#d4ff4f" stroke-width="8"/><line x1="10" y1="1" x2="10" y2="14" stroke="#d4ff4f" stroke-width="8"/><line x1="62" y1="1" x2="62" y2="14" stroke="#d4ff4f" stroke-width="8"/></svg><span style="font-family:'Azeret Mono',monospace;font-weight:700;font-size:14px;letter-spacing:-.02em">LOL BENCH</span></span>
+<nav style="display:flex;gap:24px;font-family:'Azeret Mono',monospace;font-size:12px">
+<a href="#" style="color:#eceae5;text-decoration:none;border-bottom:1px solid #d4ff4f;padding-bottom:3px">scores</a>
+<a href="#" style="color:#79808a;text-decoration:none">vote</a>
+<a href="#" style="color:#79808a;text-decoration:none">the jokes</a>
+<a href="#" style="color:#79808a;text-decoration:none">how it works</a>
+<a href="#" style="color:#79808a;text-decoration:none">github</a>
+</nav>
+<span style="margin-left:auto;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">v0.1.0 · 15 models · $6.37 spent</span>
+</div>
+</div>
+
+<div style="max-width:1300px;margin:0 auto;padding:0 34px">
+
+<div id="b3hero" style="display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:end;padding:58px 0 36px;border-bottom:1px solid #191d22">
+<div>
+<div style="font-family:'Azeret Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#d4ff4f">wave 00 / open results</div>
+<h1 id="b3title" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:94px;line-height:.9;letter-spacing:-.035em;margin-top:20px">FIFTEEN<br>MODELS WALK<br>INTO A BAR.</h1>
+<p style="margin-top:22px;font-size:22px;font-weight:200;color:#a2a8b0;max-width:40ch">Ten of them explained the bar. We are measuring which ones can also be funny.</p>
+</div>
+<div style="border:1px solid #191d22;background:rgba(12,14,17,.92)">
+<div style="padding:13px 16px;border-bottom:1px solid #191d22;font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a9299">best line written so far, author concealed until you vote</div>
+<p style="padding:18px 16px;font-size:18px;font-weight:200;font-style:italic;color:#d6d4cf;line-height:1.45">“That standing desk has never been lowered; it’s like our open door policy that somehow never applies to raises.”</p>
+<div style="border-top:1px solid #191d22;padding:11px 16px;display:flex;justify-content:space-between;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299"><span>bout 0147 · 214 ballots on this pair</span><a href="#" style="color:#d4ff4f;text-decoration:none">vote on this pair →</a></div>
+</div>
+</div>
+
+<div id="b3tracks" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#191d22;border:1px solid #191d22;margin-top:30px">
+<div style="background:#0b0d10;padding:20px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#d4ff4f">skill 01</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#d4ff4f">10 of 15 scored</span></div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.025em;margin-top:10px">Does it get the joke?</div>
+<p style="font-size:14px;font-weight:200;color:#79808a;margin-top:6px">It explains why a joke works. We check that against notes a human wrote.</p>
+<svg viewBox="0 0 360 56" style="display:block;width:100%;margin-top:14px"><line x1="0" y1="46" x2="360" y2="46" stroke="#262c33"/><rect x="0" y="10" width="20" height="36" fill="#ff5c3a"/><rect x="24" y="15" width="20" height="31" fill="#d4ff4f"/><rect x="48" y="15.4" width="20" height="30.6" fill="#d4ff4f"/><rect x="72" y="16.4" width="20" height="29.6" fill="#a2a8b0"/><rect x="96" y="19" width="20" height="27" fill="#a2a8b0"/><rect x="120" y="23.6" width="20" height="22.4" fill="#a2a8b0"/><rect x="144" y="25" width="20" height="21" fill="#a2a8b0"/><rect x="168" y="27.2" width="20" height="18.8" fill="#a2a8b0"/><rect x="192" y="40" width="20" height="6" fill="#ff5c3a"/><rect x="216" y="41" width="20" height="5" fill="#a2a8b0"/><rect x="240" y="42" width="20" height="4" fill="#262c33"/><rect x="264" y="42" width="20" height="4" fill="#262c33"/><rect x="288" y="42" width="20" height="4" fill="#262c33"/><rect x="312" y="42" width="20" height="4" fill="#262c33"/><rect x="336" y="42" width="20" height="4" fill="#262c33"/></svg>
+<div style="font-family:'Azeret Mono',monospace;font-size:10px;color:#8a9299;margin-top:8px">one bar per model, best first · lime = best in its price tier · orange = too thin to trust · dark = still being judged</div>
+</div>
+<div style="background:#0b0d10;padding:20px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#d4ff4f">skill 02</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#eceae5">you are the judge</span></div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.025em;margin-top:10px">Can it land one?</div>
+<p style="font-size:14px;font-weight:200;color:#79808a;margin-top:6px">Two models write on the same setup. Humans pick the funnier line, blind.</p>
+<svg viewBox="0 0 360 56" style="display:block;width:100%;margin-top:14px"><line x1="0" y1="46" x2="360" y2="46" stroke="#262c33"/><rect x="0" y="10" width="26" height="36" fill="#a2a8b0"/><rect x="30" y="10" width="26" height="36" fill="#a2a8b0"/><rect x="60" y="10" width="26" height="36" fill="#a2a8b0"/><rect x="90" y="10" width="26" height="36" fill="#a2a8b0"/><rect x="120" y="10" width="26" height="36" fill="#a2a8b0"/><rect x="150" y="10" width="26" height="36" fill="#a2a8b0"/><rect x="180" y="10.8" width="26" height="35.2" fill="#79808a"/><rect x="210" y="10.8" width="26" height="35.2" fill="#79808a"/><rect x="240" y="11.4" width="26" height="34.6" fill="#79808a"/><rect x="270" y="26.1" width="26" height="19.9" fill="#79808a"/><rect x="300" y="37.2" width="26" height="8.8" fill="#79808a"/><rect x="330" y="44" width="26" height="2" fill="#ff5c3a"/></svg>
+<div style="font-family:'Azeret Mono',monospace;font-size:10px;color:#8a9299;margin-top:8px">jokes written per model · 348 is a full set · 1,699 pairs formed</div>
+</div>
+<div style="background:#0b0d10;padding:20px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#d4ff4f">skill 03</span><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#8a9299">next data drop</span></div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.025em;margin-top:10px">Does it laugh with us?</div>
+<p style="font-size:14px;font-weight:200;color:#79808a;margin-top:6px">It ranks 1,500 jokes best to worst. We compare its ranking to ours.</p>
+<svg viewBox="0 0 360 56" style="display:block;width:100%;margin-top:14px"><line x1="0" y1="46" x2="360" y2="46" stroke="#262c33"/><line x1="0" y1="8" x2="360" y2="8" stroke="#191d22" stroke-dasharray="3 6"/><line x1="0" y1="27" x2="360" y2="27" stroke="#191d22" stroke-dasharray="3 6"/><text x="180" y="32" text-anchor="middle" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="11">no data yet</text></svg>
+<div style="font-family:'Azeret Mono',monospace;font-size:10px;color:#8a9299;margin-top:8px">cheapest skill to test · no benchmark covers it</div>
+</div>
+</div>
+
+<div id="b3grid" style="display:grid;grid-template-columns:1.55fr 1fr;gap:26px;padding:30px 0 0">
+
+<div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+<h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.025em">Score against cost</h2>
+<span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">lime = best in its price tier</span>
+</div>
+<div style="border:1px solid #191d22;background:rgba(12,14,17,.92)">
+<svg viewBox="0 0 800 440" style="display:block;width:100%;height:auto">
+<line x1="56" y1="40" x2="56" y2="380" stroke="#262c33"/><line x1="56" y1="380" x2="784" y2="380" stroke="#262c33"/>
+<line x1="56" y1="380" x2="784" y2="380" stroke="#14181c"/><text x="46" y="384" text-anchor="end" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="10">20</text><line x1="56" y1="271.3" x2="784" y2="271.3" stroke="#14181c"/><text x="46" y="275.3" text-anchor="end" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="10">47</text><line x1="56" y1="166.7" x2="784" y2="166.7" stroke="#14181c"/><text x="46" y="170.7" text-anchor="end" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="10">73</text><line x1="56" y1="58" x2="784" y2="58" stroke="#14181c"/><text x="46" y="62" text-anchor="end" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="10">100</text>
+<line x1="107" y1="40" x2="107" y2="380" stroke="#262c33" stroke-dasharray="2 5"/><text x="115" y="376" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="10">paid →</text>
+<text x="56" y="402" text-anchor="middle" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="10">free</text>
+<text x="784" y="402" text-anchor="end" fill="#8a9299" font-family="Azeret Mono, monospace" font-size="10">$2.00</text>
+<text x="56" y="426" fill="#79808a" font-family="Azeret Mono, monospace" font-size="10">what it cost to run the whole set →</text>
+<line x1="270" y1="74.8" x2="430" y2="74.8" stroke="#d4ff4f" stroke-dasharray="3 6" opacity=".5"/><text x="270" y="32" fill="#d4ff4f" font-family="Azeret Mono, monospace" font-size="10">best score so far: 95.8, and it costs nothing</text>
+<line x1="56" y1="58" x2="56" y2="108.3" stroke="#ff5c3a" stroke-width="2"/><circle cx="56" cy="74.8" r="5.5" fill="#d4ff4f"><title>muse-spark-1.2 · 95.8 · range 87.5 to 100.0 · free</title></circle><line x1="762.2" y1="58" x2="762.2" y2="100.7" stroke="#ff5c3a" stroke-width="2"/><circle cx="762.2" cy="76.3" r="5.5" fill="#d4ff4f"><title>gemini-3.1-pro · 95.5 · range 89.4 to 100.0 · $1.94</title></circle><line x1="56" y1="58" x2="56" y2="121.6" stroke="#ff5c3a" stroke-width="2"/><circle cx="56" cy="79.2" r="5.5" fill="#8f959d"><title>glm-5.3-flash · 94.7 · range 84.2 to 100.0 · free</title></circle><line x1="194.3" y1="76.8" x2="194.3" y2="99.5" stroke="#ff5c3a" stroke-width="2"/><circle cx="194.3" cy="88.1" r="5.5" fill="#eceae5"><title>grok-4.6 · 92.5 · range 89.7 to 95.3 · $0.38</title></circle><line x1="485.5" y1="79.6" x2="485.5" y2="129.9" stroke="#ff5c3a" stroke-width="2"/><circle cx="485.5" cy="103.5" r="5.5" fill="#eceae5"><title>claude-opus-5 · 88.7 · range 82.1 to 94.6 · $1.18</title></circle><line x1="56" y1="58" x2="56" y2="208.9" stroke="#ff5c3a" stroke-width="2"/><circle cx="56" cy="108.3" r="5.5" fill="#8f959d"><title>hy3 · 87.5 · range 62.5 to 100.0 · free</title></circle><line x1="645.7" y1="58" x2="645.7" y2="192.2" stroke="#ff5c3a" stroke-width="2"/><circle cx="645.7" cy="115.5" r="5.5" fill="#eceae5"><title>hy4-preview · 85.7 · range 66.7 to 100.0 · $1.62</title></circle><line x1="514.6" y1="58" x2="514.6" y2="359.9" stroke="#ff5c3a" stroke-width="2" opacity=".55"/><circle cx="514.6" cy="158.6" r="5.5" fill="#eceae5"><title>gpt-5.6-sol-pro · 75.0 · range 25.0 to 100.0 · $1.26</title></circle><line x1="56" y1="116.4" x2="56" y2="207.3" stroke="#ff5c3a" stroke-width="2"/><circle cx="56" cy="161.9" r="5.5" fill="#8f959d"><title>deepseek-v4-flash · 74.2 · range 62.9 to 85.5 · free</title></circle>
+</svg>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px 20px;padding:16px 18px 4px">
+<div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#d4ff4f;flex:none;transform:translateY(-1px)"></span><span style="color:#d4ff4f">muse-spark-1.2</span><span style="color:#eceae5;margin-left:auto">95.8</span><span style="color:#ff5c3a">±6.3</span><span style="color:#8a9299;min-width:42px;text-align:right">free</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#d4ff4f;flex:none;transform:translateY(-1px)"></span><span style="color:#d4ff4f">gemini-3.1-pro</span><span style="color:#eceae5;margin-left:auto">95.5</span><span style="color:#ff5c3a">±5.3</span><span style="color:#8a9299;min-width:42px;text-align:right">$1.94</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#8f959d;flex:none;transform:translateY(-1px)"></span><span style="color:#a2a8b0">glm-5.3-flash</span><span style="color:#eceae5;margin-left:auto">94.7</span><span style="color:#ff5c3a">±7.9</span><span style="color:#8a9299;min-width:42px;text-align:right">free</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#eceae5;flex:none;transform:translateY(-1px)"></span><span style="color:#a2a8b0">grok-4.6</span><span style="color:#eceae5;margin-left:auto">92.5</span><span style="color:#ff5c3a">±2.8</span><span style="color:#8a9299;min-width:42px;text-align:right">$0.38</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#eceae5;flex:none;transform:translateY(-1px)"></span><span style="color:#a2a8b0">claude-opus-5</span><span style="color:#eceae5;margin-left:auto">88.7</span><span style="color:#ff5c3a">±6.3</span><span style="color:#8a9299;min-width:42px;text-align:right">$1.18</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#8f959d;flex:none;transform:translateY(-1px)"></span><span style="color:#a2a8b0">hy3</span><span style="color:#eceae5;margin-left:auto">87.5</span><span style="color:#ff5c3a">±18.8</span><span style="color:#8a9299;min-width:42px;text-align:right">free</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#eceae5;flex:none;transform:translateY(-1px)"></span><span style="color:#a2a8b0">hy4-preview</span><span style="color:#eceae5;margin-left:auto">85.7</span><span style="color:#ff5c3a">±16.7</span><span style="color:#8a9299;min-width:42px;text-align:right">$1.62</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#eceae5;flex:none;transform:translateY(-1px)"></span><span style="color:#a2a8b0">gpt-5.6-sol-pro</span><span style="color:#eceae5;margin-left:auto">75.0</span><span style="color:#ff5c3a">±37.5</span><span style="color:#8a9299;min-width:42px;text-align:right">$1.26</span></div><div style="display:flex;align-items:baseline;gap:8px;font-family:'Azeret Mono',monospace;font-size:11px"><span style="width:9px;height:9px;border-radius:50%;background:#8f959d;flex:none;transform:translateY(-1px)"></span><span style="color:#a2a8b0">deepseek-v4-flash</span><span style="color:#eceae5;margin-left:auto">74.2</span><span style="color:#ff5c3a">±11.3</span><span style="color:#8a9299;min-width:42px;text-align:right">free</span></div>
+</div>
+<div style="border-top:1px solid #191d22;padding:12px 18px;display:flex;gap:22px;row-gap:8px;flex-wrap:wrap;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">
+<span style="color:#d4ff4f">● best in its tier</span><span style="color:#eceae5">● paid</span><span style="color:#8f959d">● free</span><span style="color:#ff5c3a">▏ range it could really be in</span><span style="margin-left:auto">paying more has not bought a better sense of humor yet · grok has the most data of anyone, 267 answers for $0.38</span>
+</div>
+</div>
+
+<div style="border:1px solid #191d22;background:rgba(12,14,17,.92);margin-top:26px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:15px 18px;border-bottom:1px solid #191d22">
+<h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px">How much data is behind each number</h2>
+<span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">one square = 10 graded answers · partial square = fewer than 10</span>
+</div>
+<div style="padding:16px 18px;display:grid;gap:13px">
+<div style="display:grid;grid-template-columns:150px 1fr 46px;gap:14px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:12px">grok-4.6</span><div style="display:flex;flex-wrap:wrap;gap:2px"><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:7px;height:9px;background:#8f959d;display:block"></span></div><span style="font-family:'Azeret Mono',monospace;font-size:12px;color:#eceae5;text-align:right">267</span></div>
+<div style="display:grid;grid-template-columns:150px 1fr 46px;gap:14px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:12px">claude-opus-5</span><div style="display:flex;flex-wrap:wrap;gap:2px"><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:4px;height:9px;background:#8f959d;display:block"></span></div><span style="font-family:'Azeret Mono',monospace;font-size:12px;color:#a2a8b0;text-align:right">84</span></div>
+<div style="display:grid;grid-template-columns:150px 1fr 46px;gap:14px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:12px">gemini-3.1-pro</span><div style="display:flex;flex-wrap:wrap;gap:2px"><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:3px;height:9px;background:#8f959d;display:block"></span></div><span style="font-family:'Azeret Mono',monospace;font-size:12px;color:#a2a8b0;text-align:right">33</span></div>
+<div style="display:grid;grid-template-columns:150px 1fr 46px;gap:14px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:12px">muse-spark-1.2</span><div style="display:flex;flex-wrap:wrap;gap:2px"><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:9px;height:9px;background:#8f959d;display:block"></span><span style="width:4px;height:9px;background:#8f959d;display:block"></span></div><span style="font-family:'Azeret Mono',monospace;font-size:12px;color:#a2a8b0;text-align:right">24</span></div>
+<div style="display:grid;grid-template-columns:150px 1fr 46px;gap:14px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:12px">gpt-5.6-sol-pro</span><div style="display:flex;flex-wrap:wrap;gap:2px"><span style="width:4px;height:9px;background:#ff5c3a;display:block"></span></div><span style="font-family:'Azeret Mono',monospace;font-size:12px;color:#ff5c3a;text-align:right">4</span></div>
+<div style="display:grid;grid-template-columns:150px 1fr 46px;gap:14px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:12px">qwen3.8-flash</span><div style="display:flex;flex-wrap:wrap;gap:2px"><span style="width:3px;height:9px;background:#ff5c3a;display:block"></span></div><span style="font-family:'Azeret Mono',monospace;font-size:12px;color:#ff5c3a;text-align:right">3</span></div>
+</div>
+<div style="border-top:1px solid #191d22;padding:12px 18px;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299;line-height:1.7">Grok's 92.5 rests on 267 graded answers. gpt-5.6-sol-pro's 75.0 rests on four, and qwen3.8-flash's perfect 100 rests on three, which is why neither number can be trusted yet. Orange means the sample is too thin.</div>
+</div>
+<div style="border:1px solid #191d22;background:rgba(12,14,17,.92);margin-top:26px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:15px 18px;border-bottom:1px solid #191d22">
+<h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px">Which kinds of joke they miss</h2>
+<span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">the dataset sorts jokes into six mechanisms, F1 to F6</span>
+</div>
+<div id="b3heat" style="padding:16px 18px">
+<div style="display:grid;grid-template-columns:150px repeat(6,1fr);gap:4px;min-width:520px">
+<span></span>
+<span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#79808a;text-align:center">F1</span>
+<span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#79808a;text-align:center">F2</span>
+<span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#79808a;text-align:center">F3</span>
+<span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#79808a;text-align:center">F4</span>
+<span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#79808a;text-align:center">F5</span>
+<span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#ff5c3a;text-align:center">F6</span>
+
+<span style="font-family:'Azeret Mono',monospace;font-size:12px;align-self:center">grok-4.6</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#c2ef43;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">98</span>
+<span style="background:#cbf648;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">99</span>
+<span style="background:#5c6b2a;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#eceae5">62</span>
+
+<span style="font-family:'Azeret Mono',monospace;font-size:12px;align-self:center">claude-opus-5</span>
+<span style="background:#14181c;height:30px"></span><span style="background:#14181c;height:30px"></span><span style="background:#14181c;height:30px"></span><span style="background:#14181c;height:30px"></span>
+<span style="background:#c8f245;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">98</span>
+<span style="background:#8ca336;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">79</span>
+
+<span style="font-family:'Azeret Mono',monospace;font-size:12px;align-self:center">gemini-3.1-pro</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#14181c;height:30px"></span><span style="background:#14181c;height:30px"></span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#14181c;height:30px"></span>
+<span style="background:#3a4020;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#eceae5">25</span>
+
+<span style="font-family:'Azeret Mono',monospace;font-size:12px;align-self:center">deepseek-v4-flash</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#14181c;height:30px"></span>
+<span style="background:#4e5a24;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#eceae5">67</span>
+
+<span style="font-family:'Azeret Mono',monospace;font-size:12px;align-self:center">glm-5.3-flash</span>
+<span style="background:#b6e13f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">92</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#14181c;height:30px"></span><span style="background:#14181c;height:30px"></span><span style="background:#14181c;height:30px"></span>
+
+<span style="font-family:'Azeret Mono',monospace;font-size:12px;align-self:center">hy3</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#d4ff4f;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">100</span>
+<span style="background:#14181c;height:30px"></span><span style="background:#14181c;height:30px"></span>
+<span style="background:#ff5c3a;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Azeret Mono',monospace;font-size:11px;color:#07080a">0</span>
+</div>
+</div>
+<div style="border-top:1px solid #191d22;padding:12px 18px;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299;line-height:1.7">Everyone is near perfect on five of the six mechanisms and falls apart on <span style="color:#ff5c3a">F6</span>: grok drops to 62, claude to 79, gemini to 25, hy3 to zero. Dark cells mean that model has not been given jokes of that kind yet.</div>
+</div>
+</div>
+
+<div style="display:grid;gap:26px;align-content:start">
+
+<div style="border:1px solid #191d22;background:rgba(12,14,17,.92)">
+<div style="padding:15px 18px;border-bottom:1px solid #191d22;display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px">Standings</h2><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#8a9299">lime = best in its price tier</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:10px 18px;font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#8a9299;border-bottom:1px solid #191d22"><span>#</span><span>model</span><span style="text-align:right">score</span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#d4ff4f">01</span><span>muse-spark-1.2</span><span style="text-align:right">95.8 <span style="color:#ff5c3a;font-size:11px">±6.3</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#d4ff4f">02</span><span>gemini-3.1-pro</span><span style="text-align:right">95.5 <span style="color:#ff5c3a;font-size:11px">±5.3</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#8a9299">03</span><span>glm-5.3-flash</span><span style="text-align:right">94.7 <span style="color:#ff5c3a;font-size:11px">±7.9</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#8a9299">04</span><span>grok-4.6</span><span style="text-align:right">92.5 <span style="color:#ff5c3a;font-size:11px">±2.8</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#8a9299">05</span><span>claude-opus-5</span><span style="text-align:right">88.7 <span style="color:#ff5c3a;font-size:11px">±6.3</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#8a9299">06</span><span>hy3</span><span style="text-align:right">87.5 <span style="color:#ff5c3a;font-size:11px">±18.8</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#8a9299">07</span><span>hy4-preview</span><span style="text-align:right">85.7 <span style="color:#ff5c3a;font-size:11px">±16.7</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-bottom:1px solid #12151a"><span style="color:#8a9299">08</span><span>gpt-5.6-sol-pro</span><span style="text-align:right">75.0 <span style="color:#ff5c3a;font-size:11px">±37.5</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px"><span style="color:#8a9299">09</span><span>deepseek-v4-flash</span><span style="text-align:right">74.2 <span style="color:#ff5c3a;font-size:11px">±11.3</span></span></div>
+<div style="display:grid;grid-template-columns:22px 1fr 96px;gap:10px;padding:11px 18px;font-family:'Azeret Mono',monospace;font-size:13px;border-top:1px solid #191d22;color:#8a9299"><span style="color:#ff5c3a">—</span><span>qwen3.8-flash</span><span style="text-align:right">100.0 <span style="color:#ff5c3a;font-size:11px">on 3</span></span></div><div style="border-top:1px solid #191d22;padding:12px 18px;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">qwen3.8-flash scored 100.0 on three answers: too thin to rank, so it sits outside the table. Five more models are still being judged.</div>
+</div>
+
+<div style="border:1px solid #191d22;background:rgba(12,14,17,.92)">
+<div style="padding:15px 18px;border-bottom:1px solid #191d22;display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px">Which one is funnier?</h2><span style="font-family:'Azeret Mono',monospace;font-size:10px;color:#d4ff4f">authors hidden</span></div>
+<div style="padding:18px">
+<div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a9299">a</div>
+<p style="font-size:16px;font-weight:200;font-style:italic;color:#d6d4cf;margin-top:6px;line-height:1.45">“The all-hands slide said we are a family, which explains the inheritance dispute over the good conference room.”</p>
+<div style="height:1px;background:#191d22;margin:16px 0"></div>
+<div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a9299">b</div>
+<p style="font-size:16px;font-weight:200;font-style:italic;color:#d6d4cf;margin-top:6px;line-height:1.45">“They called it a family meeting, then scheduled it for 7pm, which is the most family thing about it.”</p>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #191d22">
+<button style="background:none;border:0;border-right:1px solid #191d22;color:#eceae5;font-family:'Azeret Mono',monospace;font-size:13px;padding:15px 6px;cursor:pointer">a</button>
+<button style="background:none;border:0;border-right:1px solid #191d22;color:#eceae5;font-family:'Azeret Mono',monospace;font-size:13px;padding:15px 6px;cursor:pointer">b</button>
+<button style="background:none;border:0;color:#79808a;font-family:'Azeret Mono',monospace;font-size:13px;padding:15px 6px;cursor:pointer">neither</button>
+</div>
+</div>
+
+<div style="border:1px solid #191d22;background:rgba(12,14,17,.92)">
+<div style="padding:15px 18px;border-bottom:1px solid #191d22;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px">Who has written their jokes</div>
+<div style="padding:16px 18px;display:grid;gap:11px">
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">glm-5.3-flash</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:100%;background:#a2a8b0"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">348</span></div>
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">qwen3.8-max</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:100%;background:#a2a8b0"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">348</span></div>
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">mimo-v2.5-pro</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:100%;background:#a2a8b0"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">348</span></div>
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">glm-5.3</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:97.7%;background:#a2a8b0"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">340</span></div>
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">gpt-5.6-sol-pro</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:96%;background:#a2a8b0"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">334</span></div>
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">deepseek-v4-flash</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:55.2%;background:#79808a"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">192</span></div>
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">hy4-preview</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:24.4%;background:#79808a"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">85</span></div>
+<div style="display:grid;grid-template-columns:136px 1fr 34px;gap:10px;align-items:center"><span style="font-family:'Azeret Mono',monospace;font-size:11px">grok-4.6</span><div style="height:8px;background:#14181c"><i style="display:block;height:100%;width:5.5%;background:#ff5c3a"></i></div><span style="font-family:'Azeret Mono',monospace;font-size:11px;color:#a2a8b0;text-align:right">19</span></div>
+</div>
+<div style="border-top:1px solid #191d22;padding:12px 18px;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">348 jokes each is a full set. Grok understands jokes better than almost anyone and has written 19.</div>
+</div>
+
+
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#191d22;border:1px solid #191d22;margin-top:26px">
+<div style="background:#0b0d10;padding:18px 20px"><div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a9299">jokes in the set</div><div style="font-family:'Azeret Mono',monospace;font-size:24px;font-weight:600;margin-top:5px">150</div><p style="font-size:14px;font-weight:200;color:#79808a;margin-top:4px">written and checked by hand, three passes each</p></div>
+<div style="background:#0b0d10;padding:18px 20px"><div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a9299">who grades</div><div style="font-family:'Azeret Mono',monospace;font-size:24px;font-weight:600;margin-top:5px">2 models</div><p style="font-size:14px;font-weight:200;color:#79808a;margin-top:4px">from other labs, never the one being graded</p></div>
+<div style="background:#0b0d10;padding:18px 20px"><div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a9299">who decides funny</div><div style="font-family:'Azeret Mono',monospace;font-size:24px;font-weight:600;margin-top:5px">you do</div><p style="font-size:14px;font-weight:200;color:#79808a;margin-top:4px">no model ever rates a punchline</p></div>
+<div style="background:#0b0d10;padding:18px 20px"><div style="font-family:'Azeret Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a9299">total cost</div><div style="font-family:'Azeret Mono',monospace;font-size:24px;font-weight:600;margin-top:5px">$6.37</div><p style="font-size:14px;font-weight:200;color:#79808a;margin-top:4px">every run disclosed, cap $7.00</p></div>
+</div>
+<div style="margin-top:34px;padding-top:16px;border-top:1px solid #191d22;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'Azeret Mono',monospace;font-size:11px;color:#8a9299">
+<span>lolbench.lol</span><a href="https://github.com/YakshithK/lolbench" style="color:#79808a">source and raw data on github</a><span>early results · rankings will move</span>
+</div>
+
+</div></div>
+</x-dc>
+</body>
+</html>

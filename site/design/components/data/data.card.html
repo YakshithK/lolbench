@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" viewport="700x440" name="Charts" subtitle="Scatter, heatmap, dot matrix, bar list, sparkline" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{padding:18px 20px;background:var(--canvas)}</style><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script><script src="../../_ds_bundle.js"></script></head><body><div id="root"></div><script type="text/babel">
+const {Scatter,Heatmap,DotMatrix,BarList,Sparkline,Panel}=window.LOLBenchDesignSystem_ab2c27;
+ReactDOM.createRoot(document.getElementById("root")).render(<div style={{display:"grid",gap:18}}>
+ <Panel size="lg" title="Score against cost" meta="lime = best in its price tier" pad={false}>
+  <Scatter rule={{at:95.8,label:"best score so far: 95.8, and it costs nothing"}} points={[
+   {label:"muse-spark-1.2",x:0,y:95.8,lo:87.5,hi:100,leader:true},
+   {label:"glm-5.3-flash",x:0,y:94.7,lo:84.2,hi:100,dy:18},
+   {label:"grok-4.6",x:0.38,y:92.5,lo:89.7,hi:95.3,note:"$0.38",dy:20},
+   {label:"claude-opus-5",x:1.18,y:88.7,lo:82.1,hi:94.6},
+   {label:"gemini-3.1-pro",x:1.94,y:95.5,lo:89.4,hi:100,leader:true,note:"$1.94",dx:-12,dy:22},
+   {label:"gpt-5.6-sol-pro",x:1.26,y:75,lo:25,hi:100,thin:true,note:"only 4 answers in"}]}/>
+ </Panel>
+ <Panel title="Which kinds of joke they miss" meta="six mechanisms, F1 to F6"
+  caption={<>Everyone is near perfect on five and falls apart on <span style={{color:"var(--accent-distrust)"}}>F6</span>. Dark cells mean that model has not been asked yet.</>}>
+  <Heatmap columns={["F1","F2","F3","F4","F5","F6"]} warnColumn="F6" rows={[
+   {label:"grok-4.6",values:{F1:100,F2:100,F3:100,F4:98,F5:99,F6:62}},
+   {label:"claude-opus-5",values:{F5:98,F6:79}},
+   {label:"gemini-3.1-pro",values:{F1:100,F4:100,F6:25}},
+   {label:"hy3",values:{F1:100,F2:100,F3:100,F6:0}}]}/>
+ </Panel>
+ <Panel title="How much data is behind each number" meta="one square = 10 answers · partial = fewer than 10">
+  <DotMatrix rows={[{label:"grok-4.6",n:267},{label:"claude-opus-5",n:84},{label:"gemini-3.1-pro",n:33},{label:"gpt-5.6-sol-pro",n:4},{label:"qwen3.8-flash",n:3}]}/>
+ </Panel>
+ <Panel title="Who has written their jokes" meta="348 is a full set">
+  <BarList target={348} rows={[{label:"glm-5.3-flash",value:348},{label:"glm-5.3",value:340},{label:"deepseek-v4-flash",value:192},{label:"hy4-preview",value:85},{label:"grok-4.6",value:19}]}/>
+ </Panel>
+ <Panel title="Track summary" meta="sparkline">
+  <Sparkline pending={5} bars={[{label:"qwen3.8-flash",value:100,thin:true},{label:"muse-spark-1.2",value:95.8,leader:true},{label:"gemini-3.1-pro",value:95.5,leader:true},{label:"glm-5.3-flash",value:94.7},{label:"grok-4.6",value:92.5},{label:"claude-opus-5",value:88.7},{label:"hy3",value:87.5},{label:"hy4-preview",value:85.7},{label:"gpt-5.6-sol-pro",value:75,thin:true},{label:"deepseek-v4-flash",value:74.2}]}/>
+ </Panel>
+</div>);
+</script></body></html>

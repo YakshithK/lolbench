@@ -1,0 +1,27 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Layout" subtitle="Panel, standings, defense rows, pending line" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><style>body{padding:18px 20px;background:var(--canvas)}</style><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script><script src="../../_ds_bundle.js"></script></head><body><div id="root"></div><script type="text/babel">
+const {Panel,Standings,ScoreCell,RankChip,SpendCell,DefenseRows,PendingLine}=window.LOLBenchDesignSystem_ab2c27;
+ReactDOM.createRoot(document.getElementById("root")).render(<div style={{display:"grid",gap:18}}>
+ <Panel title="Standings" meta="lime = best in its price tier" pad={false}>
+  <Standings
+   rows={[
+    {label:"muse-spark-1.2",leader:true,score:<ScoreCell value={95.8} plusMinus={6.3}/>},
+    {label:"gemini-3.1-pro",leader:true,score:<ScoreCell value={95.5} plusMinus={5.3}/>},
+    {label:"glm-5.3-flash",score:<ScoreCell value={94.7} plusMinus={7.9}/>},
+    {label:"grok-4.6",score:<ScoreCell value={92.5} plusMinus={2.8}/>}]}
+   unranked={[{label:"qwen3.8-flash",score:<ScoreCell value={100} on={3}/>}]}
+   footer="qwen3.8-flash scored 100.0 on three answers: too thin to rank. Five more are still being judged."/>
+ </Panel>
+ <div style={{display:"flex",gap:26,alignItems:"center",fontFamily:"var(--mono)",fontSize:12,color:"var(--ink-3)"}}>
+  <span><RankChip rank={1} leader/> leader</span><span><RankChip rank={7}/> ranked</span><span><RankChip rank={null}/> unrankable</span>
+  <span><SpendCell usd={1.18}/></span><span><SpendCell usd={0}/></span><span><SpendCell state="not started"/></span>
+ </div>
+ <Panel title="Why trust a number here" meta="protocol">
+  <DefenseRows rows={[
+   {risk:"A model grading its own family",defense:"Two judges from other labs; self-rows dropped at scoring"},
+   {risk:"A model rating funniness",defense:"It never does: humans vote, models only match explanations"},
+   {risk:"A perfect score on three answers",defense:"Unrankable until the sample is thick enough"}]}/>
+ </Panel>
+ <PendingLine lead="Nothing to show yet" center>The joke sets ship with the next data release.</PendingLine>
+</div>);
+</script></body></html>

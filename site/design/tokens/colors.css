@@ -1,0 +1,42 @@
+/* Colour contract: two hexes, four jobs, all named.
+   Brand lime is decoration and never sits on a datum. Leader lime is only ever
+   earned by a number. They share a hex on purpose: split the token, not the page. */
+:root{
+  /* canvas and structure */
+  --canvas:#07080a;
+  --surface:#0b0d10;          /* panel fill on the grid canvas */
+  --surface-glass:rgba(12,14,17,.92);
+  --rule:#191d22;             /* every border and divider */
+  --rule-2:#262c33;           /* chart axes, one step up */
+  --grid-line:#0f1216;        /* the engraved 56px canvas grid */
+  --well:#14181c;             /* empty cells, bar tracks */
+
+  /* ink ramp. Nothing below --ink-3 is legible at 11px on --canvas. */
+  --ink:#eceae5;
+  --ink-2:#a2a8b0;
+  --ink-3:#8a9299;            /* caption floor: 6.3:1 */
+  --ink-4:#79808a;            /* 4.98:1, never below 12px */
+  --ink-mute:#8f959d;         /* neutral data fill */
+
+  /* accents */
+  --accent-brand:#d4ff4f;     /* the mark, kickers, eyebrows, status chips, links */
+  --accent-leader:#d4ff4f;    /* earned by data: tier leader, top of a scale */
+  --accent-distrust:#ff5c3a;  /* thin samples, wide ranges, zeroes */
+
+  /* sequential scale for the mechanism heatmap, olive to lime */
+  --scale-6:#d4ff4f;
+  --scale-5:#c2ef43;
+  --scale-4:#b6e13f;
+  --scale-3:#8ca336;
+  --scale-2:#5c6b2a;
+  --scale-1:#4e5a24;
+  --scale-0:#ff5c3a;          /* a zero is not a low score, it is a failure */
+
+  /* semantic aliases */
+  --text-body:var(--ink);
+  --text-secondary:var(--ink-2);
+  --text-caption:var(--ink-3);
+  --surface-card:var(--surface-glass);
+  --link:var(--accent-brand);
+  --focus-ring:var(--accent-brand);
+}

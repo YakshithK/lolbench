@@ -1,4 +1,13 @@
-# LOL Bench Design System — v1
+# LOL Bench Design System — v1 (SUPERSEDED)
+
+**Superseded 2026-09-03** by a full rewrite: a dark, chart-first console built with Claude
+Design (`site/design/`, integrated into `site/index.html`). The owner judged this v1 white/serif
+system too basic to read; the replacement keeps this doc's *honesty rules* (error bars mandatory,
+cost beside every score, closed status vocabulary, in-progress as a designed state) but replaces
+the aesthetic entirely. Source of truth going forward is `site/design/readme.md`. This file is
+kept for history only — do not build new screens against it.
+
+---
 
 The canonical, hyper-specific rules for every LOL Bench screen. Derived from and implemented by
 [`mockups/e-instrument.html`](../mockups/e-instrument.html) (the reference implementation; open it
