@@ -132,8 +132,14 @@ def main():
             print(f"[judge:{jname}] {len(todo)} judgments to make", flush=True)
 
         def ask_judge(judge_cfg, model, row, item):
+            # F6 items ask "does this land as a joke" with no single correct
+            # verdict (a text can defensibly read as either a flat non-joke or
+            # a deliberate anti-joke); judge_f6.md grades the model's argument
+            # for whichever verdict it reaches, not whether it matches a fixed
+            # answer. F1-F5 keep the original fixed-answer rubric.
+            prompt_name = "judge_f6.md" if item.get("family") == "F6" else "judge.md"
             prompt = render(
-                ROOT / "harness" / "prompts" / "judge.md",
+                ROOT / "harness" / "prompts" / prompt_name,
                 {
                     "text": item["text"],
                     "question": item["question"],
