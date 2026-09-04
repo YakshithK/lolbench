@@ -29,7 +29,12 @@ candidates:
     provider: bai
     model: deepseek-v4-flash
     family: deepseek
-    enabled: true
+    enabled: false          # retired 2026-09: same dead free-tier deal as
+                             # deepseek-judge, confirmed via a real HTTP 400
+                             # (not a rate limit) on every call. Can never get
+                             # F6 data under the new rubric - retired rather
+                             # than left with a permanent gap, same treatment
+                             # as hy4-preview.
   - name: hy3
     provider: bai
     model: hy3

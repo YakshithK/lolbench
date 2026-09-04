@@ -1,559 +1,522 @@
 {
-  "dataset_version": "0.1.0",
-  "harness_version": "0.1.2",
-  "harness_hash": "b0aecef69399d33e",
-  "generated_at": "2026-09-03T15:41:00.943224+00:00",
+  "dataset_version": "0.2.0",
+  "harness_version": "0.1.4",
+  "harness_hash": "f1f4e43437cbbe1c",
+  "generated_at": "2026-09-04T17:46:28.808286+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
   "counts": {
-    "judgments_valid": 9456,
-    "judge_pairs": 2922
+    "judgments_valid": 16291,
+    "judge_pairs": 15711
   },
   "judge_validity": {
-    "n_pairs": 2922,
-    "agreement": 0.8754,
-    "kappa": 0.3594
+    "n_pairs": 15711,
+    "mean_abs_distance_pts": 6.3,
+    "correlation": 0.3625,
+    "exact_match_rate": 0.1803
   },
   "spend": {
-    "deepseek-v4-pro": 0.21,
-    "claude-opus-5": 0.79,
-    "grok-4.6": 0.12,
-    "glm-5.3-flash": 0.04,
-    "gemini-3.1-pro": 0.31,
-    "deepseek-v4-flash": 0.02,
-    "qwen3.8-flash": 0.03,
+    "glm-5.3": 0.41,
     "gpt-5.6-sol-pro": 0.16,
-    "mimo-v2.5": 0.01,
-    "qwen3.8-max": 0.34,
-    "mimo-v2.5-pro": 0.05,
-    "glm-5.3": 0.44,
+    "grok-4.6": 0.12,
     "muse-spark-1.2": 0.01,
+    "glm-5.3-flash": 0.04,
+    "qwen3.8-flash": 0.03,
+    "gemini-3.1-pro": 0.31,
+    "claude-opus-5": 0.76,
+    "mimo-v2.5-pro": 0.05,
+    "deepseek-v4-pro": 0.22,
+    "mimo-v2.5": 0.01,
+    "qwen3.8-max": 0.33,
     "hy3": 0.02
   },
   "spend_estimated": {
-    "deepseek-v4-pro": true,
-    "claude-opus-5": true,
-    "grok-4.6": true,
-    "glm-5.3-flash": true,
-    "gemini-3.1-pro": true,
-    "deepseek-v4-flash": true,
-    "qwen3.8-flash": true,
+    "glm-5.3": true,
     "gpt-5.6-sol-pro": true,
+    "grok-4.6": true,
+    "muse-spark-1.2": true,
+    "glm-5.3-flash": true,
+    "qwen3.8-flash": true,
+    "gemini-3.1-pro": true,
+    "claude-opus-5": true,
+    "mimo-v2.5-pro": true,
+    "deepseek-v4-pro": true,
     "mimo-v2.5": true,
     "qwen3.8-max": true,
-    "mimo-v2.5-pro": true,
-    "glm-5.3": true,
-    "muse-spark-1.2": true,
     "hy3": true
   },
   "lol_a": {
     "grok-4.6": {
-      "mean": 0.9264,
-      "ci95": [
-        0.8963,
-        0.9532
-      ],
-      "n_scored": 299,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F3": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F4": {
-          "mean": 1.0,
-          "n": 49
-        },
-        "F5": {
-          "mean": 0.97,
-          "n": 50
-        },
-        "F6": {
-          "mean": 0.59,
-          "n": 50
-        }
-      }
-    },
-    "glm-5.3-flash": {
-      "mean": 0.9362,
-      "ci95": [
-        0.9206,
-        0.9502
-      ],
-      "n_scored": 894,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.986,
-          "n": 148
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 150
-        },
-        "F3": {
-          "mean": 0.993,
-          "n": 148
-        },
-        "F4": {
-          "mean": 0.986,
-          "n": 148
-        },
-        "F5": {
-          "mean": 0.987,
-          "n": 150
-        },
-        "F6": {
-          "mean": 0.667,
-          "n": 150
-        }
-      }
-    },
-    "deepseek-v4-flash": {
-      "mean": 0.9332,
-      "ci95": [
-        0.9143,
-        0.9499
-      ],
-      "n_scored": 449,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.98,
-          "n": 75
-        },
-        "F2": {
-          "mean": 0.993,
-          "n": 75
-        },
-        "F3": {
-          "mean": 0.993,
-          "n": 75
-        },
-        "F4": {
-          "mean": 0.987,
-          "n": 75
-        },
-        "F5": {
-          "mean": 0.98,
-          "n": 74
-        },
-        "F6": {
-          "mean": 0.667,
-          "n": 75
-        }
-      }
-    },
-    "hy3": {
-      "mean": 0.8956,
-      "ci95": [
-        0.8761,
-        0.9152
-      ],
-      "n_scored": 896,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.993,
-          "n": 150
-        },
-        "F2": {
-          "mean": 0.987,
-          "n": 149
-        },
-        "F3": {
-          "mean": 0.977,
-          "n": 149
-        },
-        "F4": {
-          "mean": 1.0,
-          "n": 149
-        },
-        "F5": {
-          "mean": 0.98,
-          "n": 150
-        },
-        "F6": {
-          "mean": 0.436,
-          "n": 149
-        }
-      }
-    },
-    "qwen3.8-flash": {
-      "mean": 0.8964,
-      "ci95": [
-        0.8694,
-        0.9223
-      ],
-      "n_scored": 444,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.973,
-          "n": 74
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 72
-        },
-        "F3": {
-          "mean": 1.0,
-          "n": 75
-        },
-        "F4": {
-          "mean": 1.0,
-          "n": 74
-        },
-        "F5": {
-          "mean": 1.0,
-          "n": 75
-        },
-        "F6": {
-          "mean": 0.405,
-          "n": 74
-        }
-      }
-    },
-    "gpt-5.6-sol-pro": {
-      "mean": 0.9283,
-      "ci95": [
-        0.9,
-        0.955
-      ],
-      "n_scored": 300,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.98,
-          "n": 50
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F3": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F4": {
-          "mean": 0.98,
-          "n": 50
-        },
-        "F5": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F6": {
-          "mean": 0.61,
-          "n": 50
-        }
-      }
-    },
-    "claude-opus-5": {
-      "mean": 0.9495,
-      "ci95": [
-        0.9242,
-        0.9697
-      ],
-      "n_scored": 297,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 1.0,
-          "n": 49
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F3": {
-          "mean": 1.0,
-          "n": 49
-        },
-        "F4": {
-          "mean": 0.97,
-          "n": 50
-        },
-        "F5": {
-          "mean": 1.0,
-          "n": 49
-        },
-        "F6": {
-          "mean": 0.73,
-          "n": 50
-        }
-      }
-    },
-    "gemini-3.1-pro": {
-      "mean": 0.9114,
-      "ci95": [
-        0.8813,
-        0.9398
-      ],
-      "n_scored": 299,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.98,
-          "n": 50
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F3": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F4": {
-          "mean": 0.96,
-          "n": 50
-        },
-        "F5": {
-          "mean": 0.99,
-          "n": 50
-        },
-        "F6": {
-          "mean": 0.531,
-          "n": 49
-        }
-      }
-    },
-    "muse-spark-1.2": {
-      "mean": 0.9144,
-      "ci95": [
-        0.8826,
-        0.9446
-      ],
-      "n_scored": 298,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.99,
-          "n": 49
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F3": {
-          "mean": 0.97,
-          "n": 50
-        },
-        "F4": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F5": {
-          "mean": 1.0,
-          "n": 50
-        },
-        "F6": {
-          "mean": 0.52,
-          "n": 49
-        }
-      }
-    },
-    "qwen3.8-max": {
-      "mean": 0.9148,
-      "ci95": [
-        0.8901,
-        0.9395
-      ],
-      "n_scored": 446,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 1.0,
-          "n": 75
-        },
-        "F2": {
-          "mean": 0.987,
-          "n": 75
-        },
-        "F3": {
-          "mean": 1.0,
-          "n": 75
-        },
-        "F4": {
-          "mean": 0.986,
-          "n": 73
-        },
-        "F5": {
-          "mean": 0.973,
-          "n": 74
-        },
-        "F6": {
-          "mean": 0.541,
-          "n": 74
-        }
-      }
-    },
-    "deepseek-v4-pro": {
       "mean": 0.9543,
       "ci95": [
-        0.9376,
-        0.9699
+        0.9477,
+        0.9602
       ],
-      "n_scored": 449,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.96,
-          "n": 75
-        },
-        "F2": {
-          "mean": 1.0,
-          "n": 75
-        },
-        "F3": {
-          "mean": 1.0,
-          "n": 75
-        },
-        "F4": {
-          "mean": 0.993,
-          "n": 75
-        },
-        "F5": {
-          "mean": 0.993,
-          "n": 74
-        },
-        "F6": {
-          "mean": 0.78,
-          "n": 75
-        }
-      }
-    },
-    "glm-5.3": {
-      "mean": 0.9325,
-      "ci95": [
-        0.9157,
-        0.9481
-      ],
-      "n_scored": 896,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.993,
-          "n": 148
-        },
-        "F2": {
-          "mean": 0.983,
-          "n": 150
-        },
-        "F3": {
-          "mean": 0.987,
-          "n": 149
-        },
-        "F4": {
-          "mean": 0.97,
-          "n": 149
-        },
-        "F5": {
-          "mean": 1.0,
-          "n": 150
-        },
-        "F6": {
-          "mean": 0.663,
-          "n": 150
-        }
-      }
-    },
-    "mimo-v2.5-pro": {
-      "mean": 0.8827,
-      "ci95": [
-        0.8625,
-        0.9029
-      ],
-      "n_scored": 891,
-      "items": 150,
-      "samples_per_item": 3,
-      "families": {
-        "F1": {
-          "mean": 0.983,
-          "n": 150
-        },
-        "F2": {
-          "mean": 0.957,
-          "n": 150
-        },
-        "F3": {
-          "mean": 0.966,
-          "n": 147
-        },
-        "F4": {
-          "mean": 0.966,
-          "n": 149
-        },
-        "F5": {
-          "mean": 0.979,
-          "n": 146
-        },
-        "F6": {
-          "mean": 0.446,
-          "n": 149
-        }
-      }
-    },
-    "mimo-v2.5": {
-      "mean": 0.8971,
-      "ci95": [
-        0.8762,
-        0.9161
-      ],
-      "n_scored": 816,
+      "n_scored": 575,
       "items": 150,
       "samples_per_item": 3,
       "families": {
         "F1": {
           "mean": 0.968,
-          "n": 93
+          "n": 100
         },
         "F2": {
-          "mean": 0.986,
-          "n": 143
+          "mean": 0.973,
+          "n": 100
         },
         "F3": {
-          "mean": 0.983,
-          "n": 146
+          "mean": 0.968,
+          "n": 100
+        },
+        "F4": {
+          "mean": 0.969,
+          "n": 100
+        },
+        "F5": {
+          "mean": 0.942,
+          "n": 100
+        },
+        "F6": {
+          "mean": 0.89,
+          "n": 75
+        }
+      }
+    },
+    "glm-5.3-flash": {
+      "mean": 0.9725,
+      "ci95": [
+        0.9691,
+        0.9757
+      ],
+      "n_scored": 1245,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.98,
+          "n": 225
+        },
+        "F2": {
+          "mean": 0.984,
+          "n": 225
+        },
+        "F3": {
+          "mean": 0.978,
+          "n": 225
         },
         "F4": {
           "mean": 0.979,
-          "n": 143
+          "n": 225
         },
         "F5": {
-          "mean": 0.99,
-          "n": 147
+          "mean": 0.982,
+          "n": 225
         },
         "F6": {
-          "mean": 0.5,
-          "n": 144
+          "mean": 0.897,
+          "n": 120
+        }
+      }
+    },
+    "hy3": {
+      "mean": 0.9554,
+      "ci95": [
+        0.9508,
+        0.9603
+      ],
+      "n_scored": 1241,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.971,
+          "n": 225
+        },
+        "F2": {
+          "mean": 0.967,
+          "n": 225
+        },
+        "F3": {
+          "mean": 0.966,
+          "n": 225
+        },
+        "F4": {
+          "mean": 0.973,
+          "n": 225
+        },
+        "F5": {
+          "mean": 0.963,
+          "n": 225
+        },
+        "F6": {
+          "mean": 0.832,
+          "n": 116
+        }
+      }
+    },
+    "qwen3.8-flash": {
+      "mean": 0.9495,
+      "ci95": [
+        0.9457,
+        0.9528
+      ],
+      "n_scored": 1238,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.952,
+          "n": 225
+        },
+        "F2": {
+          "mean": 0.968,
+          "n": 216
+        },
+        "F3": {
+          "mean": 0.945,
+          "n": 225
+        },
+        "F4": {
+          "mean": 0.952,
+          "n": 225
+        },
+        "F5": {
+          "mean": 0.949,
+          "n": 225
+        },
+        "F6": {
+          "mean": 0.918,
+          "n": 122
+        }
+      }
+    },
+    "gpt-5.6-sol-pro": {
+      "mean": 0.9547,
+      "ci95": [
+        0.95,
+        0.9592
+      ],
+      "n_scored": 575,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.962,
+          "n": 100
+        },
+        "F2": {
+          "mean": 0.973,
+          "n": 100
+        },
+        "F3": {
+          "mean": 0.967,
+          "n": 100
+        },
+        "F4": {
+          "mean": 0.963,
+          "n": 100
+        },
+        "F5": {
+          "mean": 0.962,
+          "n": 100
+        },
+        "F6": {
+          "mean": 0.884,
+          "n": 75
+        }
+      }
+    },
+    "claude-opus-5": {
+      "mean": 0.9645,
+      "ci95": [
+        0.9606,
+        0.9681
+      ],
+      "n_scored": 575,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.97,
+          "n": 100
+        },
+        "F2": {
+          "mean": 0.977,
+          "n": 100
+        },
+        "F3": {
+          "mean": 0.973,
+          "n": 100
+        },
+        "F4": {
+          "mean": 0.965,
+          "n": 100
+        },
+        "F5": {
+          "mean": 0.971,
+          "n": 100
+        },
+        "F6": {
+          "mean": 0.922,
+          "n": 75
+        }
+      }
+    },
+    "gemini-3.1-pro": {
+      "mean": 0.9438,
+      "ci95": [
+        0.9359,
+        0.9513
+      ],
+      "n_scored": 575,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.956,
+          "n": 100
+        },
+        "F2": {
+          "mean": 0.961,
+          "n": 100
+        },
+        "F3": {
+          "mean": 0.968,
+          "n": 100
+        },
+        "F4": {
+          "mean": 0.948,
+          "n": 100
+        },
+        "F5": {
+          "mean": 0.961,
+          "n": 100
+        },
+        "F6": {
+          "mean": 0.845,
+          "n": 75
+        }
+      }
+    },
+    "muse-spark-1.2": {
+      "mean": 0.9534,
+      "ci95": [
+        0.9471,
+        0.9591
+      ],
+      "n_scored": 575,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.962,
+          "n": 100
+        },
+        "F2": {
+          "mean": 0.974,
+          "n": 100
+        },
+        "F3": {
+          "mean": 0.952,
+          "n": 100
+        },
+        "F4": {
+          "mean": 0.968,
+          "n": 100
+        },
+        "F5": {
+          "mean": 0.969,
+          "n": 100
+        },
+        "F6": {
+          "mean": 0.876,
+          "n": 75
+        }
+      }
+    },
+    "qwen3.8-max": {
+      "mean": 0.9498,
+      "ci95": [
+        0.9461,
+        0.9532
+      ],
+      "n_scored": 1275,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.956,
+          "n": 225
+        },
+        "F2": {
+          "mean": 0.954,
+          "n": 225
+        },
+        "F3": {
+          "mean": 0.955,
+          "n": 225
+        },
+        "F4": {
+          "mean": 0.955,
+          "n": 225
+        },
+        "F5": {
+          "mean": 0.95,
+          "n": 225
+        },
+        "F6": {
+          "mean": 0.918,
+          "n": 150
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "mean": 0.9254,
+      "ci95": [
+        0.9194,
+        0.9313
+      ],
+      "n_scored": 1350,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.929,
+          "n": 225
+        },
+        "F2": {
+          "mean": 0.953,
+          "n": 225
+        },
+        "F3": {
+          "mean": 0.95,
+          "n": 225
+        },
+        "F4": {
+          "mean": 0.942,
+          "n": 225
+        },
+        "F5": {
+          "mean": 0.945,
+          "n": 225
+        },
+        "F6": {
+          "mean": 0.833,
+          "n": 225
+        }
+      }
+    },
+    "glm-5.3": {
+      "mean": 0.9716,
+      "ci95": [
+        0.968,
+        0.975
+      ],
+      "n_scored": 1263,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.981,
+          "n": 225
+        },
+        "F2": {
+          "mean": 0.984,
+          "n": 225
+        },
+        "F3": {
+          "mean": 0.979,
+          "n": 225
+        },
+        "F4": {
+          "mean": 0.968,
+          "n": 225
+        },
+        "F5": {
+          "mean": 0.982,
+          "n": 225
+        },
+        "F6": {
+          "mean": 0.913,
+          "n": 138
+        }
+      }
+    },
+    "mimo-v2.5-pro": {
+      "mean": 0.9239,
+      "ci95": [
+        0.9181,
+        0.9297
+      ],
+      "n_scored": 1725,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.945,
+          "n": 300
+        },
+        "F2": {
+          "mean": 0.943,
+          "n": 300
+        },
+        "F3": {
+          "mean": 0.948,
+          "n": 300
+        },
+        "F4": {
+          "mean": 0.932,
+          "n": 300
+        },
+        "F5": {
+          "mean": 0.936,
+          "n": 300
+        },
+        "F6": {
+          "mean": 0.811,
+          "n": 225
+        }
+      }
+    },
+    "mimo-v2.5": {
+      "mean": 0.9321,
+      "ci95": [
+        0.9258,
+        0.938
+      ],
+      "n_scored": 1532,
+      "items": 150,
+      "samples_per_item": 3,
+      "families": {
+        "F1": {
+          "mean": 0.925,
+          "n": 224
+        },
+        "F2": {
+          "mean": 0.958,
+          "n": 288
+        },
+        "F3": {
+          "mean": 0.948,
+          "n": 299
+        },
+        "F4": {
+          "mean": 0.936,
+          "n": 296
+        },
+        "F5": {
+          "mean": 0.944,
+          "n": 299
+        },
+        "F6": {
+          "mean": 0.811,
+          "n": 126
         }
       }
     }
   },
   "lol_b": {
     "status": "voting open at lolbench.lol - per-matchup win rates with Wilson CIs appear as votes accumulate. No Elo until vote volume justifies Bradley-Terry fitting (C5).",
-    "n_matchups": 3588
+    "n_matchups": 3108
   },
   "lol_c": {
     "status": "pending data import: graded joke pools (rJokesData/HAHA subsets) with owner curation."
