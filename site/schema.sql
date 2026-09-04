@@ -14,6 +14,13 @@ create table if not exists votes (
 create index if not exists votes_matchup_idx on votes (matchup_id);
 create index if not exists votes_created_idx on votes (created_at);
 
+-- Both api/vote.js and api/leaderboard.js talk to Supabase only with the
+-- service-role key from a Vercel edge function - the browser never holds
+-- Supabase credentials. Service-role bypasses RLS regardless, so this has
+-- zero effect on the app today; it's a floor against a future anon/authenticated
+-- key ever reaching this table (no policies = zero access for those keys).
+alter table votes enable row level security;
+
 -- Aggregated view the leaderboard API reads.
 create or replace view vote_counts as
 select
