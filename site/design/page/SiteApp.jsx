@@ -1,4 +1,5 @@
 const { Topbar, Footer, Kicker, Headline, Lede, StatBand, Panel } = window.LOLBenchDesignSystem_ab2c27;
+const VotePanel = window.VotePanel;
 
 const COUNT_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
   "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
@@ -30,6 +31,14 @@ function SiteApp() {
             caption={<>{data.bouts[0].id + " · " + data.bouts[0].ballots + " ballots on this pair"}</>}>
             <p style={{ fontFamily: "var(--body)", fontWeight: 200, fontStyle: "italic", fontSize: "18px", lineHeight: 1.45, color: "#d6d4cf" }}>{data.bouts[0].b}</p>
           </Panel>
+        </div>
+
+        {/* Full-width, not tucked in the sidebar: voting is the one thing on
+            this page we're actively asking a first-time visitor to do, so it
+            gets its own prominent section instead of competing for space with
+            the standings table and written-jokes chart. */}
+        <div style={{ paddingTop: "30px" }}>
+          <VotePanel bouts={data.bouts} />
         </div>
 
         <Tracks data={data} />

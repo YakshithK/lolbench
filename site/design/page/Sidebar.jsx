@@ -69,7 +69,6 @@ function Sidebar({ data }) {
           footer={footerParts.length ? footerParts.join(" ") : undefined}
         />
       </Panel>
-      <VotePanel bouts={data.bouts} />
       <Panel title="Who has written their jokes" meta={`jokes written of ${WRITTEN_TARGET}`}
         caption={`${WRITTEN_TARGET} jokes each is a full wave-0 set. Counts below are non-empty jokes actually produced, not attempts.`}>
         <BarList target={WRITTEN_TARGET} rows={data.written} />

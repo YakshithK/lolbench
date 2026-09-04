@@ -18,8 +18,20 @@ function Charts({ data }) {
   const f6Sorted = [...f6].sort((a, b) => a.v - b.v);
   const f6Worst = f6Sorted[0];
   const f6Best = f6Sorted[f6Sorted.length - 1];
+  // F1-F5 ask a model to explain a joke whose mechanism is already visible in
+  // the text; every model, cheap or frontier, finds it, so these five columns
+  // barely separate anyone. Computed live (not hardcoded) so this note stays
+  // honest as the roster and scores change - if a future model pool actually
+  // spreads out on F1-F5, this line should shrink or disappear on its own.
+  const otherSpreads = data.mechanisms.filter(f => f !== "F6").map(f => {
+    const vals = data.mechanismRows.map(r => r.values[f]).filter(v => v != null);
+    return vals.length ? Math.max(...vals) - Math.min(...vals) : null;
+  }).filter(v => v != null);
+  const maxOtherSpread = otherSpreads.length ? Math.max(...otherSpreads) : null;
   const heatCaption = f6.length
-    ? <>Every model scored on F6 lands lowest on that column, from {f6Worst && f6Worst.label + " (" + f6Worst.v + ")"} to {f6Best && f6Best.label + " (" + f6Best.v + ")"} — none has cracked the 90s that every model reaches on the other five. Dark cells mean that model hasn't been given jokes of that kind yet.</>
+    ? <>Every model scored on F6 lands lowest on that column, from {f6Worst && f6Worst.label + " (" + f6Worst.v + ")"} to {f6Best && f6Best.label + " (" + f6Best.v + ")"}. Dark cells mean that model hasn't been given jokes of that kind yet.{" "}
+        {maxOtherSpread != null ? <>The other five families barely separate models at all — no more than {maxOtherSpread} points between the best and worst score on any of them. That's a ceiling, not a strength: F1-F5 ask a model to explain a joke whose mechanism is already visible in the text, which every model manages. We're redesigning them to require real judgment, the way F6 already does.</> : null}
+      </>
     : "Mechanism data lands as families get judged.";
 
   const totalCount = data.scored.length + data.unrankable.length;
