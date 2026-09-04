@@ -100,6 +100,7 @@ def valid_counts(path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None, help="cap judgments per judge (smoke tests)")
+    parser.add_argument("--priority-family", default=None, help="finish this family's judgments before anything else, across all judges (e.g. F6)")
     args = parser.parse_args()
 
     load_env()
@@ -140,7 +141,17 @@ def main():
             model_rows.sort(key=lambda r: counts.get((jname, name), 0))
             todo.extend((name, r, items.get(r["item_id"])) for r in model_rows)
         # Item-major order inside the sort group keeps checkpoint progress coherent.
-        todo.sort(key=lambda t: (counts.get((jname, t[0]), 0), t[1]["item_id"], t[1]["sample"]))
+        # --priority-family adds a tier-0 sort key: matching-family rows across
+        # ALL judges finish before any other work starts, instead of relying on
+        # the under-judged-model sort to get there eventually (it doesn't -
+        # confirmed live: a brand-new judge's whole-dataset backlog outranks a
+        # nearly-finished family every time, since it sorts by (judge, model)
+        # count, not family).
+        priority_fam = args.priority_family
+        todo.sort(key=lambda t: (
+            0 if (priority_fam and t[2] and t[2].get("family") == priority_fam) else 1,
+            counts.get((jname, t[0]), 0), t[1]["item_id"], t[1]["sample"],
+        ))
         with print_lock:
             print(f"[judge:{jname}] {len(todo)} judgments to make", flush=True)
 
