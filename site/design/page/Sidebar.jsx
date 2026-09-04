@@ -8,11 +8,16 @@ function VotePanel({ bouts }) {
   const cast = id => {
     if (ballot) return;
     setBallot(id);
+    // BallotControls' click ids ("A"/"B"/"tie") and the keydown handler's ids
+    // ("a"/"b"/"neither") differ in case - normalize before matching, or every
+    // mouse click (the id casing that never matched "a"/"b") silently records
+    // as "tie" while only keyboard voting works correctly.
+    const key = String(id).toLowerCase();
     fetch("/api/vote", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         matchup_id: bout.id, premise_id: bout.premise, model_a: bout.modelA, model_b: bout.modelB,
-        winner: id === "a" ? "A" : id === "b" ? "B" : "tie"
+        winner: key === "a" ? "A" : key === "b" ? "B" : "tie"
       })
     }).catch(() => {});
     window.setTimeout(() => { setBallot(null); setI(n => n + 1); }, 2800);
