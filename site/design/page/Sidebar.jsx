@@ -1,4 +1,4 @@
-const { Panel, Standings, ScoreCell, Bout, BallotControls, Reveal, StatusChip, BarList } = window.LOLBenchDesignSystem_ab2c27;
+const { Panel, Standings, ScoreCell, Bout, BallotControls, Reveal, StatusChip, BarList, DotMatrix } = window.LOLBenchDesignSystem_ab2c27;
 const WRITTEN_TARGET = 40;
 
 function VotePanel({ bouts }) {
@@ -60,6 +60,10 @@ function Sidebar({ data }) {
   });
   if (data.pending > 0) footerParts.push(`${data.pending} more model${data.pending === 1 ? "" : "s"} still being judged.`);
 
+  const matrixSource = [...data.scored, ...data.unrankable];
+  const matrix = [...matrixSource].sort((a, b) => b.n - a.n).slice(0, 6).map(m => ({ label: m.name, n: m.n }));
+  const totalCount = data.scored.length + data.unrankable.length;
+
   return (
     <div style={{ display: "grid", gap: "26px", alignContent: "start" }}>
       <Panel title="Standings" meta="lime = best score on the board" pad={false}>
@@ -68,6 +72,10 @@ function Sidebar({ data }) {
           unranked={data.unrankable.map(m => ({ label: m.name, score: <ScoreCell value={m.y} on={m.n} /> }))}
           footer={footerParts.length ? footerParts.join(" ") : undefined}
         />
+      </Panel>
+      <Panel title="How much data is behind each number" meta="one square = 10 graded answers · partial square = fewer than 10"
+        caption={`Shown: the ${matrix.length} models with the most graded answers so far, out of ${totalCount} total. Orange means the sample is too thin to trust.`}>
+        <DotMatrix rows={matrix} />
       </Panel>
       <Panel title="Who has written their jokes" meta={`jokes written of ${WRITTEN_TARGET}`}
         caption={`${WRITTEN_TARGET} jokes each is a full wave-0 set. Counts below are non-empty jokes actually produced, not attempts.`}>

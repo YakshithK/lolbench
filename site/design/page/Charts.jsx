@@ -1,4 +1,4 @@
-const { Panel, Scatter, Heatmap, DotMatrix, BarList } = window.LOLBenchDesignSystem_ab2c27;
+const { Panel, Scatter, Heatmap } = window.LOLBenchDesignSystem_ab2c27;
 
 function Charts({ data }) {
   const points = data.scored.map(m => ({ label: m.name, x: m.x, y: m.y, lo: m.lo, hi: m.hi, leader: m.leader, thin: m.thin }));
@@ -10,9 +10,6 @@ function Charts({ data }) {
       + (cheapestGood && cheapestGood.name !== bestOnBoard.name ? ` The cheapest model to run, ${cheapestGood.name} at $${cheapestGood.x.toFixed(2)}, still reaches ${cheapestGood.y.toFixed(1)}.` : "")
       + ` Every figure here is estimated from output length and a per-model price table, not billed per call — none of these providers' current "free tier" deals mean the model itself costs nothing to run.`
     : "Cost data isn't available yet for any scored model.";
-
-  const matrixSource = [...data.scored, ...data.unrankable];
-  const matrix = [...matrixSource].sort((a, b) => b.n - a.n).slice(0, 6).map(m => ({ label: m.name, n: m.n }));
 
   const f6 = data.mechanismRows.map(r => ({ label: r.label, v: r.values.F6 })).filter(r => r.v != null);
   const f6Sorted = [...f6].sort((a, b) => a.v - b.v);
@@ -34,22 +31,18 @@ function Charts({ data }) {
       </>
     : "Mechanism data lands as families get judged.";
 
-  const totalCount = data.scored.length + data.unrankable.length;
-
-  // "Who has written their jokes" moved to the sidebar (see Sidebar.jsx):
-  // this column was 4 panels tall against the sidebar's 2, leaving a block
-  // of empty space under the shorter column. Moving one panel across
-  // balances the two without touching the reusable Panel/BarList components.
+  // "How much data is behind each number" moved to the sidebar (see
+  // Sidebar.jsx): moving the vote panel out to its own full-width section
+  // dropped the sidebar to 2 panels against this column's 3, leaving empty
+  // space under the shorter column - the same imbalance the prior version of
+  // this comment described, just recreated from the other direction. Moving
+  // one panel across restores the 3-and-3 balance.
   return (
     <div style={{ display: "grid", gap: "26px" }}>
       <Panel size="lg" title="Score against cost" meta="dots are models · the orange bar is the range · lime = best score on the board" pad={false}
         caption={scatterCaption}>
         <Scatter points={points} xMax={Math.ceil((Math.max(0.5, ...points.map(p => p.x)) * 1.15) * 2) / 2}
           rule={bestOnBoard ? { at: bestOnBoard.y, label: `best score so far: ${bestOnBoard.y.toFixed(1)}` } : undefined} />
-      </Panel>
-      <Panel title="How much data is behind each number" meta="one square = 10 graded answers · partial square = fewer than 10"
-        caption={`Shown: the ${matrix.length} models with the most graded answers so far, out of ${totalCount} total. Orange means the sample is too thin to trust.`}>
-        <DotMatrix rows={matrix} />
       </Panel>
       <Panel title="Which kinds of joke they miss" meta="the dataset sorts jokes into six mechanisms, F1 to F6"
         caption={heatCaption}>
