@@ -16,6 +16,12 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="./design/_ds_bundle.js?v=3"></script>
 <script src="./design/boot.js?v=3"></script>
+<!-- Vercel Web Analytics: no build step here (plain static + Babel-standalone),
+     so this is the injected-script integration, not the @vercel/analytics npm
+     package (that's for framework builds with a bundler). Requires Web
+     Analytics turned on for this project in the Vercel dashboard - the script
+     alone is a 404 no-op until that's enabled once. -->
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div id="root"></div>
