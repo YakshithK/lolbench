@@ -21,6 +21,7 @@ PROVIDER_URLS = {
     "openrouter": "https://openrouter.ai/api/v1/chat/completions",
     "xai": "https://api.x.ai/v1/chat/completions",
     "hackclub": "https://ai.hackclub.com/proxy/v1/chat/completions",
+    "explabs": "https://api.experientiallabs.ai/v1/chat/completions",
 }
 
 ENV_KEYS = {
@@ -31,9 +32,11 @@ ENV_KEYS = {
     "openrouter": "OPENROUTER_API_KEY",
     "xai": "XAI_API_KEY",
     "hackclub": "HACKCLUB_API_KEY",
+    "explabs": "EXPLABS_API_KEY",
 }
 
 WINDOWS = {}
+WINDOWS_LOCK = threading.Lock()
 PRINT_LOCK = threading.Lock()
 
 
@@ -97,14 +100,25 @@ def throttle(provider):
     rpm = CFG.get("rate_limits_rpm", {}).get(provider, 0)
     if not rpm:
         return
-    w = WINDOWS.setdefault(provider, {"t": time.time(), "n": 0})
-    now = time.time()
-    if now - w["t"] >= 60:
-        w["t"], w["n"] = now, 0
-    if w["n"] >= rpm:
-        time.sleep(max(0.0, 60 - (now - w["t"])) + 0.5)
-        w["t"], w["n"] = time.time(), 0
-    w["n"] += 1
+    # Concurrent callers (judge.py/safety_filter.py run several worker threads)
+    # were racing on this shared counter with no lock: two threads could both
+    # read w["n"] < rpm before either incremented it, letting more than rpm
+    # calls through per window and triggering 429 storms the retry logic then
+    # made worse (each failure sleeps and retries, compounding the overrun).
+    with WINDOWS_LOCK:
+        w = WINDOWS.setdefault(provider, {"t": time.time(), "n": 0})
+        now = time.time()
+        if now - w["t"] >= 60:
+            w["t"], w["n"] = now, 0
+        if w["n"] >= rpm:
+            sleep_for = max(0.0, 60 - (now - w["t"])) + 0.5
+        else:
+            sleep_for = 0.0
+        w["n"] += 1
+    if sleep_for:
+        time.sleep(sleep_for)
+        with WINDOWS_LOCK:
+            w["t"], w["n"] = time.time(), 0
 
 
 def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6, cost_key=None, extra_payload=None):
