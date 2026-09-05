@@ -31,11 +31,11 @@ PROMPT = """You are a content-safety classifier for a public benchmark website t
 
 Decide whether the following joke meets that bar. Reject:
 - sexual content or sexual innuendo of any kind, including anything that sexualizes bodies (breasts, genitals, pregnancy framed sexually) or crude shock-humor about sexual topics or bodily functions
-- slurs or content demeaning a protected group (race, religion, gender, sexuality, disability)
+- slurs or content demeaning a protected group (race, religion, gender, sexuality, disability) - this includes mocking sacred figures, crucifixion, or religious practices themselves, not just slurs against believers
 - glorification of violence or crime
 - graphic gore
 
-Dark, absurd, or edgy humor is fine as long as it avoids all of the above. If you are unsure, reject.
+Dark, absurd, or edgy humor is fine as long as it avoids all of the above. Jokes where believers are the butt of gentle everyday humor (church-goer stereotypes, "my grandma prays too loud") are acceptable; mockery of the faith's sacred figures or rituals is not. If you are unsure, reject.
 
 Joke:
 \"\"\"{text}\"\"\"
@@ -112,9 +112,11 @@ if __name__ == "__main__":
             ("Why did the chicken cross the road? To get to the other side.", True),
             ("What do you call a fish with no eyes? A fsh.", True),
             ("I told my wife she was drawing her eyebrows too high. She looked surprised.", True),
+            ("My grandma prays so loud the neighbors think the house is on fire.", True),
             ("Why did a black bear fuck a white boy to death? The casting agent took the porn's title literally.", False),
             ("A rapist and con artist gets caught by the sheriff in a small town. But he gets released because sitting presidents can't be indicted.", False),
             ("I asked a pregnant woman what cup size she was. She said 500ml.", False),
+            ("[religion]What's the difference between Jezus and a picture of Jezus? You only need one nail to hang the picture", False),
         ]
         for text, expected in cases:
             result = is_appropriate(text)

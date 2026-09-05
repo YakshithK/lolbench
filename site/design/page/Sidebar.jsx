@@ -5,6 +5,11 @@ function VotePanel({ bouts }) {
   const [i, setI] = React.useState(0);
   const [ballot, setBallot] = React.useState(null);
   const bout = bouts[i % bouts.length];
+  const isProbe = bout.kind === "c";
+  // ballot arrives as "A"/"B"/"tie" (clicks) or "a"/"b"/"neither" (keys);
+  // normalize once here so both the POST and the reveal read the same value.
+  const wkey = ballot ? String(ballot).toLowerCase() : null;
+  const w = !wkey ? null : wkey === "neither" ? "tie" : wkey === "a" ? "A" : wkey === "b" ? "B" : "tie";
   const cast = id => {
     if (ballot) return;
     setBallot(id);
@@ -13,11 +18,15 @@ function VotePanel({ bouts }) {
     // mouse click (the id casing that never matched "a"/"b") silently records
     // as "tie" while only keyboard voting works correctly.
     const key = String(id).toLowerCase();
+    const winner = key === "a" ? "A" : key === "b" ? "B" : "tie";
     fetch("/api/vote", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: JSON.stringify(isProbe ? {
+        matchup_id: bout.id, premise_id: null, model_a: null, model_b: null,
+        winner: winner, kind: "c"
+      } : {
         matchup_id: bout.id, premise_id: bout.premise, model_a: bout.modelA, model_b: bout.modelB,
-        winner: key === "a" ? "A" : key === "b" ? "B" : "tie"
+        winner: winner, kind: "b"
       })
     }).catch(() => {});
     window.setTimeout(() => { setBallot(null); setI(n => n + 1); }, 2800);
@@ -37,13 +46,21 @@ function VotePanel({ bouts }) {
         <Bout key={bout.id} a={bout.a} b={bout.b} />
         <BallotControls onVote={cast} />
         <Reveal open={!!ballot}>
-          {ballot ? <>
+          {ballot ? (isProbe ? <>
+            Ballot to {w === "tie" ? "even" : w}. Both of these were real jokes written by humans, not models.{" "}
+            {w === "tie"
+              ? <>You called it a tie — the Reddit crowd favorite was panel {bout.winner}.</>
+              : (w === bout.winner
+                ? <>The Reddit crowd favorite was panel {bout.winner} — you agreed with the crowd.</>
+                : <>The Reddit crowd favorite was panel {bout.winner} — you disagreed with the crowd.</>)} {" "}
+            {bout.ballots ? "Ballots on this pair to date: " + bout.ballots + "." : "Yours is the first ballot that touches these two."}
+          </> : <>
             Ballot to {ballot}. Panel a was <b style={{ color: "var(--accent-brand)" }}>{bout.modelA}</b>, panel b was <b style={{ color: "var(--accent-brand)" }}>{bout.modelB}</b>.{" "}
             {bout.ballots ? "Ballots on this pair to date: " + bout.ballots + "." : "Yours is the first ballot that touches these two."} Authors re-conceal for the next voter.
-          </> : null}
+          </>) : null}
         </Reveal>
         <div style={{ borderTop: "var(--border)", padding: "var(--panel-foot-pad)", fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--ink-3)" }}>
-          {bout.id + " · premise " + bout.premise + " · " + bout.ballots + " ballots on this pair"}
+          {bout.id + (isProbe ? " · real human-written jokes · " : " · premise " + bout.premise + " · ") + bout.ballots + " ballots on this pair"}
         </div>
       </Panel>
     </div>

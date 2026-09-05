@@ -41,3 +41,15 @@ group by matchup_id, premise_id, model_a, model_b;
 -- A voter can still vote on a DIFFERENT matchup — this stops stuffing one
 -- pairing, not repeat legitimate participation.
 create unique index if not exists votes_one_per_matchup on votes (voter_hash, matchup_id);
+
+-- LOL-C honeypot probes (2026-09-05): human-written Reddit pairs served blind
+-- inside the vote rotation so every visitor vote doubles as a human-vs-crowd
+-- data point. Probe rows carry kind='c' with null premise/models; the
+-- vote_counts view below aggregates them harmlessly (NULLs group together)
+-- and model standings never read them (standings render from LOL-A scores;
+-- the only vote_counts consumer looks rows up per matchup_id for counts).
+-- All statements idempotent: safe to re-run the whole file from scratch.
+alter table votes add column if not exists kind text not null default 'b';
+alter table votes alter column premise_id drop not null;
+alter table votes alter column model_a drop not null;
+alter table votes alter column model_b drop not null;

@@ -83,13 +83,38 @@
   }
 
   var bouts = matchups.map(function (m) {
-    return { id: m.matchup_id, premise: m.premise_id, modelA: m.model_a, modelB: m.model_b, a: m.a, b: m.b, ballots: 0 };
+    return { id: m.matchup_id, premise: m.premise_id, modelA: m.model_a, modelB: m.model_b, a: m.a, b: m.b, ballots: 0, kind: "b" };
   });
   // Deterministic shuffle so repeat visits don't always open on the same pair,
   // without needing Math.random at module scope before React mounts.
   for (var i = bouts.length - 1; i > 0; i--) {
     var j = (i * 2654435761) % (i + 1);
     var t = bouts[i]; bouts[i] = bouts[j]; bouts[j] = t;
+  }
+
+  // LOL-C honeypot probes: human-written Reddit pairs with a recorded crowd
+  // winner, served blind inside the normal rotation (~1 probe per 5 bouts).
+  // Every visitor vote on one is a free human-vs-crowd data point for the
+  // taste-ceiling question. Probe votes carry kind:"c" and are excluded from
+  // model standings by construction (standings render from data.scored, and
+  // the vote path tags every row). UI stays identical until the reveal.
+  var rawProbes = getJSON("./c_probes.json") || [];
+  for (var pi = rawProbes.length - 1; pi > 0; pi--) {
+    var pj = (pi * 2654435761) % (pi + 1);
+    var pt = rawProbes[pi]; rawProbes[pi] = rawProbes[pj]; rawProbes[pj] = pt;
+  }
+  var probeBouts = rawProbes.map(function (p) {
+    return { id: p.id, premise: null, modelA: null, modelB: null, a: p.joke_a, b: p.joke_b, ballots: 0, kind: "c", winner: p.winner, year: p.year };
+  });
+  if (probeBouts.length) {
+    var mixed = [];
+    var qi = 0;
+    bouts.forEach(function (bout, idx) {
+      mixed.push(bout);
+      if ((idx + 1) % 4 === 0 && qi < probeBouts.length) { mixed.push(probeBouts[qi]); qi++; }
+    });
+    while (qi < probeBouts.length) { mixed.push(probeBouts[qi]); qi++; }
+    bouts = mixed;
   }
 
   var totalSpend = 0;
@@ -111,7 +136,7 @@
     mechanisms: mechanisms,
     mechanismRows: mechanismRows,
     written: written,
-    bouts: bouts.length ? bouts : [{ id: "no bouts yet", premise: "—", modelA: "—", modelB: "—", a: "Bouts publish once wave-0 generation lands.", b: "…", ballots: 0 }],
+    bouts: bouts.length ? bouts : [{ id: "no bouts yet", premise: "—", modelA: "—", modelB: "—", a: "Bouts publish once wave-0 generation lands.", b: "…", ballots: 0, kind: "b" }],
     costEstimated: true // every figure in `spend` is derived (see harness/score.py spend_by_model), never metered
   };
 

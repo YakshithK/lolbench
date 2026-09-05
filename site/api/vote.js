@@ -30,15 +30,25 @@ export default async function handler(req) {
     return new Response(JSON.stringify({ error: "bad json" }), { status: 400, headers: cors });
   }
 
-  const { matchup_id, premise_id, model_a, model_b, winner } = body;
-  if (
-    typeof matchup_id !== "string" ||
-    typeof premise_id !== "string" ||
-    typeof model_a !== "string" ||
-    typeof model_b !== "string" ||
-    model_a === model_b ||
-    !["A", "B", "tie"].includes(winner)
-  ) {
+  const { matchup_id, premise_id, model_a, model_b, winner, kind } = body;
+  // kind 'c' = LOL-C honeypot probe (human-written pair, no models involved).
+  // Anything else is a normal model bout. Probes are constrained to C-prefixed
+  // ids with null model fields so model votes can't hide in the probe lane
+  // (and vice versa) - standings integrity depends on the lanes staying apart.
+  const k = kind === "c" ? "c" : "b";
+  const valid =
+    typeof matchup_id === "string" &&
+    ["A", "B", "tie"].includes(winner) &&
+    (k === "b"
+      ? (typeof premise_id === "string" &&
+        typeof model_a === "string" &&
+        typeof model_b === "string" &&
+        model_a !== model_b)
+      : (/^C-\d+$/.test(matchup_id) &&
+        (premise_id == null) &&
+        (model_a == null) &&
+        (model_b == null)));
+  if (!valid) {
     return new Response(JSON.stringify({ error: "bad payload" }), { status: 400, headers: cors });
   }
 
@@ -55,7 +65,7 @@ export default async function handler(req) {
       "Content-Type": "application/json",
       Prefer: "return=minimal",
     },
-    body: JSON.stringify({ matchup_id, premise_id, model_a, model_b, winner, voter_hash }),
+    body: JSON.stringify({ matchup_id, premise_id: premise_id || null, model_a: model_a || null, model_b: model_b || null, winner, voter_hash, kind: k }),
   });
 
   if (r.status === 409) {
