@@ -27,9 +27,15 @@ from run import ROOT, chat, load_env  # noqa: E402
 
 MODELS = [("explabs", "qwen3.8-27b"), ("explabs", "gpt-5.6-luna")]
 
-PROMPT = """You are a content-safety classifier for a public benchmark website that anyone, including students and their families, might visit.
+PROMPT = """You are a content-safety classifier for a public benchmark website that must be safe for children and families - roughly a PG / Disney-movie standard.
 
-Decide whether the following joke is appropriate to display publicly: no explicit sexual content, no slurs or content demeaning a protected group (race, religion, gender, sexuality, disability), no glorification of violence/crime, no content that would embarrass someone if seen over their shoulder in a school or workplace setting. Mild innuendo or dark-but-not-graphic humor is fine; explicit or degrading content is not.
+Decide whether the following joke meets that bar. Reject:
+- sexual content or sexual innuendo of any kind, including anything that sexualizes bodies (breasts, genitals, pregnancy framed sexually) or crude shock-humor about sexual topics or bodily functions
+- slurs or content demeaning a protected group (race, religion, gender, sexuality, disability)
+- glorification of violence or crime
+- graphic gore
+
+Dark, absurd, or edgy humor is fine as long as it avoids all of the above. If you are unsure, reject.
 
 Joke:
 \"\"\"{text}\"\"\"
@@ -105,8 +111,10 @@ if __name__ == "__main__":
         cases = [
             ("Why did the chicken cross the road? To get to the other side.", True),
             ("What do you call a fish with no eyes? A fsh.", True),
+            ("I told my wife she was drawing her eyebrows too high. She looked surprised.", True),
             ("Why did a black bear fuck a white boy to death? The casting agent took the porn's title literally.", False),
             ("A rapist and con artist gets caught by the sheriff in a small town. But he gets released because sitting presidents can't be indicted.", False),
+            ("I asked a pregnant woman what cup size she was. She said 500ml.", False),
         ]
         for text, expected in cases:
             result = is_appropriate(text)
