@@ -11,14 +11,17 @@ function VotePanel({ bouts }) {
   const wkey = ballot ? String(ballot).toLowerCase() : null;
   const w = !wkey ? null : wkey === "neither" ? "tie" : wkey === "a" ? "A" : wkey === "b" ? "B" : "tie";
   const cast = id => {
-    if (ballot) return;
-    setBallot(id);
+    if (ballot && ballot !== "error") return;
     // BallotControls' click ids ("A"/"B"/"tie") and the keydown handler's ids
     // ("a"/"b"/"neither") differ in case - normalize before matching, or every
     // mouse click (the id casing that never matched "a"/"b") silently records
     // as "tie" while only keyboard voting works correctly.
     const key = String(id).toLowerCase();
     const winner = key === "a" ? "A" : key === "b" ? "B" : "tie";
+    // Reveal ONLY on a confirmed write. The old code set the ballot first and
+    // swallowed fetch errors, so a 409 (already voted) or 500 showed a success
+    // reveal for a vote that never landed - silent data corruption plus a lie
+    // to the voter. On failure we show an error and stay on the same bout.
     fetch("/api/vote", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(isProbe ? {
@@ -28,8 +31,11 @@ function VotePanel({ bouts }) {
         matchup_id: bout.id, premise_id: bout.premise, model_a: bout.modelA, model_b: bout.modelB,
         winner: winner, kind: "b"
       })
-    }).catch(() => {});
-    window.setTimeout(() => { setBallot(null); setI(n => n + 1); }, 2800);
+    }).then(r => {
+      if (!r.ok) throw new Error("vote rejected: " + r.status);
+      setBallot(id);
+      window.setTimeout(() => { setBallot(null); setI(n => n + 1); }, 2800);
+    }).catch(() => { setBallot("error"); });
   };
   React.useEffect(() => {
     const onKey = e => {
@@ -46,7 +52,8 @@ function VotePanel({ bouts }) {
         <Bout key={bout.id} a={bout.a} b={bout.b} />
         <BallotControls onVote={cast} />
         <Reveal open={!!ballot}>
-          {ballot ? (isProbe ? <>
+          {ballot === "error" ? <>Vote didn't record — connection hiccup or you already voted on this pair. Pick again to retry; you stay on this bout.</>
+          : ballot ? (isProbe ? <>
             Ballot to {w === "tie" ? "even" : w}. Both of these were real jokes written by humans, not models.{" "}
             {w === "tie"
               ? <>You called it a tie — the Reddit crowd favorite was panel {bout.winner}.</>
