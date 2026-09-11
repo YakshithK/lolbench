@@ -22,6 +22,9 @@ create index if not exists votes_created_idx on votes (created_at);
 alter table votes enable row level security;
 
 -- Aggregated view the leaderboard API reads.
+-- NOTE: in CREATE OR REPLACE, a new column must go LAST. Putting neithers
+-- before total renames total->neithers positionally and Postgres rejects it
+-- (42P16). Order here is cosmetic: the API reads columns by name.
 create or replace view vote_counts as
 select
   matchup_id,
@@ -31,8 +34,8 @@ select
   count(*) filter (where winner = 'A') as wins_a,
   count(*) filter (where winner = 'B') as wins_b,
   count(*) filter (where winner = 'tie') as ties,
-  count(*) filter (where winner = 'neither') as neithers,
-  count(*) as total
+  count(*) as total,
+  count(*) filter (where winner = 'neither') as neithers
 from votes
 group by matchup_id, premise_id, model_a, model_b;
 
@@ -73,8 +76,8 @@ select
   count(*) filter (where winner = 'A') as wins_a,
   count(*) filter (where winner = 'B') as wins_b,
   count(*) filter (where winner = 'tie') as ties,
-  count(*) filter (where winner = 'neither') as neithers,
-  count(*) as total
+  count(*) as total,
+  count(*) filter (where winner = 'neither') as neithers
 from votes
 group by matchup_id, premise_id, model_a, model_b;
 
