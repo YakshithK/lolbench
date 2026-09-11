@@ -2,7 +2,7 @@ import React from "react";
 
 /* Three equal cells on the panel's bottom edge. Hover raises contrast to ink,
    press raises it again to brand lime. 44px minimum height. */
-export function BallotControls({ onVote, options = [{ id: "A", label: "a" }, { id: "B", label: "b" }, { id: "tie", label: "neither" }] }) {
+export function BallotControls({ onVote, options = [{ id: "A", label: "a" }, { id: "B", label: "b" }, { id: "neither", label: "neither" }] }) {
   const [hot, setHot] = React.useState(null);
   const [down, setDown] = React.useState(null);
   return (

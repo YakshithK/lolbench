@@ -6,3 +6,4 @@ Audience/persona: {{persona}}
 Edginess budget: {{edginess_budget}} (0 = squeaky clean, 5 = edgy but never punching down; never target protected groups)
 
 The joke must land in the final line (the punchline). Maximum 60 words.
+Never use em dashes (—) or double hyphens (--) anywhere in the joke; use commas or periods instead.

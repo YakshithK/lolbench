@@ -11,6 +11,9 @@ async function hashIp(ip) {
   return Array.from(new Uint8Array(buf)).map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
+// Stage-2 follow-up: after a "neither" ballot the voter may optionally say WHY
+// (didn't get it / got it, wasn't funny / both were terrible) plus a free-text
+// note. One row per (voter, matchup); notes are stored, never scored.
 export default async function handler(req) {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   if (req.method !== "POST") {
@@ -30,15 +33,13 @@ export default async function handler(req) {
     return new Response(JSON.stringify({ error: "bad json" }), { status: 400, headers: cors });
   }
 
-  const { matchup_id, premise_id, model_a, model_b, winner, kind } = body;
-  // kind 'c' = LOL-C honeypot probe (human-written pair, no models involved).
-  // Anything else is a normal model bout. Probes are constrained to C-prefixed
-  // ids with null model fields so model votes can't hide in the probe lane
-  // (and vice versa) - standings integrity depends on the lanes staying apart.
+  const { matchup_id, premise_id, model_a, model_b, kind, reason, note } = body;
   const k = kind === "c" ? "c" : "b";
+  const cleanNote = typeof note === "string" ? note.slice(0, 500) : null;
   const valid =
     typeof matchup_id === "string" &&
-    ["A", "B", "tie", "neither"].includes(winner) &&
+    ["didnt-get", "not-funny", "both-terrible"].includes(reason) &&
+    (cleanNote === null || cleanNote.length <= 500) &&
     (k === "b"
       ? (typeof premise_id === "string" &&
         typeof model_a === "string" &&
@@ -57,7 +58,7 @@ export default async function handler(req) {
     (req.headers.get("x-forwarded-for") || "unknown").split(",")[0].trim();
   const voter_hash = await hashIp(ip);
 
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/votes`, {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/vote_feedback`, {
     method: "POST",
     headers: {
       apikey: SERVICE_KEY,
@@ -65,11 +66,11 @@ export default async function handler(req) {
       "Content-Type": "application/json",
       Prefer: "return=minimal",
     },
-    body: JSON.stringify({ matchup_id, premise_id: premise_id || null, model_a: model_a || null, model_b: model_b || null, winner, voter_hash, kind: k }),
+    body: JSON.stringify({ matchup_id, premise_id: premise_id || null, model_a: model_a || null, model_b: model_b || null, kind: k, reason, note: cleanNote && cleanNote.trim() ? cleanNote.trim() : null, voter_hash }),
   });
 
   if (r.status === 409) {
-    return new Response(JSON.stringify({ error: "already voted on this matchup" }), { status: 409, headers: cors });
+    return new Response(JSON.stringify({ error: "already gave feedback on this matchup" }), { status: 409, headers: cors });
   }
   if (!r.ok) {
     return new Response(JSON.stringify({ error: "db error" }), { status: 502, headers: cors });

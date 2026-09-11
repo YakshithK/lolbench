@@ -145,7 +145,7 @@
     var lb = getJSON("/api/leaderboard");
     if (Array.isArray(lb)) {
       var byId = {};
-      lb.forEach(function (row) { byId[row.matchup_id] = (row.wins_a || 0) + (row.wins_b || 0) + (row.ties || 0); });
+      lb.forEach(function (row) { byId[row.matchup_id] = (row.wins_a || 0) + (row.wins_b || 0) + (row.ties || 0) + (row.neithers || 0); });
       window.LOLB.bouts.forEach(function (bout) {
         if (byId[bout.id] != null) bout.ballots = byId[bout.id];
       });

@@ -1157,7 +1157,7 @@ function BallotControls({
     id: "B",
     label: "b"
   }, {
-    id: "tie",
+    id: "neither",
     label: "neither"
   }]
 }) {

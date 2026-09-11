@@ -6,7 +6,7 @@ create table if not exists votes (
   premise_id text not null,
   model_a text not null,
   model_b text not null,
-  winner text not null check (winner in ('A','B','tie')),
+  winner text not null check (winner in ('A','B','tie','neither')),
   voter_hash text not null,
   created_at timestamptz not null default now()
 );
@@ -31,6 +31,7 @@ select
   count(*) filter (where winner = 'A') as wins_a,
   count(*) filter (where winner = 'B') as wins_b,
   count(*) filter (where winner = 'tie') as ties,
+  count(*) filter (where winner = 'neither') as neithers,
   count(*) as total
 from votes
 group by matchup_id, premise_id, model_a, model_b;
@@ -53,3 +54,46 @@ alter table votes add column if not exists kind text not null default 'b';
 alter table votes alter column premise_id drop not null;
 alter table votes alter column model_a drop not null;
 alter table votes alter column model_b drop not null;
+
+-- Neither-vote support (2026-09-12): 'neither' is a DISTINCT stored outcome
+-- (voter found nothing funny), not a tie. Old tie rows stay ties - they can
+-- never be retro-split, so pre-neither tie-rates aren't strictly comparable
+-- to post-neither ones. Run this block once in the Supabase SQL editor, then
+-- deploy the site (vote.js + ballot UI already accept 'neither').
+-- If neither votes still 400 after this, check \d votes for a stale
+-- auto-named check constraint from the original CREATE TABLE and drop it.
+alter table votes drop constraint if exists votes_winner_check;
+alter table votes add constraint votes_winner_check check (winner in ('A','B','tie','neither'));
+create or replace view vote_counts as
+select
+  matchup_id,
+  premise_id,
+  model_a,
+  model_b,
+  count(*) filter (where winner = 'A') as wins_a,
+  count(*) filter (where winner = 'B') as wins_b,
+  count(*) filter (where winner = 'tie') as ties,
+  count(*) filter (where winner = 'neither') as neithers,
+  count(*) as total
+from votes
+group by matchup_id, premise_id, model_a, model_b;
+
+-- Stage-2 neither follow-up (2026-09-12): optional WHY behind a neither
+-- ballot plus a free-text note. Stored, never scored. One row per
+-- (voter, matchup). Run once in the Supabase SQL editor alongside the
+-- neither block above, then deploy the site (feedback.js + ballot UI
+-- already call it).
+create table if not exists vote_feedback (
+  id bigint generated always as identity primary key,
+  matchup_id text not null,
+  premise_id text,
+  model_a text,
+  model_b text,
+  kind text not null default 'b',
+  reason text not null check (reason in ('didnt-get','not-funny','both-terrible')),
+  note text,
+  voter_hash text not null,
+  created_at timestamptz not null default now()
+);
+create unique index if not exists vote_feedback_one_per_matchup on vote_feedback (voter_hash, matchup_id);
+alter table vote_feedback enable row level security;
