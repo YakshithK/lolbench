@@ -38,6 +38,8 @@ ENV_KEYS = {
 WINDOWS = {}
 WINDOWS_LOCK = threading.Lock()
 PRINT_LOCK = threading.Lock()
+KEY_ROUND_ROBIN = {}
+KEY_RR_LOCK = threading.Lock()
 
 
 SPEND = {"usd": 0.0}
@@ -69,12 +71,12 @@ MODEL_PRICES = {
     "glm-5.3": (1.4, 4.4), "deepseek-v4-pro": (1.6, 3.2),
     "qwen3.8-max": (2, 6), "mimo-v2.5-pro": (0.44, 0.87), "hy4-preview": (0.83, 2.5),
     "gpt-5.6-sol-pro": (2, 10), "gemini-3.1-pro": (2, 12),
-    "claude-opus-5": (5, 25), "muse-spark-1.2": (0.10, 0.30),  # hackclub free tier: real cost estimated, not billed
+    "claude-opus-5": (5, 25), "muse-spark-1.2": (1.25, 4.25),  # metered OpenRouter 2026-09-12 (was estimated)
     "grok-4.6": (2, 6),
 }
 # Models whose flash/base price above is an estimate (no billed rate exists),
 # not a metered one. Surfaced in results.json so the UI can disclose it.
-ESTIMATED_PRICE_MODELS = {"glm-5.3-flash", "deepseek-v4-flash", "hy3", "mimo-v2.5", "qwen3.8-flash", "muse-spark-1.2"}
+ESTIMATED_PRICE_MODELS = {"glm-5.3-flash", "deepseek-v4-flash", "hy3", "mimo-v2.5", "qwen3.8-flash"}
 COST_LOG = ROOT / "outputs" / "cost_log.jsonl"
 
 
@@ -96,17 +98,60 @@ def spend_exceeded():
     return cap and SPEND["usd"] >= cap
 
 
-def throttle(provider):
+def provider_keys(provider):
+    """All configured API keys for a provider: the primary ENV_KEYS entry
+    plus numbered variants (BAI_API_KEY, BAI_API_KEY_2, BAI_API_KEY_3, ...).
+    Read live from environ on every call so .env changes via load_env()
+    are picked up without restarts. Empty list = provider unauthenticated
+    (same as before: requests go out without an Authorization header)."""
+    base = ENV_KEYS.get(provider, "")
+    keys = []
+    if base:
+        k0 = os.environ.get(base, "")
+        if k0:
+            keys.append(k0)
+        i = 2
+        while True:
+            ki = os.environ.get(f"{base}_{i}", "")
+            if not ki:
+                break
+            keys.append(ki)
+            i += 1
+    return keys
+
+
+def pick_key(provider):
+    """Thread-safe round-robin over a provider's keys. Returns (key, slot).
+    One key per call (not per retry attempt): retries stay on the same key
+    so backoff semantics are unchanged and 429 accounting stays attributable
+    to the key that actually got refused. Single-key providers always get
+    slot 0, byte-identical behavior to before rotation existed."""
+    keys = provider_keys(provider)
+    if not keys:
+        return "", 0
+    with KEY_RR_LOCK:
+        n = KEY_ROUND_ROBIN.get(provider, 0)
+        KEY_ROUND_ROBIN[provider] = n + 1
+    return keys[n % len(keys)], (n % len(keys))
+
+
+def throttle(provider, slot=0):
     rpm = CFG.get("rate_limits_rpm", {}).get(provider, 0)
     if not rpm:
         return
+    # Windows are per (provider, key-slot), not per provider: each key gets
+    # the full configured rpm in its own window. If provider limits turn out
+    # to be per-account/IP rather than per-key, the 429 rate will show it
+    # (watch the log) - and rotation degrades gracefully to plain round-robin
+    # with no worse behavior than a single key.
     # Concurrent callers (judge.py/safety_filter.py run several worker threads)
     # were racing on this shared counter with no lock: two threads could both
     # read w["n"] < rpm before either incremented it, letting more than rpm
     # calls through per window and triggering 429 storms the retry logic then
     # made worse (each failure sleeps and retries, compounding the overrun).
+    window = f"{provider}#{slot}"
     with WINDOWS_LOCK:
-        w = WINDOWS.setdefault(provider, {"t": time.time(), "n": 0})
+        w = WINDOWS.setdefault(window, {"t": time.time(), "n": 0})
         now = time.time()
         if now - w["t"] >= 60:
             w["t"], w["n"] = now, 0
@@ -123,7 +168,7 @@ def throttle(provider):
 
 def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6, cost_key=None, extra_payload=None):
     url = base_url or PROVIDER_URLS[provider]
-    key = os.environ.get(ENV_KEYS.get(provider, ""), "")
+    key, slot = pick_key(provider)
     headers = {"Content-Type": "application/json"}
     if key:
         headers["Authorization"] = f"Bearer {key}"
@@ -133,7 +178,7 @@ def chat(provider, model, base_url, messages, temperature, max_tokens, retries=6
     payload = json.dumps(body).encode("utf-8")
     delay = 2.0
     for attempt in range(retries):
-        throttle(provider)
+        throttle(provider, slot)
         req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
         try:
             with urllib.request.urlopen(req, timeout=240) as r:
@@ -195,8 +240,11 @@ def run_candidate(cand, items, premises):
     mt = CFG["max_output_tokens"]
     workers = max(1, int(CFG.get("parallel_workers", 1)))
     lock = threading.Lock()
-    # think: false -> disable reasoning via OpenRouter's unified param (cost control)
-    extra = {"reasoning": {"enabled": False}} if (cand.get("think") is False and provider == "openrouter") else None
+    # think: false -> disable reasoning via OpenRouter's unified param (cost control).
+    # Applies on hackclub too: it fronts the same OpenRouter routes (verified
+    # live: the param is accepted), so think:false candidates keep identical
+    # behavior whichever of the two pipes they run on.
+    extra = {"reasoning": {"enabled": False}} if (cand.get("think") is False and provider in ("openrouter", "hackclub")) else None
 
     out_a = ROOT / CFG["paths"]["outputs"] / name / "lol_a.jsonl"
     done = done_keys(out_a)

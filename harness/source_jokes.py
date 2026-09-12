@@ -290,10 +290,24 @@ def main():
     a_candidates = build_lol_a_candidates(rows, used_texts, n=300)
     dadjoke_texts = load_dadjokes(n=300)
     for i, text in enumerate(dadjoke_texts):
+        # Tier 1 BY CONSTRUCTION, not by measurement - deliberate choice, see below.
+        # The tier_of() heuristic below is structurally blind on dadjokes: its
+        # Q/A test anchors at string start, but dadjokes arrive as setup +
+        # punchline already joined, so the question shape sits mid-string and
+        # never fires (measured: all 220 would default to tier 2, not because
+        # they are hard but because the detector cannot see their structure).
+        # Rather than reshape the heuristic around one source, dadjokes - a
+        # corpus that is short Q/A puns by editorial selection - are assigned
+        # tier 1 directly. Risk accepted: culture-heavy dad jokes that are
+        # genuinely tier-2 will hide in tier 1. The check is post-hoc, not
+        # a priori: after the run, compare dadjokes-sourced vs rJokes-sourced
+        # tier-1 means. Equal => the force was harmless. Diverged =>
+        # revisit with per-setup tiering (the question/answer split exists
+        # upstream in load_dadjokes and can be tiered on the setup half).
         a_candidates.append({
             "id": f"A-DAD-{i:04d}",
             "text": text,
-            "draft_tier": 1,  # dadjokes format is almost universally a short, structurally-visible pun - matches tier 1 by construction, not the heuristic
+            "draft_tier": 1,
             "year": None,
             "source": "dadjokes (huggingface.co/datasets/shuttie/dadjokes, Apache 2.0)",
         })
@@ -312,6 +326,45 @@ def main():
     c_pairs_final = [p for p in c_pairs if p["joke_a"] in c_passed and p["joke_b"] in c_passed]
     a_candidates_final = [c for c in a_candidates if c["text"] in a_passed]
 
+    for i, p in enumerate(c_pairs_final):
+        p["id"] = f"C-{i:04d}"
+    for i, c in enumerate(a_candidates_final):
+        c["id"] = f"A-CAND-{i:04d}"
+
+    # Near-duplicate sweep (Jaccard >= 0.6 on alpha-token sets): the exact-
+    # string dedup in load_clean_rows misses reworded reposts, and rJokes is
+    # full of them. Measured 2026-09: the "attire/tire" unicycle joke survived
+    # in C twice (scores 741 AND 23 - direct evidence scores track virality,
+    # not just funniness) plus once in the A pool. Same mechanism tested 3x
+    # across 2 tracks. Drop later-seen near-dups; report everything dropped.
+    def _toks(t):
+        return set(re.findall(r"[a-z]{3,}", t.lower()))
+
+    def _near(a, b, thresh=0.6):
+        sa, sb = _toks(a), _toks(b)
+        return bool(sa and sb) and len(sa & sb) / len(sa | sb) >= thresh
+
+    kept_pairs, dropped_pairs = [], []
+    seen_texts = []
+    for p in c_pairs_final:
+        if any(_near(p["joke_a"], s) or _near(p["joke_b"], s) for s in seen_texts):
+            dropped_pairs.append(p["id"])
+            continue
+        kept_pairs.append(p)
+        seen_texts.extend([p["joke_a"], p["joke_b"]])
+    kept_a, dropped_a = [], []
+    for c in a_candidates_final:
+        if any(_near(c["text"], s) for s in seen_texts):
+            dropped_a.append(c["id"])
+            continue
+        kept_a.append(c)
+        seen_texts.append(c["text"])
+    print(f"[dedup] dropped {len(dropped_pairs)} C pairs, {len(dropped_a)} A candidates as near-dups", flush=True)
+    if dropped_pairs:
+        print(f"  C dropped: {dropped_pairs}", flush=True)
+    if dropped_a:
+        print(f"  A dropped: {dropped_a}", flush=True)
+    c_pairs_final, a_candidates_final = kept_pairs, kept_a
     for i, p in enumerate(c_pairs_final):
         p["id"] = f"C-{i:04d}"
     for i, c in enumerate(a_candidates_final):

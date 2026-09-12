@@ -101,6 +101,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None, help="cap judgments per judge (smoke tests)")
     parser.add_argument("--priority-family", default=None, help="finish this family's judgments before anything else, across all judges (e.g. F6)")
+    parser.add_argument("--out", default=None, help="alternate judgments filename within the judgments dir (e.g. lol_a_judgments_r2.jsonl) so a concurrent run never interleaves lines with another writer; merge by concatenation later (score.py dedupes by key, latest wins)")
     args = parser.parse_args()
 
     load_env()
@@ -110,8 +111,13 @@ def main():
     judges = [j for j in CFG["judges"] if j.get("enabled", True)]
     jt = CFG.get("judge_max_tokens", 1500)
     workers = max(1, int(CFG.get("judge_workers", CFG.get("parallel_workers", 1))))
-    out = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
+    out = ROOT / CFG["paths"]["judgments"] / (args.out or "lol_a_judgments.jsonl")
+    main_out = ROOT / CFG["paths"]["judgments"] / "lol_a_judgments.jsonl"
     done = judgment_done_keys(out)
+    if out != main_out:
+        # Never redo work already banked in the main file; own file tracks
+        # what THIS run completed (nulls retry in both, by design).
+        done |= judgment_done_keys(main_out)
     lock = threading.Lock()
     print_lock = threading.Lock()
 
@@ -132,6 +138,11 @@ def main():
         excluded |= {name for name, fam in cand_family.items() if fam and fam == j.get("family")}
         excluded.add(j["model"])
         counts = valid_counts(out)
+        if out != main_out:
+            # Prioritize by global progress, not just this file's, so the
+            # concurrent run backfills genuinely thin models first.
+            for k, v in valid_counts(main_out).items():
+                counts[k] = counts.get(k, 0) + v
         # Under-judged models first: backfill before touching well-scored rows.
         todo = []
         for name, rows in outputs.items():
@@ -160,8 +171,12 @@ def main():
             # verdict (a text can defensibly read as either a flat non-joke or
             # a deliberate anti-joke); judge_f6.md grades the model's argument
             # for whichever verdict it reaches, not whether it matches a fixed
-            # answer. F1-F5 keep the original fixed-answer rubric.
-            prompt_name = "judge_f6.md" if item.get("family") == "F6" else "judge.md"
+            # answer. T1/T2/T3 (v0.3 tiered redesign) route the same way: the
+            # pilot showed fixed-answer matching saturates while argument-
+            # validity grading spreads (T1 9.2 / T2 12.2 / T3 9.0 pts). F1-F5
+            # keep the original fixed-answer rubric (saturated, retained for
+            # history until the v0.3 cutover purges those rows).
+            prompt_name = "judge_f6.md" if item.get("family") in ("F6", "T1", "T2", "T3") else "judge.md"
             prompt = render(
                 ROOT / "harness" / "prompts" / prompt_name,
                 {

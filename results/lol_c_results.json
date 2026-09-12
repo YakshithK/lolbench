@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-09-06T00:55:20.753425+00:00",
+  "dataset_version": "0.2.0",
+  "n_pairs": 130,
+  "temperature": 0.0,
+  "models": {
+    "glm-5.3-flash": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 3,
+      "n_pairs": 130
+    },
+    "hy3": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 1,
+      "n_pairs": 130
+    },
+    "mimo-v2.5": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "qwen3.8-flash": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "glm-5.3": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "deepseek-v4-pro": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "qwen3.8-max": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "mimo-v2.5-pro": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "gpt-5.6-sol-pro": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "gemini-3.1-pro": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "claude-opus-5": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "muse-spark-1.2": {
+      "accuracy": 0.6667,
+      "ci95": [
+        0.0,
+        1.0
+      ],
+      "n": 3,
+      "n_null": 0,
+      "n_pairs": 130
+    },
+    "grok-4.6": {
+      "accuracy": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n": 0,
+      "n_null": 0,
+      "n_pairs": 130
+    }
+  },
+  "lol_a_means": {
+    "muse-spark-1.2": 0.9534
+  },
+  "correlation_a_vs_c": {
+    "spearman_a_vs_c": null,
+    "n_models": 1,
+    "models": [
+      "muse-spark-1.2"
+    ]
+  }
+}

@@ -74,11 +74,10 @@ def is_appropriate(text, workers_note=None):
 def filter_pool(texts, max_workers=6, label=""):
     """texts: list of unique strings. Returns the set of texts that passed
     both classifiers. Runs classification for both models per text in
-    sequence. max_workers=3 matches judge.py's established safe concurrency
-    for bai (config.yaml: judge_workers=3, "free-tier safe" per its own
-    comment) - 8 workers x 2 sequential calls each badly overran the shared
-    60rpm limit's own throttle() (a global counter with no lock, so
-    concurrent threads race past it), causing a 429 retry storm: 45 minutes
+    sequence. max_workers=6: throttle() paces per (provider, key-slot) window
+    (see run.py), so 6 workers stay comfortably under the 60rpm cap even
+    before key rotation spreads load. History: 8 workers x 2 sequential
+    calls each badly overran the old shared 60rpm window, causing a 429
     produced only 75/400 classifications, an 8+ hour real ETA. Confirmed by
     killing that run and re-measuring at this concurrency before trusting it."""
     passed = set()
