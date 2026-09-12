@@ -66,5 +66,18 @@ Everything else is agent-scriptable: scaffold, harness, runner, site, Supabase s
 C0 → C1 → C2 → C3 (site + first scores) → C4 (voting) → C5 (credibility) → C6 (Elo) → C7 (rhythm).
 C3 and C4 are the "show him" moment. C5+ is deliberately not launch-shaped.
 
+## Where we actually are (2026-09-12 status stamp)
+- C0-C4: DONE (site live, voting live, ballots accumulating).
+- v0.3 cut over: 396-item A set (F6 kept, F1-F5 purged/replaced via T1-T3 tiers),
+  13 models published, dataset_version 0.3.0, judge_validity n=18,774.
+- C5 blockers: n>=10 is met on 8 models (claude/gemini/gpt/muse/grok thin - T-row
+  generation parked on Hack Club throttles); alpha (3 raters x 100 items) NOT
+  started; contamination permutation test NOT started; H1/H2 verdicts NOT run.
+- Voting upgrades shipped from launch feedback: neither + stage-2 + vote_feedback
+  (see docs/08-launch-log.md). Freshness filter live at sourcing time.
+- Next launch Thursday ships one visible thing from the feedback ledger
+  (docs/06 queue: familiarity kill-test, normalizer, cohort question).
+- Kill criteria unchanged.
+
 ## Kill criteria (from governance doc)
 If H2 fails (LOL-A saturates) or LOL-C shows no signal beyond crowd-upvote regression → stop or pivot; publish what exists as a negative/limited result. Cost before C5 is trivial by design; nothing expensive is ever built on hope.

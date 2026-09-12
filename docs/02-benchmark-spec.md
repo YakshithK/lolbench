@@ -39,6 +39,22 @@
 - Persona-randomized voter panels (Crowd Score method); mandatory position-swap and length normalization (position/verbosity bias, MT-Bench taxonomy).
 - Human spot-check of 20 judge-graded samples before any publish.
 - Judge-validity score (jury vs human agreement) recomputed and published every wave at C6+.
+- Live judge roster (2026-09-12): qwen-judge + hy-judge (2-judge floor holds for all
+  pending candidates). Retired: deepseek-judge (bai deal ended), glm-judge (bai free
+  quota 0 across all keys 2026-09-12). Historical family tags preserved in config so
+  old same-family exclusions stay correct. Standing priority: recruit a 3rd judge
+  from any non-qwen family to restore redundancy before the next judge-heavy wave.
+
+## Voting booth spec (as shipped 2026-09-12)
+- Ballot: A / B / neither (distinct stored outcome; "tie" remains for genuine ties).
+- Stage-2 on neither (optional): didn't-get / got-it-not-funny / both-terrible +
+  500-char note. Stored in vote_feedback; notes never scored.
+- Old ties stay ties (pre-neither "neither" clicks are unrecoverable as ties);
+  pre/post tie-rate comparability is a documented footnote.
+- LOL-C honeypot probes ride the same booth at 1:5 rotation (kind-tagged lane;
+  model standings never read probe votes).
+- Queued booth upgrades (docs/06): formatting normalizer at render time, optional
+  cohort question, community joke submissions.
 
 ## Inter-annotator agreement (alpha) protocol
 - 3 raters (owner + 2 friends), 100 items, independent and blind, Krippendorff's alpha per family.

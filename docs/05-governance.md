@@ -27,6 +27,32 @@
 - Order-permutation memorization test on open models per model release (Oren et al.).
 - Wave items retire after one wave; premise sourcing stays fresher than any training cutoff.
 - Documented per-release: "what we checked, what we found."
+- **Known limits (community-audited 2026-09-11/12, see docs/08-launch-log.md):**
+  - Memorized JOKES (Chris-Hart): sourced old-pool items may be in training data.
+    Mitigation: B-premises are fresh-written; detection tests judgment not recall;
+    fresh human-written items are the structural fix (roadmap queue).
+  - Memorized COMMENTARY (NeuralNomad87): famous jokes ship with analyses in
+    training data, so explaining them is partly retrieval. Kill-test queued
+    (obscure-joke stratum). Deeper than the joke-level confound and distinct from it.
+  - Stale-item freshness (sergey_v): dated-event humor reads factually broken to
+    later voters and gets recorded as unfunny. Mitigation:
+    harness/freshness_check.py at sourcing time; quarantine at rotation, not
+    mid-flight (ballot continuity).
+  - Style unblinding (sergey_v): em dashes mark AI text and partially unblind the
+    anonymous vote. Mitigation: dash ban in generation prompts (forward-only;
+    wave-0 vs wave-1 style delta is a documented footnote).
+  - Anti-humor boundary: "so unfunny it's funny" scores as model failure while
+    succeeding sideways. Methods footnote until an F7 exists.
+
+## Voting data
+- No accounts, no PII collected; aggregated stats only. Cohort question (when it
+  ships) is optional, self-reported, coarse, and nullable - and its answers are
+  aggregation-only too.
+- Neither votes and stage-2 feedback (reason + optional note) are stored distinct
+  outcomes. Notes are stored, never scored. Free-text is capped (500 chars) and
+  never rendered back to other users.
+- Vote-booth integrity: one ballot per (voter hash, matchup) enforced at the DB;
+  model standings never read the probe lane and vice versa (kind-tagged lanes).
 
 ## Versioning
 - Dataset versions + harness hash stamp every result; breaking changes bump major version.

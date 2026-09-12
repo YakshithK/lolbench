@@ -14,12 +14,36 @@ It is not "how many times do we run it" — it is calls per model per event.
 - Full day-1 total: ~10,000 short calls (~1k tokens each) ≈ 10M tokens ≈ single-digit dollars on paid APIs. **Rate limits are the constraint, never money.**
 - Re-runs are event-triggered only: new model added, item set expanded (C5 doubles: n 5→10), new wave, quarterly audit.
 
-## Free-tier reality (verified)
-- Gemini free tier: ~10 RPM / ~250 requests/day — cannot carry the run; used as a capped candidate slot only.
+## Free-tier reality (verified 2026-09-12, post-launch lessons)
+- b.ai: three keys rotated; glm-5.3-flash free quota went to 0 on ALL keys
+  (balance=0) on 2026-09-12 - glm-judge retired, qwen+hy judges hold the 2-judge
+  floor for every pending model. deepseek free deal ended earlier (2026-09).
+- Hack Club: free, no payment rail, but throttling is per-slug AND account-level.
+  Burst windows after a reset let bulk through, then shutters close per slug
+  (muse 6/371, gpt 251/371, gemini 0/371 while others flowed). Grind-retries can
+  claw through (qwen 200 -> 819) at poor retry economics; skip-and-rotate wins.
+  20 RPM configured; the real ceiling is lower and varies.
+- OpenRouter (paid): used as a burst lane 2026-09-12 - $0.42 metered finished
+  mimo-pro (855 rows) and grok bulk (345). Measured ~$0.0005/row at our token
+  shapes (350 in / 80 out), 2x the naive estimate. Prepaid wallet = hard 402 stop,
+  which is the safety that worked. Slugs: `qwen/qwen3.8-max-0902` is the dated
+  snapshot of qwen3.8-max (undated slug not listed on OR).
+- xAI direct: grok-4.6 on owner credits (371-row anchor set ~$0.17); native slug
+  `grok-4.6` verified on api.x.ai. Routing reverts to Hack Club when wallet is dry.
+- Gemini free tier: ~10 RPM / ~250 requests/day — cannot carry the run; capped slot only.
 - Groq: ~30 RPM / ~14k requests/day (Llama family) — bulk workhorse.
 - Cerebras: free, fast — secondary open-model slot.
-- OpenAI/Anthropic: no free tiers; owner keys optional, only needed for frontier candidates.
-- Re-read provider ToS at C2 (free tiers: assume rate limits + data-use disclosure; disclose on-site if the provider trains on free-tier traffic).
+- OpenAI/Anthropic: no free tiers; owner keys only, frontier slots.
+- Re-read provider ToS quarterly (free tiers: assume rate limits + data-use disclosure; disclose on-site if the provider trains on free-tier traffic).
+
+## Provider doctrine (learned the hard way, week one)
+- One dead provider never stops the whole run: candidates, judges, and generation
+  each keep >=2 live providers. The 2026-09-12 glm-judge retirement proved the design
+  - zero data lost, floor held, board published same day.
+- Free tiers are for burst windows; paid prepaid wallets are for finishing moves;
+  throttles are for waiting out. Know which mode you're in before launching.
+- Never leave a runner grinding a 429-only slug: it starves queued models. Kill,
+  skip, rotate, circle back (muse/gpt/gemini pattern, 2026-09-12).
 
 ## Hardware roles (owner has: RTX 5060 8GB, Mac Studio M4 Ultra 64GB)
 | Machine | Role | Reality check |
