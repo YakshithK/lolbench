@@ -30,12 +30,16 @@ export default async function handler(req) {
     return new Response(JSON.stringify({ error: "bad json" }), { status: 400, headers: cors });
   }
 
-  const { matchup_id, premise_id, model_a, model_b, winner, kind } = body;
+  const { matchup_id, premise_id, model_a, model_b, winner, kind, cohort } = body;
   // kind 'c' = LOL-C honeypot probe (human-written pair, no models involved).
   // Anything else is a normal model bout. Probes are constrained to C-prefixed
   // ids with null model fields so model votes can't hide in the probe lane
   // (and vice versa) - standings integrity depends on the lanes staying apart.
   const k = kind === "c" ? "c" : "b";
+  // Optional audience tag (cohort-agreement question). Anything outside the
+  // known set stores as null instead of rejecting the ballot - a vote must
+  // never fail over an optional field.
+  const co = ["very", "somewhat", "rarely"].includes(cohort) ? cohort : null;
   const valid =
     typeof matchup_id === "string" &&
     ["A", "B", "tie", "neither"].includes(winner) &&
@@ -65,7 +69,7 @@ export default async function handler(req) {
       "Content-Type": "application/json",
       Prefer: "return=minimal",
     },
-    body: JSON.stringify({ matchup_id, premise_id: premise_id || null, model_a: model_a || null, model_b: model_b || null, winner, voter_hash, kind: k }),
+    body: JSON.stringify({ matchup_id, premise_id: premise_id || null, model_a: model_a || null, model_b: model_b || null, winner, voter_hash, kind: k, cohort: co }),
   });
 
   if (r.status === 409) {

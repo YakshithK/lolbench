@@ -100,3 +100,13 @@ create table if not exists vote_feedback (
 );
 create unique index if not exists vote_feedback_one_per_matchup on vote_feedback (voter_hash, matchup_id);
 alter table vote_feedback enable row level security;
+
+-- Optional cohort tag (2026-09-12, NeuralNomad87's cohort-agreement ask):
+-- one optional "how online are you?" pick in the booth, remembered in the
+-- voter's browser, stored per ballot as a nullable column. Forward-only:
+-- historical rows have no cohort, and per-cohort reads stay unpublished
+-- until any cohort clears the same n>=10 floor the rest of the board uses.
+alter table votes add column if not exists cohort text;
+alter table votes drop constraint if exists votes_cohort_check;
+alter table votes add constraint votes_cohort_check
+  check (cohort is null or cohort in ('very','somewhat','rarely'));

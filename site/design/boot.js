@@ -82,15 +82,55 @@
     written.sort(function (x, y) { return y.value - x.value; });
   }
 
-  var bouts = matchups.map(function (m) {
-    return { id: m.matchup_id, premise: m.premise_id, modelA: m.model_a, modelB: m.model_b, a: m.a, b: m.b, ballots: 0, kind: "b" };
-  });
-  // Deterministic shuffle so repeat visits don't always open on the same pair,
-  // without needing Math.random at module scope before React mounts.
-  for (var i = bouts.length - 1; i > 0; i--) {
-    var j = (i * 2654435761) % (i + 1);
-    var t = bouts[i]; bouts[i] = bouts[j]; bouts[j] = t;
+  // Display-layer formatting normalizer (Lower-Ad-6293's launch ask): models
+  // lean on em dashes, !!! and ALL-CAPS shouting to signal "punchline happened",
+  // which partially unblinds the anonymous vote. Strip the crutches at render
+  // time only - stored rows stay exactly as generated, and periods, commas,
+  // question marks and line breaks are kept because punctuation can BE the
+  // timing. Applies identically to human-written probe jokes so content
+  // competes with content.
+  function normalizeJoke(t) {
+    if (typeof t !== "string") return t;
+    var s = t;
+    s = s.replace(/\s*-{2,}\s*/g, ", ");   // -- / --- → comma
+    s = s.replace(/\s*[—–]\s*/g, ", ");    // em/en dash → comma
+    s = s.replace(/!{2,}/g, "!");          // !!! → !
+    s = s.replace(/\?{2,}/g, "?");         // ?? → ? (same crutch family)
+    s = s.replace(/([!?])\s*,\s*/g, "$1 "); // no comma after ?/! (dash opened a line)
+    // keep real initialisms: a corpus-derived list plus the consonant-only
+    // catch-all (GPS, GDP, RSVP); everything else is shouting → normal case.
+    // Multi-word runs ("NO WAY") downcase together so they can't half-convert.
+    var keep = function (w) {
+      return /^(ETA|GPS|PIN|GPA|CEO|REM|RSVP|CFO|ROI|GDP|FBI|EMT|USSR|TIL|NASA|USA|UFO|LOL|LMAO|ROFL|BRB|YOLO|TGIF|ASAP|FOMO)$/.test(w) || /^[^AEIOUaeiou]+$/.test(w);
+    };
+    var down = function (w) { return keep(w) ? w : w.charAt(0) + w.slice(1).toLowerCase(); };
+    s = s.replace(/\b[A-Z]{2,}(?:\s+[A-Z]{2,})+\b/g, function (run) { return run.split(/\s+/).map(down).join(" "); });
+    s = s.replace(/\b[A-Z]{3,}\b/g, down);
+    s = s.replace(/,\s*,/g, ",");          // collapse commas doubled by dash swaps
+    s = s.replace(/,\s*([.!?])/g, "$1");   // no comma right before sentence end
+    s = s.replace(/,\s*$/gm, "");          // no trailing comma where a dash closed a line
+    s = s.replace(/^,\s*/gm, "");          // no leading comma where a dash opened a line
+    s = s.replace(/ {2,}/g, " ");          // collapse spacing left by the swap
+    return s;
   }
+
+  // True Fisher-Yates shuffle. The old deterministic "(i * 2654435761) % (i + 1)"
+  // permutation never moves element 0 (j can only be 0 when i+1 divides the
+  // constant, which never happens), so the first file entry opened the booth
+  // for every visitor, every visit - 10 of the first 12 probe ballots landed
+  // on one pair because of it.
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+
+  var bouts = matchups.map(function (m) {
+    return { id: m.matchup_id, premise: m.premise_id, modelA: m.model_a, modelB: m.model_b, a: normalizeJoke(m.a), b: normalizeJoke(m.b), ballots: 0, kind: "b" };
+  });
+  shuffle(bouts);
 
   // LOL-C honeypot probes: human-written Reddit pairs with a recorded crowd
   // winner, served blind inside the normal rotation (~1 probe per 5 bouts).
@@ -99,12 +139,9 @@
   // model standings by construction (standings render from data.scored, and
   // the vote path tags every row). UI stays identical until the reveal.
   var rawProbes = getJSON("./c_probes.json") || [];
-  for (var pi = rawProbes.length - 1; pi > 0; pi--) {
-    var pj = (pi * 2654435761) % (pi + 1);
-    var pt = rawProbes[pi]; rawProbes[pi] = rawProbes[pj]; rawProbes[pj] = pt;
-  }
+  shuffle(rawProbes);
   var probeBouts = rawProbes.map(function (p) {
-    return { id: p.id, premise: null, modelA: null, modelB: null, a: p.joke_a, b: p.joke_b, ballots: 0, kind: "c", winner: p.winner, year: p.year };
+    return { id: p.id, premise: null, modelA: null, modelB: null, a: normalizeJoke(p.joke_a), b: normalizeJoke(p.joke_b), ballots: 0, kind: "c", winner: p.winner, year: p.year };
   });
   if (probeBouts.length) {
     var mixed = [];

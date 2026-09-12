@@ -38,8 +38,13 @@ Said: a joke treating a 2020 event as current reads broken to a 2026 voter, and 
 staleness gets recorded as unfunny - a different failure mode contaminating humor data.
 Done: harness/freshness_check.py (year regex + future-talk + event vocabulary). First
 scan: 9/130 C-pool, 1/30 live probes flagged - and the live flag IS his specimen
-(C-0082, triple-flagged). Quarantine decision at next probe rotation, not mid-flight
-(it has 9 ballots; pulling it breaks continuity).
+(C-0082, triple-flagged). SHIPPED 2026-09-12: C-0082 quarantined from the rotation
+(replaced by C-0095; still 30 probes, pool-verified clean). Its 10 ballots stay in
+the probe lane (never touches standings) but are excluded from the C human-ceiling
+analysis. Root cause of the 10/12 pile-up found and fixed: the deterministic probe
+"shuffle" in boot.js never moved element 0, so the first file entry was served to
+every visitor, every visit. Both shuffles (bouts + probes) replaced with a true
+Fisher-Yates - first bout and probe order now vary per visit.
 
 ### 4. Contamination (memorized jokes) — Chris-Hart_232 (r/AI)
 Said: sourced old jokes may be in training data; models may be remembering, not judging.
@@ -83,7 +88,12 @@ strip formatting/punctuation before the ballot so content competes with content.
 Planned: display-layer normalizer, render-time only (applies to past matchups, no
 rerun): em dash -> comma, !!! -> !, ALL CAPS -> normal. Keep periods, commas,
 question marks, line breaks (punctuation can BE the timing; over-stripping damages
-jokes). ~20 lines in the ballot render path. Not yet built.
+jokes). ~20 lines in the ballot render path.
+SHIPPED 2026-09-12 (boot.js normalizeJoke, display layer only; stored rows stay as
+generated): em dashes/-- -> commas, !!!/?? -> single, ALL-CAPS runs -> normal case.
+Initialisms protected by a corpus-derived list (ETA, GPS, PIN, GPA, CEO, FBI, RSVP,
+USSR, TIL, LOL, ...) plus the consonant-only catch-all; multi-word runs downcase
+together ("NO WAY" -> "No Way", never "NO Way"). Applies identically to probe jokes.
 
 ### 8. Cohort agreement — NeuralNomad87 (r/AI)
 Said: global preference averages wash out what makes humor interesting; the same
@@ -94,7 +104,14 @@ Supporting evidence from our own board: 13 models compressed into 0.837-0.922
 globally - exactly what you'd expect if real variance lives across audiences.
 Planned: one optional cohort question in the booth ("how online are you?" - fits
 the site's voice, dodges age/region privacy friction), one nullable column,
-per-cohort agreement alongside global. Forward-only. Not yet built.
+per-cohort agreement alongside global. Forward-only.
+SHIPPED 2026-09-12 (collection layer): optional booth question with three
+self-selected picks (very / somewhat / rarely online), one-time pick remembered in
+the voter's browser, stored as nullable votes.cohort (check-constrained, applied
+via Management API; schema.sql block). Rides with every ballot, probe lane
+included. Per-cohort agreement display deliberately deferred until any cohort
+clears the board's n>=10 floor - with 134 ballots any split is statistically
+empty.
 
 ### 9. Anti-humor edge case — AffectionateGas9544 (OP, in-thread)
 Raised: a joke can be so unfunny it becomes funny ("sometimes the unfunniness makes

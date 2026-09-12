@@ -1,57 +1,57 @@
 {
   "dataset_version": "0.3.0",
   "harness_version": "0.1.4",
-  "harness_hash": "73abf5be6bc8288d",
-  "generated_at": "2026-09-11T22:31:09.469303+00:00",
+  "harness_hash": "844c880d9b445ee4",
+  "generated_at": "2026-09-12T22:12:11.755624+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
   "counts": {
-    "judgments_valid": 24762,
-    "judge_pairs": 18774
+    "judgments_valid": 25272,
+    "judge_pairs": 18963
   },
   "judge_validity": {
-    "n_pairs": 18774,
+    "n_pairs": 18963,
     "mean_abs_distance_pts": 9.8,
-    "correlation": 0.4114,
+    "correlation": 0.4122,
     "exact_match_rate": 0.0635
   },
   "spend": {
-    "glm-5.3-flash": 0.05,
-    "muse-spark-1.2": 0.02,
     "deepseek-v4-pro": 0.31,
-    "qwen3.8-flash": 0.05,
-    "mimo-v2.5": 0.02,
-    "qwen3.8-max": 0.48,
-    "claude-opus-5": 0.15,
-    "grok-4.6": 0.14,
-    "gemini-3.1-pro": 0.07,
-    "gpt-5.6-sol-pro": 0.21,
-    "glm-5.3": 0.46,
+    "hy3": 0.02,
+    "glm-5.3-flash": 0.05,
     "mimo-v2.5-pro": 0.08,
-    "hy3": 0.02
+    "qwen3.8-flash": 0.05,
+    "glm-5.3": 0.46,
+    "qwen3.8-max": 0.48,
+    "muse-spark-1.2": 0.02,
+    "grok-4.6": 0.14,
+    "gemini-3.1-pro": 0.13,
+    "gpt-5.6-sol-pro": 0.3,
+    "mimo-v2.5": 0.02,
+    "claude-opus-5": 0.15
   },
   "spend_estimated": {
-    "glm-5.3-flash": true,
-    "muse-spark-1.2": true,
     "deepseek-v4-pro": true,
+    "hy3": true,
+    "glm-5.3-flash": true,
+    "mimo-v2.5-pro": true,
     "qwen3.8-flash": true,
-    "mimo-v2.5": true,
+    "glm-5.3": true,
     "qwen3.8-max": true,
-    "claude-opus-5": true,
+    "muse-spark-1.2": true,
     "grok-4.6": true,
     "gemini-3.1-pro": true,
     "gpt-5.6-sol-pro": true,
-    "glm-5.3": true,
-    "mimo-v2.5-pro": true,
-    "hy3": true
+    "mimo-v2.5": true,
+    "claude-opus-5": true
   },
   "lol_a": {
     "gpt-5.6-sol-pro": {
-      "mean": 0.8962,
+      "mean": 0.8911,
       "ci95": [
-        0.8894,
-        0.9023
+        0.8851,
+        0.8965
       ],
-      "n_scored": 828,
+      "n_scored": 1128,
       "items": 150,
       "samples_per_item": 3,
       "families": {
@@ -60,24 +60,36 @@
           "n": 75
         },
         "T1": {
-          "mean": 0.897,
-          "n": 753
+          "mean": 0.895,
+          "n": 828
+        },
+        "T2": {
+          "mean": 0.875,
+          "n": 195
+        },
+        "T3": {
+          "mean": 0.904,
+          "n": 30
         }
       }
     },
     "gemini-3.1-pro": {
-      "mean": 0.8448,
+      "mean": 0.8601,
       "ci95": [
-        0.8123,
-        0.8736
+        0.8424,
+        0.8769
       ],
-      "n_scored": 75,
+      "n_scored": 285,
       "items": 150,
       "samples_per_item": 3,
       "families": {
         "F6": {
           "mean": 0.845,
           "n": 75
+        },
+        "T1": {
+          "mean": 0.866,
+          "n": 210
         }
       }
     },

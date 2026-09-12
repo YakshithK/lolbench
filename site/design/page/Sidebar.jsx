@@ -1,11 +1,25 @@
 const { Panel, Standings, ScoreCell, Bout, BallotControls, Reveal, StatusChip, BarList, DotMatrix } = window.LOLBenchDesignSystem_ab2c27;
 const WRITTEN_TARGET = 40;
 
+// Optional cohort question (NeuralNomad87's launch ask: global preference
+// averages wash out the variance that actually differs between models - the
+// same joke splits hard by audience). One-time pick, remembered locally,
+// rides along with every ballot as a nullable column. Forward-only: old rows
+// have no cohort, and per-cohort reads stay unpublished until any cohort
+// clears the same n>=10 floor the rest of the board uses.
+const COHORTS = [["very", "very online"], ["somewhat", "somewhat online"], ["rarely", "rarely online"]];
+const COHORT_KEY = "lolb_cohort";
+
 function VotePanel({ bouts }) {
   const [i, setI] = React.useState(0);
   const [ballot, setBallot] = React.useState(null);
   const [fb, setFb] = React.useState(null); // stage-2 follow-up: null | sending | done | error
   const [note, setNote] = React.useState("");
+  const [cohort, setCohort] = React.useState(() => { try { return localStorage.getItem(COHORT_KEY) || ""; } catch (e) { return ""; } });
+  const pickCohort = v => {
+    setCohort(v);
+    try { localStorage.setItem(COHORT_KEY, v); } catch (e) { /* private mode: rides on this page's votes only */ }
+  };
   const adv = React.useRef(0);
   // Single choke point for moving on. The generation counter invalidates any
   // pending auto-advance timer, so a Send-triggered advance can't be followed
@@ -35,10 +49,10 @@ function VotePanel({ bouts }) {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(isProbe ? {
         matchup_id: bout.id, premise_id: null, model_a: null, model_b: null,
-        winner: winner, kind: "c"
+        winner: winner, kind: "c", cohort: cohort || null
       } : {
         matchup_id: bout.id, premise_id: bout.premise, model_a: bout.modelA, model_b: bout.modelB,
-        winner: winner, kind: "b"
+        winner: winner, kind: "b", cohort: cohort || null
       })
     }).then(r => {
       if (!r.ok) throw new Error("vote rejected: " + r.status);
@@ -120,6 +134,16 @@ function VotePanel({ bouts }) {
               {fb === "error" ? <div style={{ marginTop: "6px" }}>didn't record — hit skip to move on.</div> : null}
             </div>)}
         </Reveal>
+        <div style={{ borderTop: "var(--border)", padding: "var(--panel-foot-pad)", fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--ink-3)" }}>
+          {cohort
+            ? <span>voting as: {COHORTS.filter(c => c[0] === cohort).map(c => c[1])[0] || cohort}{" · "}<button onClick={() => pickCohort("")} style={{ fontFamily: "var(--mono)", fontSize: "var(--caption-size)", padding: 0, cursor: "pointer", border: 0, background: "transparent", color: "var(--ink-4)", textDecoration: "underline" }}>change</button></span>
+            : <span>optional: how online are you?{" "}
+              {COHORTS.map(([cid, label], ci) => (
+                <button key={cid} onClick={() => pickCohort(cid)}
+                  style={{ fontFamily: "var(--mono)", fontSize: "var(--caption-size)", padding: "6px 8px", cursor: "pointer", border: "var(--border)", background: "transparent", color: "var(--ink-2)", marginLeft: ci ? "6px" : 0 }}>{label}</button>
+              ))}
+            </span>}
+        </div>
         <div style={{ borderTop: "var(--border)", padding: "var(--panel-foot-pad)", fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--ink-3)" }}>
           {bout.id + (isProbe ? " · real human-written jokes · " : " · premise " + bout.premise + " · ") + bout.ballots + " ballots on this pair"}
         </div>
