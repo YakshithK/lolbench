@@ -17,6 +17,9 @@
    through the same explain-and-grade pipeline. If the 95-vs-81 gap collapses on
    obscure items, the axis is familiarity not success/failure - and F6 becomes the
    only uncontaminated tier. Either outcome is publishable. Free pipes.
+   **DESIGNED 2026-09-12** - full design (2x2, three arms, pre-registered
+   predictions, item criteria, quarantine execution plan, paper mapping) in
+   docs/10-familiarity-kill-test.md. Next action: source candidates.
 2. **Formatting normalizer** (Lower-Ad-6293): display-layer only (em dash -> comma,
    !!! -> !, CAPS -> case; keep periods/commas/question marks/line breaks). Applies
    retroactively at render time, no rerun, no migration.
