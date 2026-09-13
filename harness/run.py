@@ -22,6 +22,12 @@ PROVIDER_URLS = {
     "xai": "https://api.x.ai/v1/chat/completions",
     "hackclub": "https://ai.hackclub.com/proxy/v1/chat/completions",
     "explabs": "https://api.experientiallabs.ai/v1/chat/completions",
+    # kiraai.vn (added 2026-09-13): Vietnamese OpenAI-compatible router; the
+    # -free slugs are 30M tokens/day free (per model, no deposit). Gateway is
+    # SLOW: first probe 504'd at default timeouts - budget long timeouts and
+    # low concurrency. prompt_tokens run ~4k on trivial calls, so the daily
+    # quota burns faster than the headline suggests.
+    "kira": "https://kiraai.vn/api/v1/chat/completions",
 }
 
 ENV_KEYS = {
@@ -33,6 +39,7 @@ ENV_KEYS = {
     "xai": "XAI_API_KEY",
     "hackclub": "HACKCLUB_API_KEY",
     "explabs": "EXPLABS_API_KEY",
+    "kira": "KIRA_API_KEY",
 }
 
 WINDOWS = {}

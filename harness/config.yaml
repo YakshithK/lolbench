@@ -158,6 +158,19 @@ judges:
     model: hy3
     family: tencent
     exclude_models: []
+  - name: kira-glm-judge
+    provider: kira
+    model: glm-5.3-free
+    family: zai
+    exclude_models: []
+    enabled: false          # 2026-09-13: recruited as the 3rd-judge backup (zai family -
+                            # restores the 2-judge floor for qwen AND tencent candidates the
+                            # moment it activates; exactly the redundancy glm-judge's death
+                            # removed). NOT for bulk coverage: measured 216s/call on the
+                            # judge_f6 rubric (free-tier contention), a full wave would take
+                            # days. Verdict quality is excellent - fact-checked a planted
+                            # wrong pun mechanism and scored it 10/100. Enable when qwen-judge
+                            # or hy-judge dies; b.ai outages now have a standing replacement.
     # Added to restore a 2-judge floor for every family. With only qwen-judge
     # + glm-judge active (post deepseek-judge retirement), qwen-family and
     # zai-family candidates each had exactly 1 eligible judge - no possible
@@ -171,6 +184,9 @@ rate_limits_rpm:
   bai: 60                   # quota storm on 2026-09-01 burned 7.7k calls; pace the free tier
   hackclub: 20              # cut 60->20 on 2026-09-08: provider's real limit is far below
                              # 60rpm (10k throttled calls prove it); pace under the real ceiling
+  kira: 10                  # 2026-09-13: gateway is slow (504s at default pace); start at 10rpm
+                             # until measured. 30M tokens/day per -free model is the real ceiling,
+                             # and prompt_tokens run ~4k on trivial calls.
   openrouter: 0
   xai: 0
   groq: 30
