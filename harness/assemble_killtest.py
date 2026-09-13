@@ -80,7 +80,9 @@ def main():
             ".stat{color:#8b93a7}.bad{color:#e2725b}.chip{display:inline-block;background:#161a26;padding:2px 8px;border-radius:6px;margin-right:6px}</style></head><body>",
             "<h1>Kill-test taste read (Arm K: obscure WORKING jokes)</h1>",
             f"<p class=stat>{len(obscure)} web-verified-obscure candidates. Reply with the ids to KILL "
-            "(anything that isn't actually funny, reads stale, or skews edgy/NSFW-adjacent). "
+            "(anything that isn't actually funny, reads stale, skews edgy/NSFW-adjacent, or that you "
+            "PERSONALLY RECOGNIZE as a well-known joke - search can't index word-of-mouth fame, so your "
+            "recognition is the backstop for exactly the confound this experiment studies). "
             "Target after your read: 50 items + 10 spares. Everything here already passed: upvote band 20-500, "
             "freshness scan, near-dup sweep, and web-obscurity verification (zero commentary hits).</p>"]
     for c in obscure:
