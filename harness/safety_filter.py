@@ -62,7 +62,7 @@ def classify_one(provider, model, text):
     messages = [{"role": "user", "content": PROMPT.format(text=text)}]
     for attempt in range(4):
         try:
-            raw = chat(provider, model, None, messages, 0.0, 300)
+            raw = chat(provider, model, None, messages, 0.0, 3000)
             m = re.search(r"\{.*\}", raw, re.S)
             if m:
                 o = json.loads(m.group(0))
@@ -107,7 +107,7 @@ def classify_status(text):
         got = None
         for attempt in range(4):
             try:
-                raw = chat(provider, model, None, messages, 0.0, 300)
+                raw = chat(provider, model, None, messages, 0.0, 3000)
                 m = re.search(r"\{.*\}", raw, re.S)
                 if m:
                     o = json.loads(m.group(0))
