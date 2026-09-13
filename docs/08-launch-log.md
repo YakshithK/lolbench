@@ -81,6 +81,11 @@ Status: QUEUED as wave-1.5 experiment (~50 obscure items, gen + judge, free pipe
 when throttle windows allow). Either outcome strengthens the paper: if confirmed,
 F6 becomes the only uncontaminated tier ("everything else was retrieval; this tier
 is the actual reasoning test").
+**RAN 2026-09-13 (docs/10 section 10): familiarity REJECTED.** On 87
+web-verified-no-commentary working jokes, models score famous and obscure items
+identically (gap ~0), while the working-vs-failed differential persists between
+equally obscure items (+2 to +5 pts). F6's gap is measured, not just argued, to be
+something other than retrieval.
 
 ### 7. Formatting crutches — Lower-Ad-6293 (r/AI)
 Said: models lean on exclamation marks and em dashes to signal "punchline happened";

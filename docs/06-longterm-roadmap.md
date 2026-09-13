@@ -14,12 +14,9 @@
 
 ## Near-term experiment queue (from launch feedback, priority order)
 1. **Familiarity kill-test** (NeuralNomad87): ~50 genuinely obscure real jokes
-   through the same explain-and-grade pipeline. If the 95-vs-81 gap collapses on
-   obscure items, the axis is familiarity not success/failure - and F6 becomes the
-   only uncontaminated tier. Either outcome is publishable. Free pipes.
-   **DESIGNED 2026-09-12** - full design (2x2, three arms, pre-registered
-   predictions, item criteria, quarantine execution plan, paper mapping) in
-   docs/10-familiarity-kill-test.md. Next action: source candidates.
+   through the same explain-and-grade pipeline. **RUN 2026-09-13 - familiarity
+   REJECTED; F6's working-vs-failed differential survives the confound
+   (results in docs/10 section 10).** Either outcome is publishable. Free pipes.
 2. **Formatting normalizer** (Lower-Ad-6293): display-layer only (em dash -> comma,
    !!! -> !, CAPS -> case; keep periods/commas/question marks/line breaks). Applies
    retroactively at render time, no rerun, no migration.
