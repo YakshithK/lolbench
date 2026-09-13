@@ -207,19 +207,39 @@ def arm_r_candidates(existing, n_target=40):
     return out
 
 
-def safety_only():
+def safety_only(only_verified=False):
     """Classify candidates that are still 'pending', prune failures, rewrite.
     Paced: sleep between texts so a throttled provider can recover mid-run
-    instead of burning all retries in the first seconds (the 429-storm lesson)."""
+    instead of burning all retries in the first seconds (the 429-storm lesson).
+
+    only_verified: classify only candidates the web-verification batches have
+    already marked 'obscure' (safety runs while searches continue; flagged
+    jokes don't deserve classifier calls)."""
     load_env()
     from safety_filter import is_appropriate
     rows = [json.loads(l) for l in OUT_PATH.read_text(encoding="utf-8-sig").splitlines() if l.strip()]
-    pending = [r for r in rows if r.get("safety_status") == "pending"]
+    allowed = None
+    if only_verified:
+        allowed = set()
+        for p in sorted(DATA_DIR.glob("killtest_verify_batch*.jsonl")):
+            for line in p.read_text(encoding="utf-8-sig").splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    r = json.loads(line)
+                except Exception:
+                    continue
+                if r.get("verdict") == "obscure":
+                    allowed.add(r["id"])
+        print(f"[safety] only-verified mode: {len(allowed)} verified-obscure candidates", flush=True)
+    pending = [r for r in rows if r.get("safety_status") == "pending" and (allowed is None or r["id"] in allowed)]
     print(f"[safety] {len(pending)}/{len(rows)} candidates pending classification", flush=True)
     kept, dropped = 0, 0
     for i, r in enumerate(rows):
         if r.get("safety_status") != "pending":
             kept += 1 if r.get("safety_status") == "passed" else 0
+            continue
+        if allowed is not None and r["id"] not in allowed:
             continue
         if is_appropriate(r["text"]):
             r["safety_status"] = "passed"
@@ -240,11 +260,12 @@ def safety_only():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--safety-only", action="store_true", help="classify pending candidates in place, prune failures")
+    ap.add_argument("--only-verified", action="store_true", help="with --safety-only: classify only web-verified-obscure candidates")
     ap.add_argument("--skip-arm-r", action="store_true")
     args = ap.parse_args()
 
     if args.safety_only:
-        safety_only()
+        safety_only(only_verified=args.only_verified)
         return
 
     existing = load_existing_texts()
