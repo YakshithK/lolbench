@@ -79,6 +79,55 @@ def is_appropriate(text, workers_note=None):
     return all(r is True for r in results)
 
 
+def classify_status(text):
+    """Tri-state classification for sourcing passes that must distinguish
+    'this joke was judged inappropriate' from 'the infrastructure hiccuped'.
+
+    Returns (status, model_or_note):
+      - ('passed', '')            both models say appropriate
+      - ('rejected', model)       at least one model says NOT appropriate (AND-gate)
+      - ('provider_filtered', m)  the provider's own WAF refused the request
+                                  body (HTTP 400) - an infra-level content
+                                  rejection, not a model verdict. Response
+                                  body is logged so the label is grounded
+                                  (the read-the-error-body rule).
+      - ('error', m)              429/401/5xx/parse failures - may succeed on
+                                  a later pass; caller should leave PENDING,
+                                  never silently drop (fail-closed during an
+                                  outage would drain the pool invisibly).
+    """
+    verdicts = []
+    for provider, model in MODELS:
+        messages = [{"role": "user", "content": PROMPT.format(text=text)}]
+        got = None
+        for attempt in range(4):
+            try:
+                raw = chat(provider, model, None, messages, 0.0, 300)
+                m = re.search(r"\{.*\}", raw, re.S)
+                if m:
+                    o = json.loads(m.group(0))
+                    if "appropriate" in o:
+                        got = bool(o["appropriate"])
+                        break
+            except Exception as e:
+                body = ""
+                try:
+                    body = e.read().decode("utf-8", errors="replace")[:220]  # HTTPError
+                except Exception:
+                    body = str(e)
+                with print_lock:
+                    print(f"[warn] {model} classify attempt {attempt}: {body}", flush=True)
+                if "400" in str(e):
+                    return "provider_filtered", f"{model}: {body}"
+                time.sleep(2 * (attempt + 1))
+        if got is None:
+            return "error", model
+        verdicts.append(got)
+    if all(v is True for v in verdicts):
+        return "passed", ""
+    return "rejected", verdicts[0] if verdicts else ""
+
+
 def filter_pool(texts, max_workers=6, label=""):
     """texts: list of unique strings. Returns the set of texts that passed
     both classifiers. Runs classification for both models per text in

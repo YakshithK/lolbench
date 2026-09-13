@@ -216,7 +216,7 @@ def safety_only(only_verified=False):
     already marked 'obscure' (safety runs while searches continue; flagged
     jokes don't deserve classifier calls)."""
     load_env()
-    from safety_filter import is_appropriate
+    from safety_filter import classify_status
     rows = [json.loads(l) for l in OUT_PATH.read_text(encoding="utf-8-sig").splitlines() if l.strip()]
     allowed = None
     if only_verified:
@@ -234,27 +234,31 @@ def safety_only(only_verified=False):
         print(f"[safety] only-verified mode: {len(allowed)} verified-obscure candidates", flush=True)
     pending = [r for r in rows if r.get("safety_status") == "pending" and (allowed is None or r["id"] in allowed)]
     print(f"[safety] {len(pending)}/{len(rows)} candidates pending classification", flush=True)
-    kept, dropped = 0, 0
+    counts = {"passed": 0, "dropped": 0, "still_pending": 0}
     for i, r in enumerate(rows):
         if r.get("safety_status") != "pending":
-            kept += 1 if r.get("safety_status") == "passed" else 0
             continue
         if allowed is not None and r["id"] not in allowed:
             continue
-        if is_appropriate(r["text"]):
+        status, note = classify_status(r["text"])
+        if status == "passed":
             r["safety_status"] = "passed"
-            kept += 1
-        else:
+            r["safety_note"] = ""
+            counts["passed"] += 1
+        elif status in ("rejected", "provider_filtered"):
             r["safety_status"] = "dropped"
-            dropped += 1
+            r["safety_note"] = f"{status}: {note}"
+            counts["dropped"] += 1
+        else:  # 'error' - infra hiccup; leave pending for a later pass
+            counts["still_pending"] += 1
         if (i + 1) % 10 == 0:
-            print(f"[safety] {i + 1}/{len(rows)} done (kept={kept}, dropped={dropped})", flush=True)
+            print(f"[safety] {i + 1}/{len(rows)} done ({counts})", flush=True)
             time.sleep(5)  # pace: let per-window throttles drain between batches
     survivors = [r for r in rows if r.get("safety_status") == "passed"]
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
-    print(f"[safety] final: {len(survivors)} passed, {dropped} dropped (fail-closed on errors)", flush=True)
+    print(f"[safety] final: {counts} (fail-closed dropped are verdicts; errors left pending)", flush=True)
 
 
 def main():
