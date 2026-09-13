@@ -80,12 +80,15 @@ def _toks(t):
 
 
 def load_existing_texts():
-    """Every joke text already committed to any pool, live or draft."""
+    """Every joke text already committed to any pool, live or draft - plus
+    any kill-test candidates already drawn (top-up laps must be disjoint
+    from lap 1, not just from the published pools)."""
     files = [
         ("data/lol_a_items.jsonl", ["text"]),
         ("data/lol_c_pools.jsonl", ["joke_a", "joke_b"]),
         ("data/lol_a_pilot.jsonl", ["text"]),
         ("data/lol_a_f1f5_candidates_draft.jsonl", ["text"]),
+        ("data/killtest_candidates.jsonl", ["text"]),
     ]
     texts = []
     for rel, keys in files:
@@ -105,11 +108,12 @@ def load_existing_texts():
     return texts
 
 
-def arm_k_candidates(existing):
+def arm_k_candidates(existing, seed_offset=0):
     """Buffer every band row, seeded-shuffle, then draw quotas in shuffled
     order with freshness + near-dup checks applied per draw. Near-dup token
-    sets for the existing pool are pre-tokenized once."""
-    rng = random.Random(SEED)
+    sets for the existing pool are pre-tokenized once. seed_offset shifts the
+    shuffle for top-up laps (a different slice of the same band)."""
+    rng = random.Random(SEED + seed_offset)
     band = []
     n_rows = 0
     for text, score, year in load_clean_rows():
@@ -268,6 +272,7 @@ def main():
     ap.add_argument("--safety-only", action="store_true", help="classify pending candidates in place, prune failures")
     ap.add_argument("--only-verified", action="store_true", help="with --safety-only: classify only web-verified-obscure candidates")
     ap.add_argument("--skip-arm-r", action="store_true")
+    ap.add_argument("--seed-offset", type=int, default=0, help="shift the draw shuffle for top-up laps")
     args = ap.parse_args()
 
     if args.safety_only:
@@ -277,19 +282,27 @@ def main():
     existing = load_existing_texts()
     print(f"[existing] {len(existing)} pool texts loaded for disjointness", flush=True)
 
-    cands = arm_k_candidates(existing)
+    cands = arm_k_candidates(existing, seed_offset=args.seed_offset)
     if not args.skip_arm_r:
         cands += arm_r_candidates(existing)
     for i, c in enumerate(cands):
         c["id"] = f"{c['id'][:1]}-CAND-{i:04d}"
 
+    prior = []
+    if OUT_PATH.exists():
+        prior = [json.loads(l) for l in OUT_PATH.read_text(encoding="utf-8-sig").splitlines() if l.strip()]
+        known = {p["text"] for p in prior}
+        cands = [c for c in cands if c["text"] not in known]
+    all_rows = prior + cands
+    for i, c in enumerate(all_rows):
+        c["id"] = f"{c['id'][:1]}-CAND-{i:04d}"
     with open(OUT_PATH, "w", encoding="utf-8") as f:
-        for c in cands:
+        for c in all_rows:
             f.write(json.dumps(c, ensure_ascii=False) + "\n")
     tiers = {}
     for c in cands:
         tiers[c["draft_tier"]] = tiers.get(c["draft_tier"], 0) + 1
-    print(f"[write] {OUT_PATH}: {len(cands)} candidates (safety deferred to --safety-only), tiers={tiers}", flush=True)
+    print(f"[write] {OUT_PATH}: +{len(cands)} new candidates (total {len(all_rows)}; safety deferred to --safety-only), tiers={tiers}", flush=True)
 
 
 if __name__ == "__main__":
