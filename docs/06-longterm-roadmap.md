@@ -12,6 +12,34 @@
   regular submissions (technical deep-dives like the counterfactual finding,
   result writeups) - no repost restriction on those.
 
+## LOL-C probe plan (written 2026-09-13, after the launch-feedback review)
+
+State: 12 probe ballots lifetime (10 on the since-quarantined C-0082), 0 since the
+shuffle fix deployed (sample too small to read - ~26% chance of zero in 6 ballots),
+site traffic ~6 ballots/day post-spike, cohort question 0/6 takers so far.
+
+Owner concern on record: the probe flow may ask too much of the average visitor.
+The vote itself costs nothing extra (identical one-click; probes are invisible
+until the reveal). The REVEAL is the load - it makes the voter process methodology
+("the Reddit crowd favorite was panel A") where they wanted a punchline.
+
+Plan, in order:
+1. Reveal copy tweak (queued, ~10 lines in Sidebar.jsx): make it a game, not a
+   lecture - e.g. "the internet picked panel a. You picked panel b. 48% of voters
+   match the crowd." Same data lane, zero homework.
+2. Checkpoint after TWO posts (Tuesday's kill-test post + one more): read the
+   probe rate. Meaningful movement -> keep passive collection as is.
+3. If the probe rate is still ~zero after two posts: build the TASTE TEST - a
+   dedicated opt-in mode instead of booth-interjected probes. Spec: 10 pairs from
+   the reviewed pool, ~2 minutes, one entry point on the leaderboard, ends with a
+   shareable result ("you match the internet's taste: 60%"), per-pair reveal of
+   the crowd favorite, same kind='c' lane and cohort tagging as booth probes.
+   The site GIVES the visitor something instead of asking.
+4. Unchanged: the pre-registered branch decision (~600-900 ballots before run_c.py
+   means anything; kill criterion if the ceiling can't be measured - a negative
+   result ships). The taste test exists to reach that decision with data, not to
+   replace it.
+
 ## Near-term experiment queue (from launch feedback, priority order)
 1. **Familiarity kill-test** (NeuralNomad87): ~50 genuinely obscure real jokes
    through the same explain-and-grade pipeline. **RUN 2026-09-13 - familiarity
