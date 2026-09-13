@@ -8,11 +8,19 @@ judge-grades-itself circularity this project has spent a long time fixing;
 using one to flag explicit/offensive content before a human ever sees it is
 ordinary content moderation, no different in kind from a spam filter.
 
-Two free B.AI models (glm-5.3-flash, hy3) must BOTH agree a joke is
-appropriate for it to pass - an AND-gate, not majority vote, so a single
-model's blind spot doesn't let something through. Mirrors the project's
-existing dual-judge pattern for the same reason: no single model's judgment
-is trusted alone.
+Two heterogeneous models must BOTH agree a joke is appropriate for it to pass -
+an AND-gate, not majority vote, so a single model's blind spot doesn't let
+something through. Mirrors the project's existing dual-judge pattern for the
+same reason: no single model's judgment is trusted alone.
+
+Classifier roster history (same retirement pattern as the judge roster):
+- (explabs, qwen3.8-27b + gpt-5.6-luna): the sourcing-time gate for v0.3.
+  Retired 2026-09-12 - luna went hard 401 (dead credential, not throttling)
+  and 27b sat in a 429 storm; fail-closed behavior means a dead classifier
+  silently drops the whole pool.
+- (bai, qwen3.8-flash + hy3): current pair. Family-disjoint (qwen/tencent),
+  both proven live as judges, and free-tier capacity is already managed by
+  the same rate limits the judge phase runs under.
 """
 import json
 import re
@@ -25,7 +33,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from run import ROOT, chat, load_env  # noqa: E402
 
-MODELS = [("explabs", "qwen3.8-27b"), ("explabs", "gpt-5.6-luna")]
+MODELS = [("bai", "qwen3.8-flash"), ("bai", "hy3")]
 
 PROMPT = """You are a content-safety classifier for a public benchmark website that must be safe for children and families - roughly a PG / Disney-movie standard.
 
