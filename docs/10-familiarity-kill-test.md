@@ -142,3 +142,51 @@ rJokesData carries per-post scores upstream but the A-sourcing did not retain
 them. Re-joining by text hash would give a fame gradient WITHIN the existing
 T-tier (score vs source-upvotes regression) as corroborating evidence. Deferred:
 only worth doing if the main verdict is ambiguous.
+
+## 10. RESULTS (2026-09-13, run complete)
+
+87 items (owner-approved from 92 verified-obscure; kills: a German-lightbulb
+duplicate pair the Jaccard sweep missed, a Diana death joke, an organ-trafficking
+punchline, one "weird" - each an owner catch the machine gates passed). 7 free-lane
+models generated (glm-5.3-flash dead; anchors 0 - HC tar-pit night), both judges
+graded, n=885 judge pairs, judge_validity correlation 0.4926 (higher than the main
+board's 0.4114).
+
+The 2x2 per model (scores x100; T1/F6 anchors read from the published board):
+
+| model | famous~work | obscure~work | obscure~fail | gap_T-K | gap_K-F6 |
+|---|---|---|---|---|---|
+| qwen3.8-max | 91 | 94 | 92 | -2.4 | +2.0 |
+| qwen3.8-flash | 90 | 94 | 92 | -3.3 | +2.0 |
+| glm-5.3 | 90 | 91 | 91 | -0.6 | -0.0 |
+| deepseek-v4-pro | 88 | 88 | 83 | -0.7 | +5.1 |
+| mimo-v2.5 | 84 | 83 | 81 | +0.4 | +2.6 |
+| hy3 | 87 | 83 | 83 | +4.3 | -0.3 |
+| mimo-v2.5-pro | 84 | 81 | 81 | +3.1 | +0.1 |
+
+**Verdict: P2 (familiarity) REJECTED. P1 (reasoning) confirmed, sharpened.**
+
+1. Obscure-working scores equal famous-working scores: gap_T-K centers on zero
+   (mean +0.1, range -3.3 to +4.3, all within the +/-3-4pt CI at this n). If
+   commentary-retrieval drove scores, verified-no-commentary items would collapse
+   toward failed-joke levels. They do not. Two qwen models even scored obscure
+   items HIGHER than famous ones.
+2. The residual working-vs-failed gap (gap_K-F6, +2 to +5 pts) persists BETWEEN
+   EQUALLY OBSCURE items. Both cells have zero retrievable commentary, so
+   familiarity cannot explain the differential - whatever the F6 rubric measures
+   there is about the explanations themselves. This is the P1 claim with
+   NeuralNomad's confound experimentally removed, which is stronger than the
+   original framing: F6 stays the uncontaminated tier, and now it is MEASURED,
+   not just argued.
+3. Scope caveats, disclosed: the F6 anchor rows are the main run's LLM-drafted
+   failed jokes, so the K-vs-F6 comparison crosses real-vs-synthetic provenance
+   (familiarity is controlled; provenance is a separate axis). hy3 and
+   mimo-v2.5-pro show the largest residual T-K gaps (+3-4) - within CI noise,
+   but the per-model spread is reported as-is.
+4. Protocol amendment: design said n=50; all 87 owner-approved items ran (same
+   pre-registered criteria, more data, no selection discretion). Cost: $0 metered.
+
+Open follow-ups: anchors backfill (claude/gemini/muse/gpt/grok on the kill-test
+set) when HC windows open - frontier coverage on obscure items is paper-nice but
+verdict-independent; Arm R (post-cutoff) still blocked on a Reddit fetch route;
+4 of 340 candidates permanently unverified (search timeouts).
