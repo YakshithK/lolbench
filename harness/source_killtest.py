@@ -251,9 +251,11 @@ def safety_only(only_verified=False):
             counts["dropped"] += 1
         else:  # 'error' - infra hiccup; leave pending for a later pass
             counts["still_pending"] += 1
+        time.sleep(3)  # pace every call: the free tier's real ceiling is far
+                       # below its doc rate, and retry backoffs inside a
+                       # closed window just re-hit it (measured 2026-09-12)
         if (i + 1) % 10 == 0:
             print(f"[safety] {i + 1}/{len(rows)} done ({counts})", flush=True)
-            time.sleep(5)  # pace: let per-window throttles drain between batches
     survivors = [r for r in rows if r.get("safety_status") == "passed"]
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         for r in rows:
