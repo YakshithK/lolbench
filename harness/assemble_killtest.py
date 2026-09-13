@@ -68,8 +68,10 @@ def main():
         print(f"[final] wrote {FINALISTS}: {len(out)} finalists (of {len(keeps)} keep ids)")
         return
 
-    obscure = [c for c in cands if verdicts.get(c["id"], {}).get("verdict") == "obscure"]
-    flagged = [c for c in cands if verdicts.get(c["id"], {}).get("verdict") == "flagged"]
+    obscure = [c for c in cands if verdicts.get(c["id"], {}).get("verdict") == "obscure"
+               and c.get("safety_status") == "passed"]
+    flagged = [c for c in cands if verdicts.get(c["id"], {}).get("verdict") == "flagged"
+               or c.get("safety_status") == "dropped"]
     unverified = [c for c in cands if c["id"] in verdicts and verdicts[c["id"]].get("verdict") == "unverified"]
 
     # Review order: tier then score, so the owner reads a stable, comparable list.
