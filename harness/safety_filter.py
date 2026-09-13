@@ -18,9 +18,14 @@ Classifier roster history (same retirement pattern as the judge roster):
   Retired 2026-09-12 - luna went hard 401 (dead credential, not throttling)
   and 27b sat in a 429 storm; fail-closed behavior means a dead classifier
   silently drops the whole pool.
-- (bai, qwen3.8-flash + hy3): current pair. Family-disjoint (qwen/tencent),
-  both proven live as judges, and free-tier capacity is already managed by
-  the same rate limits the judge phase runs under.
+- (bai, qwen3.8-flash + hy3): same day, brief tenure - single calls were
+  healthy but the account carried a stacked throttle from the day's earlier
+  judge traffic and errored through most of a paced run (measured: 8 of the
+  first 12 classifications errored at ~12rpm). Left pending by the tri-state
+  classifier, not dropped.
+- (hackclub, qwen/qwen3.8-max + deepseek/deepseek-v4-pro): current pair.
+  Family-disjoint (qwen/deepseek), answered clean JSON on first try, and HC's
+  20rpm config is comfortably above the paced classification load.
 """
 import json
 import re
@@ -33,7 +38,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from run import ROOT, chat, load_env  # noqa: E402
 
-MODELS = [("bai", "qwen3.8-flash"), ("bai", "hy3")]
+MODELS = [("hackclub", "qwen/qwen3.8-max"), ("hackclub", "deepseek/deepseek-v4-pro")]
 
 PROMPT = """You are a content-safety classifier for a public benchmark website that must be safe for children and families - roughly a PG / Disney-movie standard.
 
