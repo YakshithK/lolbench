@@ -1,48 +1,48 @@
 {
   "dataset_version": "0.3.0",
   "harness_version": "0.1.4",
-  "harness_hash": "844c880d9b445ee4",
-  "generated_at": "2026-09-12T22:12:11.755624+00:00",
+  "harness_hash": "733d7256362fe7c5",
+  "generated_at": "2026-09-16T04:57:00.961855+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
   "counts": {
-    "judgments_valid": 25272,
-    "judge_pairs": 18963
+    "judgments_valid": 25770,
+    "judge_pairs": 19212
   },
   "judge_validity": {
-    "n_pairs": 18963,
+    "n_pairs": 19212,
     "mean_abs_distance_pts": 9.8,
-    "correlation": 0.4122,
-    "exact_match_rate": 0.0635
+    "correlation": 0.4096,
+    "exact_match_rate": 0.0632
   },
   "spend": {
-    "deepseek-v4-pro": 0.31,
-    "hy3": 0.02,
-    "glm-5.3-flash": 0.05,
-    "mimo-v2.5-pro": 0.08,
-    "qwen3.8-flash": 0.05,
     "glm-5.3": 0.46,
-    "qwen3.8-max": 0.48,
-    "muse-spark-1.2": 0.02,
-    "grok-4.6": 0.14,
-    "gemini-3.1-pro": 0.13,
-    "gpt-5.6-sol-pro": 0.3,
+    "qwen3.8-flash": 0.05,
+    "claude-opus-5": 0.15,
     "mimo-v2.5": 0.02,
-    "claude-opus-5": 0.15
+    "gemini-3.1-pro": 0.36,
+    "gpt-5.6-sol-pro": 0.3,
+    "qwen3.8-max": 0.48,
+    "grok-4.6": 0.14,
+    "mimo-v2.5-pro": 0.08,
+    "glm-5.3-flash": 0.05,
+    "deepseek-v4-pro": 0.31,
+    "muse-spark-1.2": 0.02,
+    "hy3": 0.02
   },
   "spend_estimated": {
-    "deepseek-v4-pro": true,
-    "hy3": true,
-    "glm-5.3-flash": true,
-    "mimo-v2.5-pro": true,
-    "qwen3.8-flash": true,
     "glm-5.3": true,
-    "qwen3.8-max": true,
-    "muse-spark-1.2": true,
-    "grok-4.6": true,
+    "qwen3.8-flash": true,
+    "claude-opus-5": true,
+    "mimo-v2.5": true,
     "gemini-3.1-pro": true,
     "gpt-5.6-sol-pro": true,
-    "mimo-v2.5": true,
-    "claude-opus-5": true
+    "qwen3.8-max": true,
+    "grok-4.6": true,
+    "mimo-v2.5-pro": true,
+    "glm-5.3-flash": true,
+    "deepseek-v4-pro": true,
+    "muse-spark-1.2": true,
+    "hy3": true
   },
   "lol_a": {
     "gpt-5.6-sol-pro": {
@@ -74,12 +74,12 @@
       }
     },
     "gemini-3.1-pro": {
-      "mean": 0.8601,
+      "mean": 0.8805,
       "ci95": [
-        0.8424,
-        0.8769
+        0.8707,
+        0.8894
       ],
-      "n_scored": 285,
+      "n_scored": 783,
       "items": 150,
       "samples_per_item": 3,
       "families": {
@@ -88,8 +88,12 @@
           "n": 75
         },
         "T1": {
-          "mean": 0.866,
-          "n": 210
+          "mean": 0.885,
+          "n": 622
+        },
+        "T2": {
+          "mean": 0.875,
+          "n": 86
         }
       }
     },

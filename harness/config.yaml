@@ -99,7 +99,9 @@ candidates:
     model: google/gemini-3.1-pro-preview
     family: google
     anchor: true
-    enabled: true
+    enabled: true            # 2026-09-16: re-enabled for JUDGING its +249 new rows.
+                             # Generation stays parked (HC walled); disable again
+                             # before any generate relaunch, or run only others.
   - name: claude-opus-5
     provider: hackclub
     model: anthropic/claude-opus-5
