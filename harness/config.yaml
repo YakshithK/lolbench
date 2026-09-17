@@ -27,12 +27,13 @@ temperature: 0.9            # generation diversity; judge calls use temperature 
 max_spend_usd: 100.00        # 2026-09-12: back on free pipes (bai/hackclub),
                              # billed spend is $0; guards estimated-spend runaway only.
 
-# Candidates: five free B.AI models for v0. Paid entries (OpenRouter/xAI)
-# stay disabled until keys land.
+# Candidates: five free models (B.AI through 2026-09-16; Hack Club since the
+# 2026-09-17 all-keys paywall - same slugs, new pipe, families unchanged).
+# Paid entries (OpenRouter/xAI) stay disabled until keys land.
 candidates:
   - name: glm-5.3-flash
-    provider: bai
-    model: glm-5.3-flash
+    provider: hackclub        # 2026-09-17: bai paywalled, slug verified live.
+    model: z-ai/glm-5.3-flash
     family: zai
     enabled: true
   - name: deepseek-v4-flash
@@ -46,18 +47,18 @@ candidates:
                              # than left with a permanent gap, same treatment
                              # as hy4-preview.
   - name: hy3
-    provider: bai
-    model: hy3
+    provider: hackclub        # 2026-09-17: bai paywalled, slug verified live.
+    model: tencent/hy3
     family: tencent
     enabled: true
   - name: mimo-v2.5
-    provider: bai
-    model: mimo-v2.5
+    provider: hackclub        # 2026-09-17: bai paywalled, slug verified live.
+    model: xiaomi/mimo-v2.5
     family: xiaomi
     enabled: true
   - name: qwen3.8-flash
-    provider: bai
-    model: qwen3.8-flash
+    provider: hackclub        # 2026-09-17: bai paywalled, slug verified live.
+    model: qwen/qwen3.8-flash
     family: qwen
     enabled: true
   # ---- Tier 2: OSS flagship (OpenRouter, full run) ----
