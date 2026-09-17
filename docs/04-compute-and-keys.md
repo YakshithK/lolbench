@@ -14,8 +14,27 @@ It is not "how many times do we run it" — it is calls per model per event.
 - Full day-1 total: ~10,000 short calls (~1k tokens each) ≈ 10M tokens ≈ single-digit dollars on paid APIs. **Rate limits are the constraint, never money.**
 - Re-runs are event-triggered only: new model added, item set expanded (C5 doubles: n 5→10), new wave, quarterly audit.
 
-## Free-tier reality (verified 2026-09-12, post-launch lessons)
-- b.ai: three keys rotated; glm-5.3-flash free quota went to 0 on ALL keys
+## Free-tier reality (verified 2026-09-17; third death wave)
+
+- b.ai: DEAD on all three keys (balance=0, `insufficient_user_quota`, verified
+  per-key 2026-09-17) - the third free-tier death after deepseek (deal ended)
+  and glm-5.3-flash (quota 0, 2026-09-12). Both live judges (qwen + hy) were
+  bai lanes: rerouted same-day to Hack Club (`qwen/qwen3.8-flash`,
+  `tencent/hy3`, both verified 200; families unchanged so exclusions hold).
+- kiraai.vn: free tier restructured to paid between 2026-09-13 and 2026-09-17.
+  All four `-free` slugs 404 (`model_not_found`); bare slugs 402 on an empty
+  VND wallet. kira-glm-judge (216s/call backup) is unrunnable until funded.
+  Lesson: a spare lane only counts while its billing model is verified live;
+  re-probe before depending on it.
+- Hack Club: free, no payment rail, throttling per-slug AND account-level.
+  2026-09-17 burst delivered ~600 generation rows (gemini completed 419,
+  claude 48 -> 416, muse 31 -> 184) then stacked account-wide; judges at
+  6 concurrent stacked it further (13 verdicts then all-429). Dropped to
+  4 concurrent + cool-down between phases. Skip-and-rotate now applies to
+  whole phases, not just slugs: generation and judging take turns on one
+  account.
+- (2026-09-12 notes, kept for history)
+- b.ai (2026-09-12): three keys rotated; glm-5.3-flash free quota went to 0 on ALL keys
   (balance=0) on 2026-09-12 - glm-judge retired, qwen+hy judges hold the 2-judge
   floor for every pending model. deepseek free deal ended earlier (2026-09).
 - Hack Club: free, no payment rail, but throttling is per-slug AND account-level.

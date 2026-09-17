@@ -12,7 +12,13 @@ anchor_samples: 1          # frontier anchors run once per item (wider CIs, flag
 lol_b_samples: 1          # voting uses sample 0; extra samples added at C5
 max_output_tokens: 2000     # reasoning models: budget includes hidden reasoning tokens
 judge_max_tokens: 3000      # judges are reasoning models too; budget covers reasoning + JSON
-judge_workers: 3            # per judge; 2 judges x 3 = 6 concurrent B.AI calls (free-tier safe)
+judge_workers: 1            # per judge; 2 total concurrent Hack Club calls.
+                             # Lowered 2->1 on 2026-09-17: the live HC ceiling is
+                             # near-single-digit rpm and 4 workers drain the burst
+                             # allowance faster than it refills (13 verdicts then
+                             # all-429); fallback retries multiply load per row
+                             # under throttling. Slower drain = sustained progress.
+                             # Revert upward when the account is cool.
 parallel_workers: 3            # per-candidate concurrent calls. Lowered 8->3 on 2026-09-08:
                              # Hack Club throttled 10k+ generation calls (429 wall + 521s) at 8 workers.
                              # Matches judge_workers' proven-safe level; throughput comes from fewer
@@ -99,9 +105,7 @@ candidates:
     model: google/gemini-3.1-pro-preview
     family: google
     anchor: true
-    enabled: true            # 2026-09-16: re-enabled for JUDGING its +249 new rows.
-                             # Generation stays parked (HC walled); disable again
-                             # before any generate relaunch, or run only others.
+    enabled: true
   - name: claude-opus-5
     provider: hackclub
     model: anthropic/claude-opus-5
@@ -114,8 +118,9 @@ candidates:
     model: meta/muse-spark-1.2
     family: meta
     anchor: true
-    enabled: true           # 2026-09-12: re-enabled for scoring; generation stays
-                            # parked (no runner active). Tar pit at 6/371.
+    enabled: false          # 2026-09-17: skipped mid-run, muse shutter slammed
+                            # (1 ok / 39 warn); 184 rows banked, circles back
+                            # on the next burst window. See skip-and-rotate.
   - name: grok-4.6
     provider: hackclub
     model: x-ai/grok-4.6
@@ -139,8 +144,8 @@ judges:
                              # judgments it already made keep their correct family
                              # tag for same-family exclusion checks on old data.
   - name: qwen-judge
-    provider: bai
-    model: qwen3.8-flash
+    provider: hackclub        # 2026-09-17: bai all-keys 0, kira free dead;
+    model: qwen/qwen3.8-flash  # verified live. Family tag unchanged.
     family: qwen
     exclude_models: []
   - name: glm-judge
@@ -156,8 +161,8 @@ judges:
                             # Next judge launch needs a 3rd-judge replacement
                             # (any non-qwen family) or qwen-family rows go single-judge.
   - name: hy-judge
-    provider: bai
-    model: hy3
+    provider: hackclub        # 2026-09-17: bai all-keys 0, kira free dead;
+    model: tencent/hy3         # verified live. Family tag unchanged.
     family: tencent
     exclude_models: []
   - name: kira-glm-judge
