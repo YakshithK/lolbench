@@ -63,6 +63,10 @@ It is not "how many times do we run it" — it is calls per model per event.
   throttles are for waiting out. Know which mode you're in before launching.
 - Never leave a runner grinding a 429-only slug: it starves queued models. Kill,
   skip, rotate, circle back (muse/gpt/gemini pattern, 2026-09-12).
+- Single probes lie: a 200 OK on one call proves routing, not capacity
+  (2026-09-17: muse + grok slugs probed clean, then went 0-ok under sustained
+  calling). The only valid window test is a sustained mini-run (~20 calls);
+  probe-then-launch on one data point burns the cool-down it was measuring.
 
 ## Hardware roles (owner has: RTX 5060 8GB, Mac Studio M4 Ultra 64GB)
 | Machine | Role | Reality check |

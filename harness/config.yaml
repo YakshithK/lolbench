@@ -119,9 +119,10 @@ candidates:
     model: meta/muse-spark-1.2
     family: meta
     anchor: true
-    enabled: false          # 2026-09-17: skipped mid-run, muse shutter slammed
-                            # (1 ok / 39 warn); 184 rows banked, circles back
-                            # on the next burst window. See skip-and-rotate.
+    enabled: false          # 2026-09-17: re-parked, slug still 429-only on
+                            # relaunch (0 ok / 24 warn); 184 banked. Single
+                            # probes slip through but sustained calling does
+                            # not - needs a real window, not a cool spell.
   - name: grok-4.6
     provider: hackclub
     model: x-ai/grok-4.6
