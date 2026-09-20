@@ -1,5 +1,32 @@
 # LOL Bench — Compute, Calls, and Keys
 
+## Free-tier reality (verified 2026-09-20; fourth death wave - every lane)
+
+The 2026-09-17 HC "stacking" was not a throttle. It was the free credit pool
+draining. On 2026-09-20 every provider residues to zero, verified by direct probe:
+
+- Hack Club: proxy is OpenRouter-backed. All slugs now return HTTP 402
+  `Insufficient credits` (limit_source `openrouter_credits`); a live slug
+  (gemini-3.1-pro) returns 400 `not a valid model ID`. Per-slug routing is gone,
+  it is one account credit pool. The ~600-row 09-17 burst was the last spend.
+- b.ai: three keys, all `balance=0` / `insufficient_user_quota` (09-17, escalated).
+- kiraai.vn: free slugs 404 `model_not_found`; bare slugs 402 empty VND wallet.
+- OpenRouter: key `API key expired` (401) - both /credits and /key.
+- xAI direct: 403 `team ... used all available credits or reached monthly limit`.
+- tokenrouter (an OR reseller): 200 on /models, but every chat 403
+  `insufficient_user_quota`; gift balance 0. The one `:free`-tagged model is also
+  0. Dead lane, not a workaround.
+- explabs: /models returns 288 models and 200, but every chat is
+  `model_requires_purchase ... locked until you make a purchase`. Listing, not
+  access.
+- Gemini/Groq/Cerebras free tiers: unchanged policy, not held by us; Gemini
+  ~250 req/day cannot carry the run.
+
+Net: there is no funded free lane left. Any further work needs either owner
+credits on one paid lane (OpenRouter is cheapest at ~$0.0005/row and the wallet
+402 is the safety that worked), or the local hardware lane (RTX 5060 8GB / Mac
+Studio M4 Ultra 64GB) reusing `harness/*.py` against a local OpenAI-compatible server.
+
 ## Call budget (the honest math)
 
 It is not "how many times do we run it" — it is calls per model per event.
