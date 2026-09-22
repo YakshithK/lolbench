@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07080a">
+<title>LOL Bench · Someone tried to break this benchmark</title>
+<meta name="description" content="A commenter said our best result was memory, not reasoning. He designed the experiment to prove it. 87 obscure jokes later, he was wrong.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="LOL Bench">
+<meta property="og:title" content="LOL Bench · Someone tried to break this benchmark">
+<meta property="og:description" content="87 obscure jokes, 7 models, 885 judgments. The memory theory is rejected, and the finding is stronger for it.">
+<meta property="og:url" content="https://www.lolbench.lol/kill-test/">
+<meta property="og:image" content="https://www.lolbench.lol/og-image.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LOL Bench · Someone tried to break this benchmark">
+<meta name="twitter:description" content="87 obscure jokes, 7 models, 885 judgments. The memory theory is rejected, and the finding is stronger for it.">
+<meta name="twitter:image" content="https://www.lolbench.lol/og-image.png?v=2">
+<link rel="icon" href="../design/assets/mark.svg">
+<link rel="stylesheet" href="../design/styles.css?v=3">
+<style>
+@media(max-width:1080px){.kt-hero{grid-template-columns:1fr!important;gap:26px!important}}
+.kt-body{max-width:70ch}
+.kt-body p{margin-top:14px;color:var(--ink-2);font-weight:300}
+.kt-body p strong{color:var(--ink);font-weight:600}
+.kt-sec{padding-top:34px;margin-top:34px;border-top:var(--border)}
+.kt-sec h2{font-family:var(--display);font-weight:800;font-size:var(--h2-size);letter-spacing:-.025em}
+.kt-tablewrap{overflow-x:auto}
+table.kt{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:var(--data-size);font-variant-numeric:tabular-nums}
+table.kt th{font-size:var(--label-size);letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--ink-3);font-weight:500;text-align:right;padding:8px 12px;border-bottom:var(--border-axis);white-space:nowrap}
+table.kt th:first-child,table.kt td:first-child{text-align:left}
+table.kt td{padding:var(--cell-pad);border-bottom:var(--border);color:var(--ink);text-align:right;white-space:nowrap}
+table.kt tr:last-child td{border-bottom:none}
+.chip{display:inline-block;font-family:var(--mono);font-size:var(--caption-size);letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--accent-brand);border:1px solid var(--accent-brand);padding:5px 12px}
+.kt-cta{margin-top:34px;border:var(--border);background:var(--surface-glass);padding:var(--panel-body-pad);display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.kt-cta p{font-weight:200;color:var(--ink-2);font-size:18px}
+.kt-cta a{font-family:var(--mono);font-size:13px;color:var(--accent-brand);border:1px solid var(--accent-brand);padding:12px 22px;white-space:nowrap}
+.kt-cta a:hover{background:var(--accent-brand);color:#07080a}
+</style>
+</head>
+<body>
+<div style="border-bottom:var(--border);background:var(--canvas)">
+  <div class="wrap" style="height:var(--topbar-h);display:flex;align-items:center;gap:32px">
+    <a href="/" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)">
+      <img src="../design/assets/mark.svg" alt="" width="26" height="17">
+      <span style="font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:-.02em">LOL BENCH</span>
+    </a>
+    <nav style="display:flex;gap:24px;font-family:var(--mono);font-size:12px">
+      <a href="/" style="color:var(--ink-4);text-decoration:none;padding-bottom:3px;border-bottom:1px solid transparent">scores</a>
+      <a href="/kill-test/" aria-current="page" style="color:var(--ink);text-decoration:none;padding-bottom:3px;border-bottom:1px solid var(--accent-brand)">findings</a>
+      <a href="https://github.com/YakshithK/lolbench" style="color:var(--ink-4);text-decoration:none;padding-bottom:3px;border-bottom:1px solid transparent">github</a>
+    </nav>
+    <span style="margin-left:auto;font-family:var(--mono);font-size:var(--stamp-size);color:var(--ink-3)">experiment 01 · 2026-09-13</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="kt-hero" style="display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:end;padding:var(--hero-pad);border-bottom:var(--border)">
+    <div>
+      <div style="font-family:var(--mono);font-size:var(--caption-size);letter-spacing:var(--kicker-tracking);text-transform:uppercase;color:var(--accent-brand)">experiment 01 / a community kill-test</div>
+      <h1 style="font-family:var(--display);font-weight:800;font-size:var(--h1-size);line-height:var(--h1-leading);letter-spacing:var(--h1-tracking);margin-top:20px">Someone tried<br>to break this<br>benchmark.</h1>
+      <p style="margin-top:22px;font-family:var(--body);font-size:var(--sub-size);font-weight:200;color:var(--ink-2);max-width:40ch">A commenter said our best result was memory wearing a reasoning costume. He designed the experiment to prove it. We ran it.</p>
+    </div>
+    <div style="border:var(--border);background:var(--surface-glass)">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:var(--panel-head-pad);border-bottom:var(--border)">
+        <h2 style="font-family:var(--display);font-weight:700;font-size:var(--h4-size);letter-spacing:-.025em">The bet</h2>
+        <span style="font-family:var(--mono);font-size:var(--caption-size);color:var(--ink-3);text-align:right">u/NeuralNomad87, launch thread</span>
+      </div>
+      <div style="padding:var(--panel-body-pad)">
+        <p style="font-family:var(--body);font-weight:200;font-style:italic;font-size:18px;line-height:1.45;color:#d6d4cf">Run genuinely obscure real jokes through the same pipeline. If the scores collapse toward dud-level, your axis is familiarity, not reasoning.</p>
+      </div>
+      <div style="border-top:var(--border);padding:var(--panel-foot-pad);font-family:var(--mono);font-size:var(--caption-size);color:var(--ink-3);line-height:1.7">Offered for free. Pre-registered before a single call. The benchmark tests its community's theories on its own data, whatever the theories say.</div>
+    </div>
+  </div>
+
+  <div class="kt-sec kt-body" style="border-top:none;margin-top:0">
+    <h2>The attack, in plain words</h2>
+    <p>Our headline result was a gap: models score around <span class="num">95</span> explaining why a working joke works, and around <span class="num">81</span> explaining why a failed one does not. We read that as reasoning. The commenter read it as memory.</p>
+    <p>Famous jokes come with commentary attached. Every well-known joke has been analyzed somewhere, and that analysis is in the training data. So explaining a winner is partly <strong>remembering</strong>. Failed jokes have no literature at all. Explaining a dud is pure <strong>thinking</strong>. The gap might measure the distance between recall and reasoning, wearing a humor costume.</p>
+    <p>It was the best comment of the launch because it was checkable. So we checked it.</p>
+  </div>
+
+  <div class="kt-sec kt-body">
+    <h2>The test</h2>
+    <p><span class="num">87</span> real jokes, pulled from high-upvote archives, each verified by web search to have no analysis or commentary anywhere findable. The machine gates missed a few; a human taste-read killed the rest, including a duplicate pair, a death joke, and one punchline nobody should grade. Same explain-and-grade pipeline, two judges from other labs, <span class="num">7</span> models, <span class="num">885</span> double-judged pairs, judge agreement <span class="num">r=0.49</span>. Metered cost: <span class="num">$0</span>.</p>
+    <p>Protocol said 50 items. All 87 approved items ran under the same pre-registered criteria, no selection discretion. More data, same rules.</p>
+  </div>
+
+  <div class="kt-sec">
+    <h2 style="font-family:var(--display);font-weight:800;font-size:var(--h2-size);letter-spacing:-.025em">The result</h2>
+    <p style="margin-top:14px;color:var(--ink-2);font-weight:300;max-width:70ch"><span class="chip">verdict: the memory theory is rejected</span></p>
+    <div style="border:var(--border);background:var(--surface-glass);margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:var(--panel-head-pad);border-bottom:var(--border)">
+        <h2 style="font-family:var(--display);font-weight:700;font-size:var(--h4-size);letter-spacing:-.025em">Famous vs obscure, per model</h2>
+        <span style="font-family:var(--mono);font-size:var(--caption-size);color:var(--ink-3);text-align:right">scores x100 · 87 obscure items</span>
+      </div>
+      <div class="kt-tablewrap">
+      <table class="kt">
+        <thead><tr><th>model</th><th>famous, works</th><th>obscure, works</th><th>obscure, fails</th><th>gap, famous-obscure</th><th>gap, works-fails</th></tr></thead>
+        <tbody>
+          <tr><td>qwen3.8-max</td><td>91</td><td>94</td><td>92</td><td>-2.4</td><td>+2.0</td></tr>
+          <tr><td>qwen3.8-flash</td><td>90</td><td>94</td><td>92</td><td>-3.3</td><td>+2.0</td></tr>
+          <tr><td>glm-5.3</td><td>90</td><td>91</td><td>91</td><td>-0.6</td><td>-0.0</td></tr>
+          <tr><td>deepseek-v4-pro</td><td>88</td><td>88</td><td>83</td><td>-0.7</td><td>+5.1</td></tr>
+          <tr><td>mimo-v2.5</td><td>84</td><td>83</td><td>81</td><td>+0.4</td><td>+2.6</td></tr>
+          <tr><td>hy3</td><td>87</td><td>83</td><td>83</td><td>+4.3</td><td>-0.3</td></tr>
+          <tr><td>mimo-v2.5-pro</td><td>84</td><td>81</td><td>81</td><td>+3.1</td><td>+0.1</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div style="border-top:var(--border);padding:var(--panel-foot-pad);font-family:var(--mono);font-size:var(--caption-size);color:var(--ink-3);line-height:1.7">Obscure working jokes score the same as famous ones. The gap centers on zero (mean +0.1, every row inside the ±3 to 4 pt confidence interval at this n). Two models scored obscure jokes higher than famous ones. Famous rows: the published board. Obscure rows: 87 items, 885 judged pairs.</div>
+    </div>
+  </div>
+
+  <div class="kt-sec kt-body">
+    <h2>What it means</h2>
+    <p>If commentary-retrieval were doing the work, zero-commentary items should have collapsed toward dud-level. They did not. The memory theory is out.</p>
+    <p>The sharper finding is in the second gap column: the working-vs-failed difference (<span class="num">+2</span> to <span class="num">+5</span> pts) persists <strong>between two equally obscure cells</strong>. Both have nothing to retrieve. So whatever that gap measures, it is about the explanations themselves, not memory of joke analyses.</p>
+    <p>Our hardest tier, the failed-joke explanations, is now the uncontaminated reasoning tier. Before this test that was an argument. Now it is measured. And the counterfactual theory three commenters converged on gets a second piece of evidence: models failing to explain a dud do not diagnose it, they assert it. <span class="num">72%</span> of low-scoring explanations say the joke "doesn't land" without saying why.</p>
+  </div>
+
+  <div class="kt-sec">
+    <h2 style="font-family:var(--display);font-weight:800;font-size:var(--h2-size);letter-spacing:-.025em">The caveats, on the record</h2>
+    <div style="border:var(--border);background:var(--surface-glass);margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:var(--panel-head-pad);border-bottom:var(--border)">
+        <h2 style="font-family:var(--display);font-weight:700;font-size:var(--h4-size);letter-spacing:-.025em">What this test does not prove</h2>
+        <span style="font-family:var(--mono);font-size:var(--caption-size);color:var(--ink-3);text-align:right">3 limits, stated before the conclusion</span>
+      </div>
+      <div style="padding:var(--panel-body-pad);max-width:70ch">
+        <p style="color:var(--ink-2);font-weight:300"><strong style="color:var(--ink)">Provenance.</strong> Our failed-joke anchors are model-drafted. So the last comparison crosses real-vs-synthetic. Familiarity is controlled; provenance is a separate axis, and the control for it is next.</p>
+        <p style="color:var(--ink-2);font-weight:300;margin-top:14px"><strong style="color:var(--ink)">Small n.</strong> Seven models, 885 pairs. Every gap above sits inside a ±3 to 4 pt interval. hy3 and mimo-v2.5-pro show the widest spreads; reported as-is, not smoothed.</p>
+        <p style="color:var(--ink-2);font-weight:300;margin-top:14px"><strong style="color:var(--ink)">No frontier anchors.</strong> The big models never touched this set; their lanes were down that night. Frontier coverage on obscure items is paper-nice but verdict-independent. Full protocol: <a href="https://github.com/YakshithK/lolbench/blob/master/docs/10-familiarity-kill-test.md">docs/10 in the repo</a>.</p>
+      </div>
+      <div style="border-top:var(--border);padding:var(--panel-foot-pad);font-family:var(--mono);font-size:var(--caption-size);color:var(--ink-3);line-height:1.7">A negative result ships: had the scores collapsed, this page would report that the axis was familiarity. It reports what the data said instead.</div>
+    </div>
+  </div>
+
+  <div class="kt-sec kt-body">
+    <h2>What is next</h2>
+    <p>Two controls, both pre-registerable, both free to design now. A provenance control runs model-drafted obscure jokes through the same pipeline, to separate success-vs-failure from real-vs-synthetic. A rubric-priming control re-judges failed explanations under neutral wording, to harden the counterfactual finding. Each gets its own page here when it lands.</p>
+    <p>The commenter earned more than a verdict. His other two notes shipped as well: the "how online are you" cohort question is live in the booth, and per-cohort agreement publishes the moment any cohort clears our <span class="num">n=10</span> floor.</p>
+  </div>
+
+  <div class="kt-cta">
+    <p>Think a result here is memory, luck, or rubric. Bring the test.<br><span style="font-size:15px;color:var(--ink-4)">Meanwhile: vote a matchup. Your picks get graded the same way ours did.</span></p>
+    <a href="/#vote-panel">vote a matchup</a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:var(--border);margin-top:var(--gap-panel)">
+    <div style="background:var(--surface);padding:var(--band-pad)">
+      <div style="font-family:var(--mono);font-size:var(--label-size);letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--ink-3)">jokes verified obscure</div>
+      <div class="num" style="font-size:var(--data-lg-size);font-weight:600;margin-top:5px">87</div>
+      <p style="font-size:14px;font-weight:200;color:var(--ink-4);margin-top:4px">all owner-approved, 4 kills logged</p>
+    </div>
+    <div style="background:var(--surface);padding:var(--band-pad)">
+      <div style="font-family:var(--mono);font-size:var(--label-size);letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--ink-3)">double-judged pairs</div>
+      <div class="num" style="font-size:var(--data-lg-size);font-weight:600;margin-top:5px">885</div>
+      <p style="font-size:14px;font-weight:200;color:var(--ink-4);margin-top:4px">judge agreement r=0.49</p>
+    </div>
+    <div style="background:var(--surface);padding:var(--band-pad)">
+      <div style="font-family:var(--mono);font-size:var(--label-size);letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--ink-3)">mean famous-obscure gap</div>
+      <div class="num" style="font-size:var(--data-lg-size);font-weight:600;margin-top:5px">+0.1</div>
+      <p style="font-size:14px;font-weight:200;color:var(--ink-4);margin-top:4px">centers on zero, ±3 to 4 pt CI</p>
+    </div>
+    <div style="background:var(--surface);padding:var(--band-pad)">
+      <div style="font-family:var(--mono);font-size:var(--label-size);letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--ink-3)">metered cost</div>
+      <div class="num" style="font-size:var(--data-lg-size);font-weight:600;margin-top:5px">$0</div>
+      <p style="font-size:14px;font-weight:200;color:var(--ink-4);margin-top:4px">free lanes, 7 models, 2 judges</p>
+    </div>
+  </div>
+</div>
+
+<footer class="wrap" style="margin-top:34px;padding-top:16px;padding-bottom:34px;border-top:var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:var(--caption-size);color:var(--ink-3)">
+  <span>lolbench.lol /kill-test</span>
+  <a href="https://github.com/YakshithK/lolbench" style="color:var(--ink-4)">source and raw data on github</a>
+  <span>early results · rankings will move</span>
+</footer>
+</body>
+</html>
