@@ -46,6 +46,7 @@ candidates:
                              # F6 data under the new rubric - retired rather
                              # than left with a permanent gap, same treatment
                              # as hy4-preview.
+    retired: true           # explicitly off the public board, not merely paused.
   - name: hy3
     provider: hackclub        # 2026-09-17: bai paywalled, slug verified live.
     model: tencent/hy3
@@ -90,6 +91,7 @@ candidates:
                              # reasoning ~27-77% of the time (confirmed via cost log
                              # cross-reference), producing empty outputs that score as
                              # comprehension failures rather than infrastructure ones
+    retired: true           # explicitly off the public board, not merely paused.
 
   # ---- Tier 4: frontier anchors (OpenRouter/xAI, n=1) ----
   - name: gpt-5.6-sol-pro
@@ -123,6 +125,7 @@ candidates:
                             # relaunch (0 ok / 24 warn); 184 banked. Single
                             # probes slip through but sustained calling does
                             # not - needs a real window, not a cool spell.
+                            # Parked, NOT retired: still scores on the board.
   - name: grok-4.6
     provider: hackclub
     model: x-ai/grok-4.6

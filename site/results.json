@@ -1,48 +1,48 @@
 {
   "dataset_version": "0.3.0",
   "harness_version": "0.1.4",
-  "harness_hash": "733d7256362fe7c5",
-  "generated_at": "2026-09-16T04:57:00.961855+00:00",
+  "harness_hash": "325ac78e896e6e82",
+  "generated_at": "2026-09-25T16:47:55.422340+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
   "counts": {
-    "judgments_valid": 25770,
-    "judge_pairs": 19212
+    "judgments_valid": 26662,
+    "judge_pairs": 19658
   },
   "judge_validity": {
-    "n_pairs": 19212,
+    "n_pairs": 19658,
     "mean_abs_distance_pts": 9.8,
-    "correlation": 0.4096,
-    "exact_match_rate": 0.0632
+    "correlation": 0.4089,
+    "exact_match_rate": 0.0631
   },
   "spend": {
-    "glm-5.3": 0.46,
-    "qwen3.8-flash": 0.05,
-    "claude-opus-5": 0.15,
-    "mimo-v2.5": 0.02,
-    "gemini-3.1-pro": 0.36,
-    "gpt-5.6-sol-pro": 0.3,
-    "qwen3.8-max": 0.48,
+    "gemini-3.1-pro": 0.41,
     "grok-4.6": 0.14,
-    "mimo-v2.5-pro": 0.08,
+    "qwen3.8-flash": 0.05,
+    "muse-spark-1.2": 0.05,
+    "gpt-5.6-sol-pro": 0.3,
     "glm-5.3-flash": 0.05,
-    "deepseek-v4-pro": 0.31,
-    "muse-spark-1.2": 0.02,
-    "hy3": 0.02
+    "qwen3.8-max": 0.48,
+    "glm-5.3": 0.46,
+    "mimo-v2.5": 0.02,
+    "mimo-v2.5-pro": 0.08,
+    "hy3": 0.02,
+    "claude-opus-5": 0.94,
+    "deepseek-v4-pro": 0.31
   },
   "spend_estimated": {
-    "glm-5.3": true,
-    "qwen3.8-flash": true,
-    "claude-opus-5": true,
-    "mimo-v2.5": true,
     "gemini-3.1-pro": true,
-    "gpt-5.6-sol-pro": true,
-    "qwen3.8-max": true,
     "grok-4.6": true,
-    "mimo-v2.5-pro": true,
-    "glm-5.3-flash": true,
-    "deepseek-v4-pro": true,
+    "qwen3.8-flash": true,
     "muse-spark-1.2": true,
-    "hy3": true
+    "gpt-5.6-sol-pro": true,
+    "glm-5.3-flash": true,
+    "qwen3.8-max": true,
+    "glm-5.3": true,
+    "mimo-v2.5": true,
+    "mimo-v2.5-pro": true,
+    "hy3": true,
+    "claude-opus-5": true,
+    "deepseek-v4-pro": true
   },
   "lol_a": {
     "gpt-5.6-sol-pro": {
@@ -74,12 +74,12 @@
       }
     },
     "gemini-3.1-pro": {
-      "mean": 0.8805,
+      "mean": 0.8815,
       "ci95": [
-        0.8707,
-        0.8894
+        0.8725,
+        0.8898
       ],
-      "n_scored": 783,
+      "n_scored": 887,
       "items": 150,
       "samples_per_item": 3,
       "families": {
@@ -92,34 +92,50 @@
           "n": 622
         },
         "T2": {
-          "mean": 0.875,
-          "n": 86
+          "mean": 0.879,
+          "n": 160
+        },
+        "T3": {
+          "mean": 0.906,
+          "n": 30
         }
       }
     },
     "claude-opus-5": {
-      "mean": 0.9217,
+      "mean": 0.9002,
       "ci95": [
-        0.9073,
-        0.9339
+        0.8938,
+        0.9064
       ],
-      "n_scored": 75,
+      "n_scored": 817,
       "items": 150,
       "samples_per_item": 3,
       "families": {
         "F6": {
           "mean": 0.922,
           "n": 75
+        },
+        "T1": {
+          "mean": 0.896,
+          "n": 552
+        },
+        "T2": {
+          "mean": 0.9,
+          "n": 160
+        },
+        "T3": {
+          "mean": 0.924,
+          "n": 30
         }
       }
     },
     "grok-4.6": {
-      "mean": 0.906,
+      "mean": 0.9065,
       "ci95": [
-        0.9006,
-        0.9112
+        0.9011,
+        0.9118
       ],
-      "n_scored": 1119,
+      "n_scored": 1165,
       "items": 150,
       "samples_per_item": 3,
       "families": {
@@ -132,8 +148,12 @@
           "n": 828
         },
         "T2": {
-          "mean": 0.894,
-          "n": 216
+          "mean": 0.895,
+          "n": 232
+        },
+        "T3": {
+          "mean": 0.918,
+          "n": 30
         }
       }
     },

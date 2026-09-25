@@ -19,7 +19,19 @@ CFG = yaml.safe_load((ROOT / "harness" / "config.yaml").read_text(encoding="utf-
 
 
 def enabled_candidates():
-    return {c["name"] for c in CFG["candidates"] if c.get("enabled")}
+    """Models that may appear on the public board.
+
+    `enabled` gates GENERATION only. A model that is parked (enabled: false
+    because its provider lane is dead) still has banked rows and must stay on
+    the board: dropping it would silently delete a published result from the
+    public record. `retired: true` is the explicit opt-out, and it means the
+    model is being REMOVED on purpose, not merely paused.
+    """
+    return {
+        c["name"]
+        for c in CFG["candidates"]
+        if c.get("enabled") or not c.get("retired")
+    }
 
 
 def mean(xs):
