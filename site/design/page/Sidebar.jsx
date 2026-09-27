@@ -166,6 +166,15 @@ function Sidebar({ data }) {
   const matrix = [...matrixSource].sort((a, b) => b.n - a.n).slice(0, 6).map(m => ({ label: m.name, n: m.n }));
   const totalCount = data.scored.length + data.unrankable.length;
 
+  // Win-rate table caption has to carry the convention and the thin-data
+  // warning, because a percentage with no denominator is the exact thing this
+  // design system refuses to print.
+  const wr = data.winrate || [];
+  const placeable = wr.filter(r => r.n >= 20);
+  const winCaption = wr.length
+    ? `A decision is a ballot that picked one of the two jokes; there are ${data.voteTotals ? data.voteTotals.decisive.toLocaleString() : "no"} of them. Ties and "neither" are excluded from both sides of the rate. ${placeable.length} of ${wr.length} models have 20 or more decisions (${placeable.map(r => r.label).join(", ") || "none"}); the rest are shown in orange, and the ranges overlap, so this is not a ranking yet. Every one of these rates is provisional and will move as ballots land.`
+    : "No decisive ballots yet.";
+
   return (
     <div style={{ display: "grid", gap: "26px", alignContent: "start" }}>
       <Panel title="Standings" meta="lime = best score on the board" pad={false}>
@@ -178,6 +187,10 @@ function Sidebar({ data }) {
       <Panel title="How much data is behind each number" meta="one square = 10 graded answers · partial square = fewer than 10"
         caption={`Shown: the ${matrix.length} models with the most graded answers so far, out of ${totalCount} total. Orange means the sample is too thin to trust.`}>
         <DotMatrix rows={matrix} />
+      </Panel>
+      <Panel title="Which model's jokes people pick" meta="win rate · 95% range shown"
+        caption={winCaption}>
+        <WinRateChart rows={data.winrate} />
       </Panel>
       <Panel title="Who has written their jokes" meta={`jokes written of ${WRITTEN_TARGET}`}
         caption={`${WRITTEN_TARGET} jokes each is a full wave-0 set. Counts below are non-empty jokes actually produced, not attempts.`}>

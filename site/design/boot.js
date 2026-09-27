@@ -173,19 +173,40 @@
     mechanisms: mechanisms,
     mechanismRows: mechanismRows,
     written: written,
+    winrate: [],
+    voteTotals: null,
     bouts: bouts.length ? bouts : [{ id: "no bouts yet", premise: "—", modelA: "—", modelB: "—", a: "Bouts publish once wave-0 generation lands.", b: "…", ballots: 0, kind: "b" }],
     costEstimated: true // every figure in `spend` is derived (see harness/score.py spend_by_model), never metered
   };
 
-  // Best-effort real ballot counts; leaves ballots:0 if the API isn't reachable.
+  // Best-effort real ballot counts plus live LOL-B win rates; leaves ballots:0
+  // and winrate:[] if the API isn't reachable. Tolerates the pre-2026-09 array
+  // shape so a stale deploy can't blank the page.
   try {
     var lb = getJSON("/api/leaderboard");
-    if (Array.isArray(lb)) {
-      var byId = {};
-      lb.forEach(function (row) { byId[row.matchup_id] = (row.wins_a || 0) + (row.wins_b || 0) + (row.ties || 0) + (row.neithers || 0); });
-      window.LOLB.bouts.forEach(function (bout) {
-        if (byId[bout.id] != null) bout.ballots = byId[bout.id];
+    var rows = Array.isArray(lb) ? lb : (lb && lb.matchups) || [];
+    var byId = {};
+    rows.forEach(function (row) { byId[row.matchup_id] = (row.wins_a || 0) + (row.wins_b || 0) + (row.ties || 0) + (row.neithers || 0); });
+    window.LOLB.bouts.forEach(function (bout) {
+      if (byId[bout.id] != null) bout.ballots = byId[bout.id];
+    });
+    if (lb && !Array.isArray(lb) && Array.isArray(lb.models)) {
+      // THIN_DECISIONS mirrors the rankable floor: a win rate off a handful of
+      // decisive ballots is shown but coloured as untrustworthy, never ranked.
+      var THIN_DECISIONS = 20;
+      window.LOLB.winrate = lb.models.map(function (m) {
+        return {
+          label: m.model,
+          value: Math.round(m.rate * 1000) / 10,
+          lo: Math.round(m.lo * 1000) / 10,
+          hi: Math.round(m.hi * 1000) / 10,
+          n: m.decisions,
+          wins: m.wins,
+          thin: m.decisions < THIN_DECISIONS,
+          ranked: m.decisions >= THIN_DECISIONS
+        };
       });
+      window.LOLB.voteTotals = lb.totals || null;
     }
   } catch (e) { /* leaderboard API not configured locally; ballots stay 0 */ }
 })();
