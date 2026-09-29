@@ -2,7 +2,7 @@
   "dataset_version": "0.3.0",
   "harness_version": "0.1.4",
   "harness_hash": "325ac78e896e6e82",
-  "generated_at": "2026-09-25T16:47:55.422340+00:00",
+  "generated_at": "2026-09-29T00:39:37.639667+00:00",
   "banner": "PRELIMINARY - auto-judged, no human calibration yet. Judge model family is disjoint from scored candidates.",
   "counts": {
     "judgments_valid": 26662,
@@ -15,34 +15,34 @@
     "exact_match_rate": 0.0631
   },
   "spend": {
-    "gemini-3.1-pro": 0.41,
-    "grok-4.6": 0.14,
-    "qwen3.8-flash": 0.05,
-    "muse-spark-1.2": 0.05,
-    "gpt-5.6-sol-pro": 0.3,
-    "glm-5.3-flash": 0.05,
-    "qwen3.8-max": 0.48,
-    "glm-5.3": 0.46,
     "mimo-v2.5": 0.02,
-    "mimo-v2.5-pro": 0.08,
+    "qwen3.8-flash": 0.05,
     "hy3": 0.02,
     "claude-opus-5": 0.94,
-    "deepseek-v4-pro": 0.31
+    "muse-spark-1.2": 0.05,
+    "glm-5.3": 0.46,
+    "deepseek-v4-pro": 0.31,
+    "qwen3.8-max": 0.48,
+    "mimo-v2.5-pro": 0.08,
+    "gpt-5.6-sol-pro": 0.3,
+    "gemini-3.1-pro": 0.41,
+    "glm-5.3-flash": 0.05,
+    "grok-4.6": 0.14
   },
   "spend_estimated": {
-    "gemini-3.1-pro": true,
-    "grok-4.6": true,
-    "qwen3.8-flash": true,
-    "muse-spark-1.2": true,
-    "gpt-5.6-sol-pro": true,
-    "glm-5.3-flash": true,
-    "qwen3.8-max": true,
-    "glm-5.3": true,
     "mimo-v2.5": true,
-    "mimo-v2.5-pro": true,
+    "qwen3.8-flash": true,
     "hy3": true,
     "claude-opus-5": true,
-    "deepseek-v4-pro": true
+    "muse-spark-1.2": true,
+    "glm-5.3": true,
+    "deepseek-v4-pro": true,
+    "qwen3.8-max": true,
+    "mimo-v2.5-pro": true,
+    "gpt-5.6-sol-pro": true,
+    "gemini-3.1-pro": true,
+    "glm-5.3-flash": true,
+    "grok-4.6": true
   },
   "lol_a": {
     "gpt-5.6-sol-pro": {
@@ -52,7 +52,7 @@
         0.8965
       ],
       "n_scored": 1128,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -80,7 +80,7 @@
         0.8898
       ],
       "n_scored": 887,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -108,7 +108,7 @@
         0.9064
       ],
       "n_scored": 817,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -136,7 +136,7 @@
         0.9118
       ],
       "n_scored": 1165,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -164,7 +164,7 @@
         0.842
       ],
       "n_scored": 3564,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -192,7 +192,7 @@
         0.9081
       ],
       "n_scored": 2376,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -220,7 +220,7 @@
         0.9077
       ],
       "n_scored": 2376,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -248,7 +248,7 @@
         0.8715
       ],
       "n_scored": 2376,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -276,7 +276,7 @@
         0.8772
       ],
       "n_scored": 3564,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -304,7 +304,7 @@
         0.8432
       ],
       "n_scored": 3564,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -332,7 +332,7 @@
         0.9104
       ],
       "n_scored": 2376,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -360,7 +360,7 @@
         0.9201
       ],
       "n_scored": 2376,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {
@@ -388,7 +388,7 @@
         0.8998
       ],
       "n_scored": 93,
-      "items": 150,
+      "items": 396,
       "samples_per_item": 3,
       "families": {
         "F6": {

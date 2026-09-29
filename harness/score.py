@@ -147,6 +147,11 @@ def lol_a_scores():
         f = items.get(o["item_id"], "unknown")
         fam.setdefault(o["model"], {}).setdefault(f, []).append(s)
     out = {}
+    # "items" is the size of the dataset, not a constant: the site prints it as
+    # "jokes in the set" and it was hardcoded to 150 while the set is 396.
+    # Measured from the item file, per model, so a model that never saw every
+    # item reports what it actually answered.
+    item_count = len(items) if items else 0
     for model, scores in per_model.items():
         families = {
             f: {"mean": round(mean(xs), 3), "n": len(xs)}
@@ -156,7 +161,7 @@ def lol_a_scores():
             "mean": round(mean(scores), 4),
             "ci95": bootstrap_ci(scores),
             "n_scored": len(scores),
-            "items": 150,
+            "items": item_count,
             "samples_per_item": CFG["n_samples"],
             "families": families,
         }

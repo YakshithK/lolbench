@@ -3,8 +3,19 @@ const VotePanel = window.VotePanel;
 
 function SiteApp() {
   const data = window.LOLB;
-  const f6 = data.mechanismRows.map(r => r.values.F6).filter(v => v != null);
-  const allMissF6 = f6.length > 0 && f6.every(v => v < 90);
+  // The dissociation, computed rather than asserted. A model counts as "falls
+  // off on failed jokes" when its F6 mean is below its best real-joke tier
+  // (T1/T2/T3). Written this way the lede stays true if the data moves, instead
+  // of being a sentence someone wrote once and never revisited.
+  const rows = data.mechanismRows;
+  const realBest = r => ["T1", "T2", "T3"]
+    .map(t => r.values[t]).filter(v => v != null)
+    .reduce((a, v) => (a == null || v > a ? v : a), null);
+  const withBoth = rows.filter(r => r.values.F6 != null && realBest(r) != null);
+  const fallers = withBoth.filter(r => r.values.F6 < realBest(r));
+  const f6Best = withBoth.length ? Math.max(...withBoth.map(r => r.values.F6)) : null;
+  const f6Worst = withBoth.length ? Math.min(...withBoth.map(r => r.values.F6)) : null;
+  const realCeiling = withBoth.length ? Math.max(...withBoth.map(realBest)) : null;
   return (
     <>
       <Topbar current="scores" stamp={data.stamp}
@@ -18,8 +29,8 @@ function SiteApp() {
           <div>
             <Kicker>wave 00 / open results</Kicker>
             <Headline>Does it get<br />the joke?</Headline>
-            <Lede>{allMissF6
-              ? "All of them can explain why a real joke works. None of them reliably knows why a fake one doesn't."
+            <Lede>{fallers.length
+              ? <>{fallers.length} of the {withBoth.length} models here explain real jokes better than they explain failed ones. The best of them reaches {realCeiling} on jokes that work and {f6Best} on jokes that don't.</>
               : "We are measuring whether a model can explain a joke, write one, and tell good ones from bad."}</Lede>
           </div>
           <Panel title="Best line written so far" meta="author concealed until you vote"
@@ -44,7 +55,7 @@ function SiteApp() {
         </div>
 
         <StatBand stats={[
-          { label: "jokes in the set", value: String(data.itemsCount), note: "written and checked by hand" },
+          { label: "jokes in the set", value: String(data.itemsCount), note: "checked by hand before anything ran" },
           { label: "who grades", value: "2 models", note: "from other labs, never the one being graded" },
           { label: "who decides funny", value: "you do", note: "no model ever rates a punchline" },
           { label: "judge distance", value: data.judgeDistance != null ? data.judgeDistance.toFixed(1) + " pts" : "pending", note: data.judgeDistance != null ? `r=${data.judgeCorrelation} on ${data.judgePairs.toLocaleString()} double-judged pairs — not yet checked against a human` : "no dual-judged pairs yet" }
