@@ -1,6 +1,7 @@
 const { Topbar, Footer, Kicker, Headline, Lede, StatBand, Panel } = window.LOLBenchDesignSystem_ab2c27;
 const VotePanel = window.VotePanel;
 const KillTestPanel = window.KillTestPanel;
+const SubmitPanel = window.SubmitPanel;
 
 function SiteApp() {
   const data = window.LOLB;
@@ -48,11 +49,13 @@ function SiteApp() {
           <VotePanel bouts={data.bouts} />
         </div>
 
-        {/* Opt-in, separate from the booth: a differently-shaped ballot inside
-            the one-click rotation would quietly change what the vote rate
-            means. */}
-        <div style={{ paddingTop: "26px" }}>
+        {/* The two "help us out" asks, grouped and both opt-in. They sit after
+            the booth because they are the same kind of request at a different
+            cost: the booth is one click, these are real labor, so neither is
+            ever pushed on a visitor who only came to look at scores. */}
+        <div style={{ display: "grid", gap: "var(--gap-panel)", paddingTop: "26px" }}>
           <KillTestPanel items={data.killtest} />
+          <SubmitPanel />
         </div>
 
         <Tracks data={data} />

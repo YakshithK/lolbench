@@ -100,6 +100,108 @@ function KillTestPanel({ items }) {
   );
 }
 
+/* Arm R intake: send a joke newer than any model's training data.
+   The link field is not a citation nicety, it is the admission ticket, so the
+   UI says so before anyone types rather than rejecting them afterwards. Field
+   order is joke first: the ask is "send a joke", and the evidence for it comes
+   second. */
+function SubmitPanel() {
+  const [open, setOpen] = React.useState(false);
+  const [joke, setJoke] = React.useState("");
+  const [url, setUrl] = React.useState("");
+  const [ctx, setCtx] = React.useState("");
+  const [state, setState] = React.useState(null); // null | sending | done | error
+  const [msg, setMsg] = React.useState("");
+
+  const field = { width: "100%", boxSizing: "border-box", fontFamily: "var(--mono)", fontSize: "13px", padding: "10px 11px", border: "var(--border)", background: "transparent", color: "var(--ink)" };
+  const label = { fontFamily: "var(--mono)", fontSize: "var(--label-size)", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-3)" };
+
+  const submit = e => {
+    e.preventDefault();
+    if (state === "sending") return;
+    setState("sending"); setMsg("");
+    fetch("/api/submit", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ joke: joke, source_url: url, context: ctx })
+    }).then(async r => {
+      const body = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(body.error || "did not save");
+      setState("done");
+    }).catch(err => { setState("error"); setMsg(err.message); });
+  };
+
+  if (!open) {
+    return (
+      <Panel title="Send us a joke from this year" meta="optional" pad={false}
+        caption="A commenter pointed out that our obscure-joke set can still be structurally familiar, which is the one objection we have no answer for. The fix is jokes too new for any model to have seen. We cannot source those ourselves at volume.">
+        <div style={{ padding: "var(--panel-body-pad)" }}>
+          <p style={{ fontSize: "15px", fontWeight: 200, color: "var(--ink-2)", maxWidth: "62ch" }}>
+            Post a joke you have seen from this year or last, with the link you found it on. The link is required:
+            a date we can read is the only proof that a model has not already seen the joke. One per person.
+          </p>
+          <button onClick={() => setOpen(true)}
+            style={{ fontFamily: "var(--mono)", fontSize: "13px", marginTop: "14px", padding: "12px 20px", cursor: "pointer", border: "1px solid var(--accent-brand)", background: "transparent", color: "var(--accent-brand)" }}>
+            send one
+          </button>
+        </div>
+      </Panel>
+    );
+  }
+
+  return (
+    <Panel title="Send us a joke from this year" meta={state === "done" ? "received" : "one per person"} pad={false}
+      caption="We check the link date, check the joke is not already in our corpus, then humans judge whether it lands. Nothing you send enters a benchmark on trust.">
+      {state === "done" ? (
+        <div style={{ padding: "var(--panel-body-pad)" }}>
+          <p style={{ fontSize: "15px", fontWeight: 200, color: "var(--ink-2)", maxWidth: "58ch" }}>
+            Got it. If the link date holds up and it is not already in our corpus, it goes to humans to judge
+            whether it actually lands. Thanks.
+          </p>
+        </div>
+      ) : (
+        <form onSubmit={submit} style={{ padding: "var(--panel-body-pad)", display: "grid", gap: "14px" }}>
+          <div>
+            <label htmlFor="sub-joke" style={label}>the joke</label>
+            <textarea id="sub-joke" value={joke} onChange={e => setJoke(e.target.value)} rows={4} maxLength={600}
+              placeholder="write it exactly as you saw it, punctuation and all"
+              style={{ ...field, marginTop: "7px", resize: "vertical", lineHeight: 1.5 }} />
+            <div style={{ fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--ink-4)", marginTop: "5px" }}>
+              {joke.length}/600 · at least 25 characters
+            </div>
+          </div>
+          <div>
+            <label htmlFor="sub-url" style={label}>where you found it · required</label>
+            <input id="sub-url" value={url} onChange={e => setUrl(e.target.value)} type="url" inputMode="url" maxLength={500}
+              placeholder="https://..."
+              style={{ ...field, marginTop: "7px" }} />
+            <div style={{ fontSize: "13px", fontWeight: 200, color: "var(--ink-4)", marginTop: "5px", maxWidth: "58ch" }}>
+              A link is what makes this usable. The post date is the only evidence a model has not seen the joke,
+              so we cannot admit a submission without one.
+            </div>
+          </div>
+          <div>
+            <label htmlFor="sub-ctx" style={label}>anything else · optional</label>
+            <input id="sub-ctx" value={ctx} onChange={e => setCtx(e.target.value)} maxLength={400}
+              placeholder="subreddit, author, how old you think it is"
+              style={{ ...field, marginTop: "7px" }} />
+          </div>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
+            <button type="submit" disabled={state === "sending"}
+              style={{ fontFamily: "var(--mono)", fontSize: "13px", padding: "13px 22px", cursor: state === "sending" ? "wait" : "pointer", border: "1px solid var(--accent-brand)", background: "var(--accent-brand)", color: "var(--canvas)" }}>
+              {state === "sending" ? "sending…" : "send it"}
+            </button>
+            <button type="button" onClick={() => { setOpen(false); setState(null); setMsg(""); }}
+              style={{ fontFamily: "var(--mono)", fontSize: "13px", padding: "13px 16px", cursor: "pointer", border: "var(--border)", background: "transparent", color: "var(--ink-3)" }}>
+              never mind
+            </button>
+            {state === "error" ? <span style={{ fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--accent-distrust)" }}>{msg}</span> : null}
+          </div>
+        </form>
+      )}
+    </Panel>
+  );
+}
+
 function VotePanel({ bouts }) {
   const [i, setI] = React.useState(0);
   const [ballot, setBallot] = React.useState(null);
@@ -289,4 +391,4 @@ function Sidebar({ data }) {
     </div>
   );
 }
-Object.assign(window, { Sidebar, VotePanel, KillTestPanel });
+Object.assign(window, { Sidebar, VotePanel, KillTestPanel, SubmitPanel });

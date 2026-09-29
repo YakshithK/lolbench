@@ -110,3 +110,33 @@ alter table votes add column if not exists cohort text;
 alter table votes drop constraint if exists votes_cohort_check;
 alter table votes add constraint votes_cohort_check
   check (cohort is null or cohort in ('very','somewhat','rarely'));
+
+-- Arm R, post-cutoff joke intake (2026-09-27). The kill-test conceded that
+-- structure and difficulty are uncontrolled axes: obscure jokes can still be
+-- structurally familiar, and working jokes can be easier to explain for reasons
+-- unrelated to fame. The only clean fix is items no model could have seen, so
+-- the set has to postdate training cutoffs. Sourcing those at volume is the
+-- expensive part, so the audience is the source.
+--
+-- A source link is MANDATORY, not a courtesy. Arm R's entire claim is that an
+-- item postdates the cutoff, and a self-reported date from a stranger is
+-- unfalsifiable. A link carries a visible timestamp, which makes the recency
+-- claim checkable. Submissions without one cannot be admitted at all.
+--
+-- The date stored here is the SUBMITTED date (when the submitter found it), not
+-- the joke's true date. The true date is established during the audit pass and
+-- lives in the harness output, never in the public table: a submitter's memory
+-- of "I saw this last week" is exactly the unreliable part.
+create table if not exists joke_submissions (
+  id bigint generated always as identity primary key,
+  joke text not null,
+  source_url text not null,
+  context text,
+  submitter_hash text not null,
+  created_at timestamptz not null default now()
+);
+-- One joke per person, normalized for whitespace and case so a re-send with a
+-- stray newline is a 409 rather than a duplicate audit item.
+create unique index if not exists joke_submissions_one_per_person
+  on joke_submissions (submitter_hash, lower(regexp_replace(trim(joke), '\s+', ' ', 'g')));
+alter table joke_submissions enable row level security;
