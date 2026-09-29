@@ -12,22 +12,22 @@ function Charts({ data }) {
     : "Cost data isn't available yet for any scored model.";
 
   const f6 = data.mechanismRows.map(r => ({ label: r.label, v: r.values.F6 })).filter(r => r.v != null);
-  const f6Sorted = [...f6].sort((a, b) => a.v - b.v);
-  const f6Worst = f6Sorted[0];
-  const f6Best = f6Sorted[f6Sorted.length - 1];
-  // F1-F5 ask a model to explain a joke whose mechanism is already visible in
-  // the text; every model, cheap or frontier, finds it, so these five columns
-  // barely separate anyone. Computed live (not hardcoded) so this note stays
-  // honest as the roster and scores change - if a future model pool actually
-  // spreads out on F1-F5, this line should shrink or disappear on its own.
-  const otherSpreads = data.mechanisms.filter(f => f !== "F6").map(f => {
+  // Per-family spread across models, computed live. Says which columns actually
+  // separate models and which do not, without naming families that hold no
+  // items. In v0.3 the answer is the interesting one: F6 is the only column
+  // where the models visibly disagree with each other.
+  const spreadOf = f => {
     const vals = data.mechanismRows.map(r => r.values[f]).filter(v => v != null);
     return vals.length ? Math.max(...vals) - Math.min(...vals) : null;
-  }).filter(v => v != null);
-  const maxOtherSpread = otherSpreads.length ? Math.max(...otherSpreads) : null;
+  };
+  const spreads = data.mechanisms.map(f => ({ f, spread: spreadOf(f) })).filter(x => x.spread != null);
+  const tightest = spreads.length ? spreads.reduce((a, b) => (a.spread <= b.spread ? a : b)) : null;
+  const widest = spreads.length ? spreads.reduce((a, b) => (a.spread >= b.spread ? a : b)) : null;
+  const f6Spread = spreadOf("F6");
   const heatCaption = f6.length
-    ? <>Every model scored on F6 lands lowest on that column, from {f6Worst && f6Worst.label + " (" + f6Worst.v + ")"} to {f6Best && f6Best.label + " (" + f6Best.v + ")"}. Dark cells mean that model hasn't been given jokes of that kind yet.{" "}
-        {maxOtherSpread != null ? <>The other five families barely separate models at all — no more than {maxOtherSpread} points between the best and worst score on any of them. That's a ceiling, not a strength: F1-F5 ask a model to explain a joke whose mechanism is already visible in the text, which every model manages. We're redesigning them to require real judgment, the way F6 already does.</> : null}
+    ? <>
+        T1 to T3 are real jokes people wrote, graded on whether the model can say why they work. F6 is the same task on jokes we know don't work, and it is the only column where the models separate: {f6Spread != null ? f6Spread + " points" : "a wide spread"} between the best and worst, against {tightest && tightest.f !== "F6" ? tightest.spread + " points" : "almost nothing"} on {tightest ? tightest.f : "the real-joke tiers"}.{" "}
+        Dark cells mean that model hasn't been given jokes of that kind yet. Explaining a working joke is close to ceiling for every model here. Explaining a failed one is not, and that is the whole finding.
       </>
     : "Mechanism data lands as families get judged.";
 
@@ -44,7 +44,7 @@ function Charts({ data }) {
         <Scatter points={points} xMax={Math.ceil((Math.max(0.5, ...points.map(p => p.x)) * 1.15) * 2) / 2}
           rule={bestOnBoard ? { at: bestOnBoard.y, label: `best score so far: ${bestOnBoard.y.toFixed(1)}` } : undefined} />
       </Panel>
-      <Panel title="Which kinds of joke they miss" meta="the dataset sorts jokes into six mechanisms, F1 to F6"
+      <Panel title="Which kinds of joke they miss" meta="T1 to T3 are jokes that work, F6 are jokes that don't"
         caption={heatCaption}>
         <Heatmap columns={data.mechanisms} warnColumn="F6" rows={data.mechanismRows} />
       </Panel>

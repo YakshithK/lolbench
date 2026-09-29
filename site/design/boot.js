@@ -52,7 +52,17 @@
   var bestOverall = [...rankable].sort(function (a, b) { return b.y - a.y; })[0];
   rankable.forEach(function (r) { r.leader = bestOverall && r.name === bestOverall.name; });
 
-  var mechanisms = ["F1", "F2", "F3", "F4", "F5", "F6"];
+  // Derive the mechanism columns from the families that actually have items in
+  // this dataset version. v0.3 is T1/T2/T3 (real human jokes) + F6 (failed
+  // jokes); F1-F5 hold zero items, so rendering them painted five dead gray
+  // columns and a caption about families that don't exist. If a future wave
+  // adds F1-F5 items they reappear here on their own.
+  var FAMILY_ORDER = ["T1", "T2", "T3", "F1", "F2", "F3", "F4", "F5", "F6"];
+  var present = {};
+  Object.keys(lolA).forEach(function (name) {
+    Object.keys((lolA[name].families) || {}).forEach(function (f) { present[f] = true; });
+  });
+  var mechanisms = FAMILY_ORDER.filter(function (f) { return present[f]; });
   var mechanismRows = rankable.map(function (r) {
     var fam = lolA[r.name].families || {};
     var values = {};
