@@ -32,10 +32,21 @@ export default async function handler(req) {
 
   const { matchup_id, premise_id, model_a, model_b, winner, kind, cohort } = body;
   // kind 'c' = LOL-C honeypot probe (human-written pair, no models involved).
-  // Anything else is a normal model bout. Probes are constrained to C-prefixed
-  // ids with null model fields so model votes can't hide in the probe lane
+  // kind 'k' = kill-test human verification: ONE obscure joke, human answers
+  //   whether it lands. This is the lane that answers "is this obscure joke
+  //   actually funny", which the 20-500 upvote band only ever approximated.
+  // Anything else is a normal model bout. Each lane is constrained to its own
+  // id prefix with null model fields so model votes can't hide in a probe lane
   // (and vice versa) - standings integrity depends on the lanes staying apart.
-  const k = kind === "c" ? "c" : "b";
+  const k = kind === "c" || kind === "k" ? kind : "b";
+  // The k-lane reuses the existing winner vocabulary rather than adding values,
+  // so it needs no schema migration and cannot be rejected by the votes_winner_check
+  // constraint on an un-migrated database. Mapping is fixed and lives in the UI:
+  //   "A"       -> the joke lands
+  //   "B"       -> it is not funny
+  //   "neither" -> it is broken / does not parse as a joke at all
+  // "tie" is unused in this lane; a single joke cannot be tied.
+  const kWinner = k === "k" ? ["A", "B", "neither"].includes(winner) : true;
   // Optional audience tag (cohort-agreement question). Anything outside the
   // known set stores as null instead of rejecting the ballot - a vote must
   // never fail over an optional field.
@@ -48,10 +59,16 @@ export default async function handler(req) {
         typeof model_a === "string" &&
         typeof model_b === "string" &&
         model_a !== model_b)
-      : (/^C-\d+$/.test(matchup_id) &&
-        (premise_id == null) &&
-        (model_a == null) &&
-        (model_b == null)));
+      : (k === "k"
+        ? (/^K-CAND-\d+$/.test(matchup_id) &&
+          kWinner &&
+          (premise_id == null) &&
+          (model_a == null) &&
+          (model_b == null))
+        : (/^C-\d+$/.test(matchup_id) &&
+          (premise_id == null) &&
+          (model_a == null) &&
+          (model_b == null))));
   if (!valid) {
     return new Response(JSON.stringify({ error: "bad payload" }), { status: 400, headers: cors });
   }

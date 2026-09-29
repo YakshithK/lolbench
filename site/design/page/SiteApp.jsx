@@ -1,5 +1,6 @@
 const { Topbar, Footer, Kicker, Headline, Lede, StatBand, Panel } = window.LOLBenchDesignSystem_ab2c27;
 const VotePanel = window.VotePanel;
+const KillTestPanel = window.KillTestPanel;
 
 function SiteApp() {
   const data = window.LOLB;
@@ -45,6 +46,13 @@ function SiteApp() {
             the standings table and written-jokes chart. */}
         <div style={{ paddingTop: "30px" }}>
           <VotePanel bouts={data.bouts} />
+        </div>
+
+        {/* Opt-in, separate from the booth: a differently-shaped ballot inside
+            the one-click rotation would quietly change what the vote rate
+            means. */}
+        <div style={{ paddingTop: "26px" }}>
+          <KillTestPanel items={data.killtest} />
         </div>
 
         <Tracks data={data} />

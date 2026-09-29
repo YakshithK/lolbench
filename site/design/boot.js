@@ -148,6 +148,24 @@
   // taste-ceiling question. Probe votes carry kind:"c" and are excluded from
   // model standings by construction (standings render from data.scored, and
   // the vote path tags every row). UI stays identical until the reveal.
+  // Kill-test human verification lane (kind:"k"). These are the 87 obscure jokes
+  // from the familiarity kill-test, served ONE at a time. The kill-test labeled
+  // them "working" from a 20-500 upvote band, which is a proxy nobody on the
+  // subreddit accepted; this lane replaces the proxy with an actual human
+  // answer per joke. It is also the only human measurement that set has ever
+  // had, which is what makes the "we don't know if these are funny" objection
+  // answerable rather than merely conceded.
+  //
+  // Served only to voters who opt in, never silently injected into the rotation:
+  // the booth's job in the b-lane is "pick the funnier joke", and a
+  // different-shaped question in the same one-click flow would quietly change
+  // what the vote rate means.
+  var killtestItems = getJSON("./k_items.json") || [];
+  var killtestBouts = killtestItems.map(function (j) {
+    return { id: j.id, premise: null, modelA: null, modelB: null, a: normalizeJoke(j.text), b: null, ballots: 0, kind: "k", year: j.year };
+  });
+  shuffle(killtestBouts);
+
   var rawProbes = getJSON("./c_probes.json") || [];
   shuffle(rawProbes);
   var probeBouts = rawProbes.map(function (p) {
@@ -186,6 +204,7 @@
     winrate: [],
     voteTotals: null,
     bouts: bouts.length ? bouts : [{ id: "no bouts yet", premise: "—", modelA: "—", modelB: "—", a: "Bouts publish once wave-0 generation lands.", b: "…", ballots: 0, kind: "b" }],
+    killtest: killtestBouts,
     costEstimated: true // every figure in `spend` is derived (see harness/score.py spend_by_model), never metered
   };
 

@@ -9,6 +9,96 @@ const WRITTEN_TARGET = 40;
 // clears the same n>=10 floor the rest of the board uses.
 const COHORTS = [["very", "very online"], ["somewhat", "somewhat online"], ["rarely", "rarely online"]];
 const COHORT_KEY = "lolb_cohort";
+// Opt-in for the kill-test lane. Off unless the browser has already said yes,
+// so a normal visitor never sees a differently-shaped ballot by accident.
+const KILLTEST_KEY = "lolb_killtest";
+
+/* Kill-test lane: one obscure joke, one question, three honest answers.
+   The stored winner vocabulary is reused (A = lands, B = not funny, neither =
+   broken) so this needs no database migration, but the labels a human reads
+   are the plain-language ones. "broken" is deliberately distinct from "not
+   funny": the objection this lane answers is whether these 87 items are real
+   jokes at all, and collapsing that into "not funny" would hide the answer
+   inside the question. */
+function KillTestBout({ joke, year }) {
+  return (
+    <div style={{ padding: "var(--panel-body-pad)" }}>
+      <div style={{ fontFamily: "var(--mono)", fontSize: "var(--label-size)", letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ink-3)" }}>unpopular joke{year ? " · " + year : ""}</div>
+      <Joke>{joke}</Joke>
+    </div>
+  );
+}
+
+function KillTestPanel({ items }) {
+  const [on, setOn] = React.useState(() => { try { return localStorage.getItem(KILLTEST_KEY) === "1"; } catch (e) { return false; } });
+  const [i, setI] = React.useState(0);
+  const [picked, setPicked] = React.useState(null);
+  const [cohort] = React.useState(() => { try { return localStorage.getItem(COHORT_KEY) || ""; } catch (e) { return ""; } });
+  const [count, setCount] = React.useState(0);
+  if (!items || !items.length) return null;
+  const cur = items[i % items.length];
+
+  const enable = () => {
+    try { localStorage.setItem(KILLTEST_KEY, "1"); } catch (e) { /* private mode: this visit only */ }
+    setOn(true);
+  };
+  const pick = id => {
+    if (picked) return;
+    // Same confirmed-write rule as the main booth: reveal only after the row
+    // actually lands, so a 409 or 500 can never show a success that did not
+    // happen.
+    fetch("/api/vote", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matchup_id: cur.id, premise_id: null, model_a: null, model_b: null, winner: id, kind: "k", cohort: cohort || null })
+    }).then(r => {
+      if (!r.ok) throw new Error("rejected " + r.status);
+      setPicked(id);
+      setCount(n => n + 1);
+    }).catch(() => { setPicked("error"); });
+  };
+
+  if (!on) {
+    return (
+      <div id="killtest-panel">
+        <Panel title="Help settle an argument" meta="optional · 30 seconds" pad={false}
+          caption="We called 87 old jokes obscure because nobody has written an analysis of them. Someone pointed out that nobody had actually checked whether they are funny. You can.">
+          <div style={{ padding: "var(--panel-body-pad)" }}>
+            <p style={{ fontSize: "15px", fontWeight: 200, color: "var(--ink-2)", maxWidth: "58ch" }}>
+              One joke at a time. Three buttons: it lands, it is not funny, or it is broken and does not read as a joke.
+              No models, no scores, no leaderboard effect. It just settles whether our "obscure but working" set actually works.
+            </p>
+            <button onClick={enable}
+              style={{ fontFamily: "var(--mono)", fontSize: "13px", marginTop: "14px", padding: "12px 20px", cursor: "pointer", border: "1px solid var(--accent-brand)", background: "transparent", color: "var(--accent-brand)" }}>
+              show me the jokes
+            </button>
+          </div>
+        </Panel>
+      </div>
+    );
+  }
+
+  const label = picked === "A" ? "it lands" : picked === "B" ? "not funny" : picked === "neither" ? "broken, not a joke" : null;
+  return (
+    <div id="killtest-panel">
+      <Panel title="Did this one land?" meta={count ? count + " judged by you" : "optional · 30 seconds"} pad={false}
+        caption="Real joke, posted somewhere years ago, never analysed by anyone. Your answer is the only record that anyone has checked whether it is actually funny.">
+        <KillTestBout joke={cur.a} year={cur.year} />
+        <BallotControls onVote={pick} options={[{ id: "A", label: "it lands" }, { id: "B", label: "not funny" }, { id: "neither", label: "broken" }]} />
+        <Reveal open={!!picked}>
+          {picked === "error"
+            ? <>That did not record. Pick again to retry; you stay on this joke.</>
+            : picked ? <>Recorded as <b style={{ color: "var(--accent-brand)" }}>{label}</b>. That is one of 87.{" "}
+              <button onClick={() => { setPicked(null); setI(n => n + 1); }}
+                style={{ fontFamily: "var(--mono)", fontSize: "var(--caption-size)", padding: 0, cursor: "pointer", border: 0, background: "transparent", color: "var(--accent-brand)", textDecoration: "underline" }}>next joke</button>
+            </>}
+        </Reveal>
+        <div style={{ borderTop: "var(--border)", padding: "var(--panel-foot-pad)", fontFamily: "var(--mono)", fontSize: "var(--caption-size)", color: "var(--ink-3)" }}>
+          {cur.id} · you have judged {count} of these
+        </div>
+      </Panel>
+    </div>
+  );
+}
 
 function VotePanel({ bouts }) {
   const [i, setI] = React.useState(0);
@@ -199,4 +289,4 @@ function Sidebar({ data }) {
     </div>
   );
 }
-Object.assign(window, { Sidebar, VotePanel });
+Object.assign(window, { Sidebar, VotePanel, KillTestPanel });
