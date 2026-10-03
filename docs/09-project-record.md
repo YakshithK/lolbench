@@ -487,21 +487,55 @@ artifact, not the exit code.
 
 ## 8. Next steps (priority order, from the roadmap queue)
 
+SUPERSEDED 2026-09-28 — see `docs/06` section 3 for the current queue and
+`docs/11-round2-feedback.md` for round 2's ledger. Kept for the record because
+the ordering was right and the round-2 world invalidated parts of it.
+
 1. **Familiarity kill-test** (NeuralNomad87): ~50 genuinely obscure real jokes
    through the explain-and-grade pipeline, free pipes. Either outcome
    publishable; if confirmed, F6 becomes the only uncontaminated tier.
+   → **RAN 2026-09-13, 87 items, familiarity rejected.** The "only uncontaminated
+   tier" clause did not survive public review; see docs/11.
 2. **Formatting normalizer** (Lower-Ad-6293): display-layer only, ~20 lines,
-   retroactive at render time, no rerun.
+   retroactive at render time, no rerun. → **SHIPPED 2026-09-12.**
 3. **Cohort question** (NeuralNomad87): optional "how online are you?",
    nullable column, per-cohort agreement alongside global.
+   → **SHIPPED 2026-09-12, collection only.** Display still dark, one cohort.
 4. **Community joke submissions**: a submit box behind the booth —
    definitionally post-cutoff content; slow volume but compounds weekly.
+   → **SHIPPED 2026-09-27 as Arm R intake, with a mandatory dated source link.**
 5. **F6 corpus expansion**: double the 725-explanation counterfactual corpus;
-   control the rubric-priming confound with a variant rubric.
+   control the rubric-priming confound with a variant rubric. → not started.
 6. Resume parked T-row generation when Hack Club burst windows open; recruit
    the 3rd judge; then C5: alpha, permutation test, H1/H2 verdicts.
+   → **DONE 2026-09-25.** claude and grok completed (419 / 421), 879-verdict
+   judge sweep with zero 429s, board rescored to 13 models. C5 not started.
 7. Keep the Thursday cadence: ship one visible thing per launch, tag the
-   requesters, log the feedback, close the loop publicly.
+   requesters, log the feedback, close the loop publicly. → held.
+
+## 8b. Round 2 addendum (2026-09-26 to 09-28)
+
+The kill-test went public and came back with five objections, three of them
+correct, and one of them aimed at a claim we had made ourselves: that F6 was
+"uncontaminated". It is not. The design controls fame and leaves judge retrieval,
+structural familiarity, and human verification open. Full ledger, fixes and
+remaining gaps in `docs/11-round2-feedback.md`.
+
+The round also surfaced three defects in our own public record, all now fixed:
+parking a model for generation silently deleted it from the board; the mechanism
+heatmap rendered five dead columns for families with zero items and a caption
+about them; and the landing page claimed "95%+", "150 jokes", and "written and
+checked by hand", none of which the current data supported. Numbers now derive
+from `results.json` at render time rather than being written once.
+
+Two new opt-in lanes shipped (`0260b59`, `9cadf1a`): humans judge whether the 87
+obscure jokes actually land, and anyone can submit a joke with a dated source
+link for the post-cutoff arm. Both verified working end to end. Both at zero,
+because optional features do not recruit themselves.
+
+Compute is gone entirely (docs/04, fourth death wave): every free lane was
+verified dead by direct probe, including Hack Club, which turned out to be an
+OpenRouter proxy with an empty credit pool rather than a throttled free tier.
 
 ## 9. The one-paragraph retrospection
 

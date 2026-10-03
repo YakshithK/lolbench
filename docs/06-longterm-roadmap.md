@@ -41,23 +41,50 @@ Plan, in order:
    replace it.
 
 ## Near-term experiment queue (from launch feedback, priority order)
+
+Status as of 2026-09-28. Round 2's five objections are tracked in
+`docs/11-round2-feedback.md`.
+
 1. **Familiarity kill-test** (NeuralNomad87): ~50 genuinely obscure real jokes
    through the same explain-and-grade pipeline. **RUN 2026-09-13 - familiarity
    REJECTED; F6's working-vs-failed differential survives the confound
-   (results in docs/10 section 10).** Either outcome is publishable. Free pipes.
+   (results in docs/10 section 10).** 87 items actually ran, same pre-registered
+   criteria. **CLAIM CORRECTED 2026-09-28**: the design controls fame, not
+   structure, not judge retrieval, and had no human read on those 87 items. See
+   docs/10 section 10 and docs/11.
 2. **Formatting normalizer** (Lower-Ad-6293): display-layer only (em dash -> comma,
    !!! -> !, CAPS -> case; keep periods/commas/question marks/line breaks). Applies
-   retroactively at render time, no rerun, no migration.
+   retroactively at render time, no rerun, no migration. **SHIPPED 2026-09-12.**
 3. **Cohort question** (NeuralNomad87): one optional "how online are you?" in the
-   booth, nullable column, per-cohort agreement alongside global. Tests his claim
-   that audience-targeting is where models actually differ (our 0.837-0.922
-   compression is evidence-shaped like his theory).
-4. **Community joke submissions**: a submit box behind the vote booth. Definitionally
-   post-cutoff content (contamination-clean by construction); slow volume at current
-   traffic but compounds weekly with launch cadence.
-5. **F6 corpus expansion**: double the 725-explanation counterfactual corpus and
+   booth, nullable column, per-cohort agreement alongside global. **SHIPPED
+   2026-09-12 (collection).** Display still dark: only the "very" cohort has any
+   rows (13), the other two have zero, so no cohort clears the n>=10 floor for a
+   split read.
+4. **Human verification of the kill-test set** (NEW, closes objections 1/2/5):
+   one obscure joke, three answers: it lands / not funny / broken. **SHIPPED
+   2026-09-27** (`0260b59`, k-lane, opt-in). Zero votes at 48h, which is the
+   whole problem: optional features do not recruit on their own, this needs a post
+   that asks directly.
+5. **Arm R, post-cutoff items** (NEW, the only fix for objections 3/4): joke plus
+   a MANDATORY dated source link, because Arm R's claim is that the item
+   postdates training cutoffs and a self-reported date is unfalsifiable.
+   **SHIPPED 2026-09-27** (`9cadf1a`, `/api/submit` + opt-in panel, one submission
+   per person). Zero submissions at 48h. Needs a post. Depends on audience volume,
+   which is the actual constraint: 100 submissions for a usable 20-25 items, and
+   that yield estimate is still unverified.
+6. **Absurdist stratum** (NEW, raised by TheRealBejeezus): the benchmark assumes
+   every joke has a findable mechanism; jokes like "the potato!" have none. Zero
+   absurdist items exist. Either outcome is informative and it is cheap to add.
+   NOT STARTED.
+7. **Community joke submissions**: a submit box behind the vote booth. **SHIPPED
+   as the Arm R intake (item 5)** with the added constraint that a source link is
+   mandatory.
+8. **F6 corpus expansion**: double the 725-explanation counterfactual corpus and
    control the rubric-priming confound (our F6 rubric feeds judges
-   "expectation"/"incongruity" vocabulary) with a variant rubric.
+   "expectation"/"incongruity" vocabulary) with a variant rubric. NOT STARTED.
+9. **Track C** (taste): never started. The homepage still advertises taste with a
+   "no data yet" box. Either import the graded pools or reframe the homepage to
+   only claim what is measured. Owner decision outstanding.
 
 ## Theoretical register (for the paper)
 - **Counterfactual theory of failed-humor difficulty**: explaining a working joke

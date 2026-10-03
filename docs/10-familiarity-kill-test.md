@@ -178,6 +178,17 @@ The 2x2 per model (scores x100; T1/F6 anchors read from the published board):
    NeuralNomad's confound experimentally removed, which is stronger than the
    original framing: F6 stays the uncontaminated tier, and now it is MEASURED,
    not just argued.
+
+   CORRECTED 2026-09-28 after public review (docs/11): "uncontaminated" overstates
+   what this design controls. It removes ONE axis (fame, via absent human-written
+   commentary) and leaves three open: (a) judges are themselves web-trained models
+   who may have seen the joke itself even with no commentary written; (b) the human
+   booth has never seen these 87 items, so the whole result rests on auto-judges
+   agreeing with each other; (c) obscure jokes can still be structurally familiar,
+   so pattern-matching is not excluded. The defensible claim is: controlling for
+   absent human-written commentary, the working-vs-failed gap survives. Strong, but
+   not uncontaminated. Fixes for (a) and (b) shipped 2026-09-27 as the k-lane human
+   panel; (c) needs post-cutoff items (Arm R) and is still open.
 3. Scope caveats, disclosed: the F6 anchor rows are the main run's LLM-drafted
    failed jokes, so the K-vs-F6 comparison crosses real-vs-synthetic provenance
    (familiarity is controlled; provenance is a separate axis). hy3 and

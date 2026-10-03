@@ -16,6 +16,11 @@ community-feedback section.
 
 ## Feedback ledger (every substantive comment, what it means, what we did)
 
+> Round 2 (2026-09-26/28, the kill-test going public and being attacked) is a
+> separate ledger with its own doc: `docs/11-round2-feedback.md`. Five objections,
+> three correct, six fix commits. The single most important entry there is the
+> correction of our own "uncontaminated" claim.
+
 ### 1. The "neither" problem — OriginalHospital (r/AI) + sergey_v (HN) + voter behavior
 Said: split "I don't get it" from "I get it, not funny"; a forced preference counts
 as evidence the winner was good; add a "neither made me laugh" option / slider.
