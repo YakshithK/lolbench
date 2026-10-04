@@ -3,6 +3,10 @@
 **/keys*.json
 harness/.env
 
+# Internal-only notes. This repo is PUBLIC: never commit internal cluster
+# hostnames, private IPs, lab personnel names, or meeting transcripts here.
+docs/private/*
+
 # private held-out test split (never published)
 data/private/*
 !data/private/.gitkeep
